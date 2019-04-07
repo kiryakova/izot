@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        <th:block th:include="~{fragments/navbar}"></th:block>
+    </header>
+    <main class="mt-3">
+        <h1 class="text-dark text-center">All Orders</h1>
+        <hr class="hr-2 bg-eventures">
+        <table class="table table-eventures" id="ordersTable">
+            <thead>
+            <tr class="font-weight-bold">
+                <th class="w-5">#</th>
+                <th class="w-40">Name</th>
+                <th class="w-15">Customer</th>
+                <th class="w-15">Ordered On</th>
+                <th class="w-10">Tickets</th>
+                <th class="w-15">Total Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order, iter : ${allOrders}" th:object="${order}">
+                <td class="w-5" th:text="${iter.index + 1}"></td>
+                <td class="w-40" th:text="*{eventName}"></td>
+                <td class="w-15" th:text="*{extractFullName()}"></td>
+                <td class="w-15" th:text="*{#temporals.format(orderedOn, 'HH:mm | dd/MM/yyyy')}"></td>
+                <td class="w-10" th:text="*{ticketsCount}"></td>
+                <td class="w-15" th:text="*{'$' + ticketsCount * eventPricePerTicket}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+<script>
+    $('#ordersTable').DataTable();
+</script>
+</body>
+</html>

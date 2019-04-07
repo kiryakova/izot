@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<th:block th:include="~{fragments/head}"></th:block>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+
+    <main class="mt-3">
+        <div class="jumbotron bg-white">
+            <h1 class="text-center text-izot">Добави Продукт</h1>
+            <hr style="height: 2px" class="bg-izot w-50" />
+
+            <!--<th:block th:each="error: ${errors}">
+                <h3 class="text-center text-danger" th:text="${error}"></h3>
+            </th:block>-->
+
+            <form class="form w-50 mx-auto" th:action="@{/products/add}" th:method="post" th:object="${product}" enctype="multipart/form-data" >
+
+                <th:block th:include="~{fragments/product-form}"></th:block>
+
+                <div class="button-holder d-flex justify-content-center">
+                    <button type="submit" class="btn bg-izot font-weight-bold text-white">Добави</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+<script>
+    /*$(document).ready(function () {
+        getCategories();
+    });*/
+
+    fetch('/categories/fetch')
+        .then((response) => response.json())
+        .then((json) => {
+            json.forEach((category) => $('#product-category').append(`<option value="${category.id}">${category.name}</option>`));
+        })
+        .catch((err) => console.log(err));
+
+</script>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+</head>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+    <main class="mt-3">
+        <h1 class="text-center text-izot">Всички Потребители</h1>
+        <hr style="height: 2px" class="bg-izot w-75" />
+
+        <!--<hr class="hr-2 bg-dark w-75">-->
+        <table class="table table-hover w-75 mx-auto">
+            <thead>
+            <tr class="row mx-auto">
+                <th class="col-md-1 text-center text-izot-bold">#</th>
+                <th class="col-md-2 text-center text-izot-bold">Име</th>
+                <th class="col-md-3 text-center text-izot-bold">E-mail</th>
+                <th class="col-md-3 text-center text-izot-bold">Права</th>
+                <th class="col-md-3 text-center text-izot-bold">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user, iter : ${users}" th:object="${user}">
+                <tr class="row mx-auto">
+                    <th class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></th>
+                    <td class="col-md-2 text-center text-izot" th:text="*{username}"></td>
+                    <td class="col-md-3 text-center text-izot" th:text="*{email}"></td>
+                    <td class="col-md-3 text-center text-izot" th:text="${#strings.listJoin(user.authorities, ', ')}"></td>
+                    <td class="col-md-3 text-center">
+
+                        <div class="row justify-content-md-between">
+                            <th:block th:if="${#lists.contains(user.authorities, 'USER') &&
+                            !#lists.contains(user.authorities, 'MODERATOR') && !#lists.contains(user.authorities, 'ADMIN')
+                        }">
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='MODERATOR')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">MODERATOR</button>
+                                </form>
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='ADMIN')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">ADMIN</button>
+                                </form>
+                            </th:block>
+                            <th:block th:if="${#lists.contains(user.authorities, 'USER') &&
+                            #lists.contains(user.authorities, 'MODERATOR') && !#lists.contains(user.authorities, 'ADMIN')
+                        }">
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='USER')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">USER</button>
+                                </form>
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='ADMIN')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">ADMIN</button>
+                                </form>
+                            </th:block>
+                            <th:block th:if="${#lists.contains(user.authorities, 'USER') &&
+                            #lists.contains(user.authorities, 'MODERATOR') && #lists.contains(user.authorities, 'ADMIN') && !#lists.contains(user.authorities, 'ROOT_ADMIN')
+                        }">
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='USER')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">USER</button>
+                                </form>
+                                <form th:action="@{/users/set-authority/{id}/{authority}(id=*{id}, authority='MODERATOR')}" method="post">
+                                    <button class="btn bg-izot font-weight-bold text-white fit-width">MODERATOR</button>
+                                </form>
+                            </th:block>
+
+                        </div>
+                        <!--<th:block sec:authorize="${#lists.contains(*{authorities}, 'USER') && !#lists.contains(*{authorities}, 'MODERATOR') && !#lists.contains(*{authorities}, 'ADMIN')}">
+
+                        </th:block>-->
+
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <hr style="height: 2px" class="bg-izot w-75">
+    </main>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+.w-40{
+    width: 40%;
+}
+
+.bg-izot {
+    background-color: #191970;
+}
+
+.text-izot {
+    color: #191970;
+}
+
+.text-izot-bold {
+    color: #191970;
+    font-weight: bold;
+}
+
+.hr-2 {
+    height: 2px;
+}
+
+textarea {
+    resize: none;
+}
+
+.bg-img {
+    width: 35px;
+    height: 30px;
+    border-radius: 5px 0px 10px 0px;
+    /*border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 0px;*/
+    /*background: url(../img/izot.jpg);*/
+}
+
+/*.logo {
+    align-items: center;
+    color: black;
+    display: flex;
+    flex-grow: 2;
+    margin: auto;
+    text-decoration: none;
+    word-spacing: 20px;
+}*/
+
+#logo{
+    padding-left: 10px;
+}
+
+.home-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 1.5rem 3rem;
+}
+
+img.img-thumbnail {
+    border: 1px solid #191970;
+    border-radius: 4px;
+    padding: 5px;
+    max-width: 40px;
+    max-height: 40px;
+}

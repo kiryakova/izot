@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<th:block th:include="~{fragments/head}"></th:block>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+
+    <main class="mt-3">
+        <div class="jumbotron bg-white text-center">
+
+            <th:block th:include="~{fragments/product-details-form}"></th:block>
+
+            <!--<div class="row">
+                <div class="col col-md-12 mt-5">
+                    <a th:href="@{/order/product/{id}(id=${product.id})}" class="btn bg-izot font-weight-bold text-white">Поръчай</a>
+                </div>
+            </div>-->
+
+            <form id="order-form" th:action="@{/products/all/products/{categoryId}(categoryId=${product.category.id})}" method="GET">
+                <div class="button-holder d-flex justify-content-center">
+                    <input id="product-id" type="hidden" name="id" th:value="${product.id}" />
+                    <input id="category-id" type="hidden" name="id" th:value="${categoryId}" />
+                    <button id="btn-submit-order" type="submit" class="btn bg-izot font-weight-bold text-white">Поръчай</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+<script>
+    /*const http = (function () {
+        const send = (url, method, body) => {
+            const payload = {
+                headers: {
+                    "Content-Type": "application/json",
+                    // "Content-Type": "application/x-www-form-urlencoded",
+                },
+                method,
+                body: JSON.stringify(body)
+            };
+            return fetch(url, payload)
+                .then(response => response.json());
+        };
+        const post = (url, body) => send(url, 'POST', body);
+        const get = (url) => send(url, 'GET', null);
+        return {
+            send,
+            post,
+            get
+        };
+    }());
+    */
+
+    $("#order-form").on('submit', (ev) => {
+        const id = $("#product-id").val();
+        let categoryId = $("#category-id").val();
+        if(categoryId === undefined){
+            categoryId = "";
+        }
+
+        fetch('/fetch/order/add/' + id)
+            .then((response) => response.json())
+            .then((json) => {
+                if(json === true) {
+                    alert("Продуктът е добавен");
+                    window.location = '/products/all/products/' + categoryId;
+                }
+            })
+            .catch((err) => console.log(err));
+        ev.preventDefault();
+
+
+ /*       http.get("/fetch/order/submit", {id})
+            .then(() => window.location = '/products/all/products');
+        ev.preventDefault();
+*/
+        return false;
+    });
+</script>
+</html>

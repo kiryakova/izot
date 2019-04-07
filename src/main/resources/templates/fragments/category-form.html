@@ -1,0 +1,16 @@
+<th:block th:fragment="producer-form">
+
+	<div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'text-danger'" >
+		<label for="name" class="font-weight-bold text-izot">Име</label>
+		<input type="text" class="form-control text-izot" id="name" th:field="*{name}" placeholder="Въведи име..." autofocus="autofocus" />
+		<small th:each="error : ${#fields.errors('name')}" th:text="${error}"></small>
+	</div>
+	<div class="form-group" th:classappend="${#fields.hasErrors('imageUrl')}? 'text-danger'">
+		<label for="imageUrl" class="font-weight-bold text-izot">Изображение</label>
+		<input type="file" class="form-control-file" id="imageUrl" th:field="*{imageUrl}" />
+		<small th:each="error : ${#fields.errors('imageUrl')}" th:text="${error}"></small>
+	</div>
+
+	<hr style="height: 2px" class="bg-izot" />
+
+</th:block>

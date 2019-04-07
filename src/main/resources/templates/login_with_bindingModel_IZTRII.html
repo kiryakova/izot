@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<th:block th:include="~{fragments/head}"></th:block>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+
+    <main class="mt-3">
+        <div class="jumbotron bg-white">
+            <h1 class="text-center text-izot">Login</h1>
+            <hr style="height: 2px" class="bg-izot w-25" />
+
+            <!--<th:block th:each="error: ${errors}">
+                <h3 class="text-center text-danger" th:text="${error}"></h3>
+            </th:block>-->
+
+            <form class="form w-25 mx-auto" th:action="@{/users/login}" th:method="POST" th:object="${model}">
+                <!--<div class="username-and-password-holder d-flex justify-content-between">-->
+                    <div class="form-group">
+                        <label for="username" class="text-izot">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" th:value="*{username}" placeholder="Username..." autofocus="autofocus" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-izot">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" th:value="*{password}" placeholder="Password..." />
+                    </div>
+                <!--</div>-->
+                <hr style="height: 2px"  class="bg-izot" />
+                <div class="button-holder d-flex justify-content-center">
+                    <button type="submit" class="btn bg-izot text-white">Login</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>

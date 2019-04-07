@@ -1,0 +1,22 @@
+<th:block th:fragment="product-details-form">
+
+        <div class="text-center">
+            <img th:src="${product.imageUrl}" class="img-responsive" alt="Product">
+        </div>
+        <div class="row">
+            <div class="col col-md-12 mt-5">
+                <h1 th:text="'Име: ' + ${product.name}"></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12 mt-3">
+                <h4 th:text="'Описание: ' + ${product.description}"></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                <h4 th:text="'Цена: ' + ${product.price}"></h4>
+            </div>
+        </div>
+
+</th:block>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+</head>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+    <main class="mt-3">
+
+        <div class="container-fluid">
+            <h1 class="products-title text-center font-weight-bold text-izot">Продукти</h1>
+            <div class="row justify-content-end">
+                <form class="mt-3 justify-content-end">
+                    <div class="custom-control">
+                        <label for="product-category" class="font-weight-bold text-izot">Избери Категория</label>
+                        <select type="checkbox" class="form-control" id="product-category" th:name="category"> <!--th:selected="${product.category}"-->
+                            <!--<option th:value="${categoryId}" th:text="all" ></option>-->
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="products-data row mb-4 home-container">
+                <!--<th:block th:each="product : ${products}" th:object="${product}">
+                    <div class="product img-thumbnail">
+                        <div class="text-center">
+                        <h5 class="bg-izot rounded text-center align-content-md-center text-white font-weight-bold" th:text="${product.name}"></h5>
+                        <div class="px-3 justify-content-center">
+                            <img th:src="${product.imageUrl}" width="150" height="150" alt="Category">
+                        </div>
+                        <hr class="bg-izot hr-2">
+                        <div class="buttons-holder w-75 mx-auto d-flex justify-content-between">
+                            <h3 th:text="${product.price} + лв&#46;" class="text-izot font-weight-bold"></h3>
+                            <a th:href="@{/products/details/{id}(id=${product.id})}" class="btn bg-exodia text-izot font-weight-bold mb-3">Детайли &#187;</a>
+                        </div>
+                        </div>
+                    </div>
+                </th:block>-->
+                <input type="hidden" th:id="categoryId" th:value="${categoryId}" th:name="${categoryId}" />
+            </div>
+        </div>
+
+    </main>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+<script th:inline="javascript">
+    function formatProduct(product, categoryId) {
+        return '<div class="product img-thumbnail">'
+            + '<div class="text-center">'
+            + `<h5 class="bg-izot rounded text-center align-content-md-center text-white font-weight-bold">${product.name}</h5>`
+            + '<div class="px-3 justify-content-center">'
+            + `<img src="${product.imageUrl}" width="150px" height="150px" alt="Category">`
+            + '</div>'
+            + `<hr class="bg-izot hr-2">`
+            + '<div class="buttons-holder w-75 mx-auto d-flex justify-content-between">'
+            + `<h3 class="text-izot font-weight-bold">${product.price.toFixed(2)}лв&#46;</h3>`
+            + `<a href="/orders/product/details/${product.id}/${categoryId}" class="btn text-izot font-weight-bold mb-3">Детайли &#187;</a>`
+            + '</div>'
+            + '</div>'
+            + '</div>'
+    }
+
+
+    $('select[type=checkbox][name=category]').change(function () {
+        let categoryId = $(this).val();
+        //let categoryName = $(this).name;
+        //let categoryName = document.getElementById(categoryId).textContent;
+        //alert(categoryName);
+
+        loadProducts(categoryId);
+
+    });
+
+    function loadProducts(categoryId){
+        fetch('/products/fetch/' + categoryId)
+            .then((response) => response.json())
+            .then((json) => {
+                $('.products-data').empty();
+
+                //$('h1.products-title').text(categoryId);
+
+                if (json.length === 0) {
+                    $('.products-data').append(`<h1 class="text-center font-weight-bold bg-izot">Няма продукти в категория ${categoryName}</h1>`)
+                } else {
+                    for (let i = 0; i < json.length; i += 3) {
+                        //$('.products-data').append('');
+                        if(i < json.length) $('.products-data:last-child').append(formatProduct(json[i], categoryId));
+                        if(i + 1 < json.length) $('.products-data:last-child').append(formatProduct(json[i + 1], categoryId));
+                        if(i + 2 < json.length) $('.products-data:last-child').append(formatProduct(json[i + 2], categoryId));
+                    }
+                }
+            })
+            .catch((err) => console.log(err));
+    }
+
+    $(document).ready(function () {
+        //$('select[type=checkbox][name=category]').value = $('input[type=hidden][id=categoryId]').value;
+
+        let categoryId = document.getElementById("categoryId").value;
+
+        fetch('/categories/fetch')
+            .then((response) => response.json())
+            .then((json) => {
+                $('#product-category').append(
+                    `<option value="all">всички категории</option>`);
+
+                json.forEach((category) => $('#product-category').append(
+                    categoryId === (category.id)
+                        ? `<option value="${category.id}" selected>${category.name}</option>`
+                        : `<option value="${category.id}" name="${category.name}">${category.name}</option>`));
+            })
+            .catch((err) => console.log(err));
+
+
+        loadProducts(categoryId);
+
+    });
+
+    /*$('input[type=hidden][name=categoryId]').onload(function load_Category (){
+        $('select[type=checkbox][name=category]').value = $('input[type=hidden][name=categoryId]').value;
+    });*/
+</script>
+</html>

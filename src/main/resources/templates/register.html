@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<th:block th:include="~{fragments/head}"></th:block>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+
+    <main class="mt-3">
+        <div class="jumbotron bg-white">
+            <h1 class="text-center text-izot">Регистрация</h1>
+            <hr style="height: 2px" class="bg-izot w-50" />
+
+            <!--<th:block th:each="error: ${errors}">
+                <h3 class="text-center text-danger" th:text="${error}"></h3>
+            </th:block>-->
+
+            <form class="form w-50 mx-auto" th:action="@{/users/register}" th:method="post" th:object="${user}">
+                <div class="username-and-email-holder d-flex justify-content-between">
+                    <div class="form-group w-40" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
+                        <label for="username" class="font-weight-bold text-izot">Име</label>
+                        <!--<input type="text" class="form-control" id="username" name="username" th:value="*{username}" placeholder="Username..." autofocus="autofocus" />-->
+                        <input type="text" class="form-control text-izot" id="username" th:field="*{username}" placeholder="Username..." autofocus="autofocus" />
+                        <small th:each="error : ${#fields.errors('username')}" th:text="${error}"></small>
+                    </div>
+                    <div class="form-group w-40" th:classappend="${#fields.hasErrors('email')}? 'text-danger'">
+                        <label for="email" class="font-weight-bold text-izot">E-mail</label>
+                        <input type="email" class="form-control text-izot" id="email" th:field="*{email}" placeholder="Email..." />
+                        <small th:each="error : ${#fields.errors('email')}" th:text="${error}"></small>
+                    </div>
+                </div>
+                <div class="passwords-holder d-flex justify-content-between mt-3">
+                    <div class="form-group w-40" th:classappend="${#fields.hasErrors('password')}? 'text-danger'">
+                        <label for="password" class="font-weight-bold text-izot">Парола</label>
+                        <input type="password" class="form-control text-izot" id="password" th:field="*{password}" placeholder="Password..." />
+                        <small th:each="error : ${#fields.errors('password')}" th:text="${error}"></small>
+                    </div>
+                    <div class="form-group w-40" th:classappend="${#fields.hasErrors('confirmPassword')}? 'text-danger'">
+                        <label for="confirmPassword" class="font-weight-bold text-izot">Потвърдете паролата</label>
+                        <input type="password" class="form-control text-izot" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Confirm Password..." />
+                        <small th:each="error : ${#fields.errors('confirmPassword')}" th:text="${error}"></small>
+                    </div>
+                </div>
+
+
+<!--
+                <hr class="hr-2 bg-eventures">
+                <div class="first-name-and-last-name-holder d-flex justify-content-between">
+                    <div class="form-group w-40">
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="firstName" class="form-control" id="firstName"
+                               placeholder="First Name..."/>
+                    </div>
+                    <div class="form-group w-40">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="lastName" class="form-control" id="lastName" placeholder="Last Name..."/>
+                    </div>
+                </div>
+                <div class="form-group mx-auto">
+                    <div class="d-flex justify-content-center">
+                        <label for="ucn">UCN</label>
+                    </div>
+                    <input type="text" name="ucn" class="form-control" id="ucn" placeholder="Unique Citizen Number..."/>
+                </div>
+                <hr class="hr-2 bg-eventures">
+                <div class="recaptcha-holder d-flex justify-content-center">
+                    <div class="g-recaptcha" data-sitekey="6LdZW2kUAAAAAJ9EuUXAIy777v4LhVl0LUbg1KAv"></div>
+                </div>
+-->
+
+
+                <hr style="height: 2px" class="bg-izot" />
+                <div class="button-holder d-flex justify-content-center">
+                    <button type="submit" class="btn bg-izot font-weight-bold text-white">Регистрация</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>

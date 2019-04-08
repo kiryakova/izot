@@ -1,6 +1,7 @@
 package kiryakova.izot.service;
 
 import kiryakova.izot.domain.entities.Order;
+import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.domain.models.service.OrderServiceModel;
 
 import java.math.BigDecimal;
@@ -11,7 +12,9 @@ public interface OrderService {
 
     List<OrderServiceModel> findAllOrders();
 
-    List<OrderServiceModel> findAllOrdersByUserId(String userId);
+    //List<OrderServiceModel> findAllOrdersByUserId(String userId);
+
+    List<OrderServiceModel> findAllOrdersByUsername(String username) throws Exception;
 
     boolean confirmOrder(String id) throws Exception;
 
@@ -20,4 +23,8 @@ public interface OrderService {
     boolean setNewTotalPrice(BigDecimal totalPrice, Order order);
 
     OrderServiceModel findUnfinishedOrderByUserName(String username) throws Exception;
+
+    OrderServiceModel findOrderById(String id);
+
+    boolean setCustomerForOrder(String orderId, CustomerServiceModel customerServiceModel);
 }

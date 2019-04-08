@@ -11,6 +11,11 @@
         <h1 class="text-center text-izot">Продукти в кошницата</h1>
         <hr style="height: 2px" class="bg-izot w-75" />
 
+        <th:block th:if="${order} == null">
+            <h3 class="text-center text-izot">Нямате заявени продукти</h3>
+            <hr style="height: 2px" class="bg-izot w-75" />
+        </th:block>
+        <th:block th:if="${order} != null">
         <!--<hr class="hr-2 bg-dark w-75">-->
         <table class="table table-hover w-75 mx-auto">
             <thead>
@@ -70,22 +75,19 @@
                 <td colspan="3" class="col-md-4"></td>
                 <td colspan="1" class="col-md-3 align-content-end">Обща стойност на поръчката:</td>
                 <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="${order.totalPrice}"></td>
-                <td class="col-md-3"></td>
+                <td class="col-md-3"><a th:href="@{/customers/edit/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Продължи</a></td>
             </tr>
 
-            <tr class="row mx-auto">
-                <!--<td class="col-md-1 text-center text-izot"></td>
-                <td class="col-md-2 text-center text-izot"></td>
-                <td class="col-md-3 text-center text-izot"></td>
-                <td class="col-md-1 text-center text-izot"></td>-->
+            <!--<tr class="row mx-auto">
                 <td colspan="5" class="col-md-7"></td>
                 <td class="col-md-3 text-center">
-                    <a th:href="@{/orders/confirm/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Потвърди Поръчката</a>
+                    <a th:href="@{/orders/confirm/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Приключи Поръчката</a>
                 </td>
-            </tr>
+            </tr>-->
             </tbody>
         </table>
         <hr style="height: 2px" class="bg-izot w-75">
+        </th:block>
     </main>
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>

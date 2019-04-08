@@ -1,13 +1,7 @@
 package kiryakova.izot.service;
 
-import kiryakova.izot.domain.entities.Order;
-import kiryakova.izot.domain.entities.OrderProduct;
-import kiryakova.izot.domain.entities.Product;
-import kiryakova.izot.domain.entities.User;
-import kiryakova.izot.domain.models.service.OrderProductServiceModel;
-import kiryakova.izot.domain.models.service.OrderServiceModel;
-import kiryakova.izot.domain.models.service.ProductServiceModel;
-import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.domain.entities.*;
+import kiryakova.izot.domain.models.service.*;
 import kiryakova.izot.repository.OrderRepository;
 import kiryakova.izot.validation.OrderValidationService;
 import kiryakova.izot.validation.ProductValidationService;
@@ -69,10 +63,10 @@ public class OrderServiceImpl implements OrderService {
             order = new Order();
 
             //User user = this.modelMapper.map(userServiceModel, User.class);
-            User user = new User();
-            user.setId(userServiceModel.getId());
+            //User user = new User();
+            //user.setId(userServiceModel.getId());
 
-            order.setUser(user);
+            order.setUser(this.modelMapper.map(userServiceModel, User.class));
             order.setFinished(false);
             order.setTotalPrice(product.getPrice().add(new BigDecimal(0.00)));
         }
@@ -135,9 +129,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderServiceModel> findAllOrdersByUserId(String userId) {
+    public List<OrderServiceModel> findAllOrdersByUsername(String username) throws Exception {
+        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+        if(!userValidation.isValid(userServiceModel)) {
+            throw new Exception();
+        }
+
         return this.orderRepository
-                .findAllByUserId(userId)
+                .findAllByUserId(userServiceModel.getId())
                 .stream()
                 .map(x -> this.modelMapper.map(x, OrderServiceModel.class))
                 .collect(Collectors.toList());
@@ -205,5 +204,31 @@ public class OrderServiceImpl implements OrderService {
         else {
             return null;
         }
+    }
+
+    @Override
+    public OrderServiceModel findOrderById(String id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+
+        if(order != null) {
+            return this.modelMapper.map(order, OrderServiceModel.class);
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean setCustomerForOrder(String orderId, CustomerServiceModel customerServiceModel) {
+        Order order = this.orderRepository.findById(orderId).orElse(null);
+        order.setCustomer(this.modelMapper.map(customerServiceModel, Customer.class));
+        try{
+            this.orderRepository.save(order);
+        } catch (Exception ignored) {
+            //TODO: Fix this when discover exception type.
+            return false;
+        }
+
+        return true;
     }
 }

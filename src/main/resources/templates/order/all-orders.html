@@ -10,35 +10,37 @@
         <th:block th:include="~{fragments/navbar}"></th:block>
     </header>
     <main class="mt-3">
-        <h1 class="text-dark text-center">All Orders</h1>
-        <hr class="hr-2 bg-eventures">
-        <table class="table table-eventures" id="ordersTable">
+        <h1 class="text-center text-izot">Всички Поръчки</h1>
+        <hr style="height: 2px" class="bg-izot w-40" />
+        <table class="table table-hover w-40 mx-auto">
             <thead>
-            <tr class="font-weight-bold">
-                <th class="w-5">#</th>
-                <th class="w-40">Name</th>
-                <th class="w-15">Customer</th>
-                <th class="w-15">Ordered On</th>
-                <th class="w-10">Tickets</th>
-                <th class="w-15">Total Price</th>
+            <tr class="row mx-auto">
+                <th class="col-md-1 text-center text-izot-bold">#</th>
+                <th class="col-md-4 text-center text-izot-bold">Дата на поръчката</th>
+                <th class="col-md-3 text-center text-izot-bold">Обща стойност</th>
+                <th class="col-md-4 text-center text-izot-bold"></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="order, iter : ${allOrders}" th:object="${order}">
-                <td class="w-5" th:text="${iter.index + 1}"></td>
-                <td class="w-40" th:text="*{eventName}"></td>
-                <td class="w-15" th:text="*{extractFullName()}"></td>
-                <td class="w-15" th:text="*{#temporals.format(orderedOn, 'HH:mm | dd/MM/yyyy')}"></td>
-                <td class="w-10" th:text="*{ticketsCount}"></td>
-                <td class="w-15" th:text="*{'$' + ticketsCount * eventPricePerTicket}"></td>
+            <th:block th:each="order, iter : ${orders}" th:object="${order}">
+            <tr class="row mx-auto">
+                <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
+                <td class="col-md-4 text-center text-izot" th:text="*{#temporals.format(orderDate, 'dd/MM/yyyy')}"></td>
+                <td class="col-md-3 text-center text-izot" th:text="*{totalPrice}"></td>
+                <td class="col-md-4 text-center text-izot">
+                    <form id="all-orders-form" th:action="@{/orders/details/{id}(id=${order.id})}" method="GET">
+                        <div class="button-holder d-flex justify-content-center">
+                            <button type="submit" class="btn btn-danger font-weight-bold text-white">Детайли</button>
+                        </div>
+                    </form>
+                </td>
             </tr>
+            </th:block>
             </tbody>
         </table>
+        <hr style="height: 2px" class="bg-izot w-40" />
     </main>
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
-<script>
-    $('#ordersTable').DataTable();
-</script>
 </body>
 </html>

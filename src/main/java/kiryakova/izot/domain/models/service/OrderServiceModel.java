@@ -1,5 +1,6 @@
 package kiryakova.izot.domain.models.service;
 
+import kiryakova.izot.domain.entities.Customer;
 import kiryakova.izot.domain.entities.OrderProduct;
 import kiryakova.izot.domain.entities.User;
 
@@ -13,6 +14,7 @@ public class OrderServiceModel extends BaseServiceModel {
     private boolean finalized;
     private BigDecimal totalPrice;
     private User user;
+    private Customer customer;
     //private List<OrderProduct> orderProductList;
 
 
@@ -49,5 +51,13 @@ public class OrderServiceModel extends BaseServiceModel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<th:block th:include="~{fragments/head}"></th:block>
+<body>
+<div class="container-fluid">
+    <th:block th:include="~{fragments/navbar}"></th:block>
+
+    <main class="mt-3">
+        <div class="jumbotron bg-white">
+            <h1 class="text-center text-izot">Вашите данни</h1>
+            <hr style="height: 2px" class="bg-izot w-50" />
+
+            <!--<th:block th:each="error: ${errors}">
+                <h3 class="text-center text-danger" th:text="${error}"></h3>
+            </th:block>-->
+
+            <form class="form w-50 mx-auto" th:action="@{/customers/edit/{id}(id=${orderId})}" th:method="post" th:object="${customer}">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'" >
+                    <label for="firstName" class="font-weight-bold text-izot">Име</label>
+                    <input type="text" class="form-control text-izot" id="firstName" th:field="*{firstName}" />
+                    <small th:each="error : ${#fields.errors('firstName')}" th:text="${error}"></small>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('lastName')}? 'text-danger'" >
+                    <label for="lastName" class="font-weight-bold text-izot">Фамилия</label>
+                    <input type="text" class="form-control text-izot" id="lastName" th:field="*{lastName}" />
+                    <small th:each="error : ${#fields.errors('lastName')}" th:text="${error}"></small>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('address')}? 'text-danger'" >
+                    <label for="address" class="font-weight-bold text-izot">Адрес</label>
+                    <input type="text" class="form-control text-izot" id="address" th:field="*{address}" />
+                    <small th:each="error : ${#fields.errors('address')}" th:text="${error}"></small>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('phone')}? 'text-danger'">
+                    <label for="phone" class="font-weight-bold text-izot">Телефон</label>
+                    <input type="text" class="form-control text-izot" id="phone" th:field="*{phone}" />
+                    <small th:each="error : ${#fields.errors('phone')}" th:text="${error}"></small>
+                </div>
+
+                <hr style="height: 2px" class="bg-izot" />
+
+                <div class="button-holder d-flex justify-content-center">
+                    <button type="submit" class="btn bg-izot font-weight-bold text-white">Потвърдете</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>

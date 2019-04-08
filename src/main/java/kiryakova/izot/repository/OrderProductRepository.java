@@ -31,8 +31,8 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Stri
     void deleteOrderProduct(String id);
     */
 
-    @Query(value = "SELECT * FROM order_products WHERE order_id = :id "
+    @Query(value = "SELECT * FROM order_products WHERE order_id = :order_id "
             , nativeQuery = true)
-    List<OrderProduct> findOrderProductsByOrderId(String id);
+    List<OrderProduct> findOrderProductsByOrderId(@Param("order_id") String order_id);
 
 }

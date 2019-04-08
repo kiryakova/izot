@@ -1,5 +1,6 @@
 package kiryakova.izot.domain.models.view;
 
+import kiryakova.izot.domain.entities.Customer;
 import kiryakova.izot.domain.entities.User;
 
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ public class OrderViewModel extends BaseViewModel {
     private LocalDate orderDate;
     private boolean finalized;
     private BigDecimal totalPrice;
-    private User customer;
+    private User user;
+    private Customer customer;
     //private List<OrderProductViewModel> orderProductList;
 
     public OrderViewModel() {
@@ -41,11 +43,19 @@ public class OrderViewModel extends BaseViewModel {
         this.totalPrice = totalPrice;
     }
 
-    public User getCustomer() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(User customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 

@@ -13,8 +13,8 @@ public class Order extends BaseEntity {
     private LocalDate orderDate;
     private boolean isFinished;
     private User user;
+    private Customer customer;
     private BigDecimal totalPrice;
-    //private User performer;
     private List<OrderProduct> orderProductList;
 
     public Order() {
@@ -49,17 +49,6 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
-/*
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "performer_id", referencedColumnName = "id")
-    public User getPerformer() {
-        return performer;
-    }
-
-    public void setPerformer(User performer) {
-        this.performer = performer;
-    }
-*/
     @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order")
     public List<OrderProduct> getOrderProductList() {
         return orderProductList;
@@ -67,6 +56,16 @@ public class Order extends BaseEntity {
 
     public void setOrderProductList(List<OrderProduct> orderProductList) {
         this.orderProductList = orderProductList;
+    }
+
+    @ManyToOne(targetEntity = Customer.class)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Column(name = "total_price")

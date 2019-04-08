@@ -19,4 +19,5 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     @Query(value = "SELECT * FROM orders WHERE user_id = :userId AND is_finished = 'false' "
             , nativeQuery = true)
     Optional<Order> findUnfinishedOrderByUserId(@Param("userId") String userId);
+
 }

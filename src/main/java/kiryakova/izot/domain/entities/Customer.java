@@ -1,8 +1,8 @@
 package kiryakova.izot.domain.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.springframework.lang.NonNull;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -11,14 +11,16 @@ public class Customer extends BaseEntity {
     private String firstName;
     private String lastName;
     private String address;
-    private String email;
     private String phone;
+    private User user;
     //private List<Order> orderList;
 
 
     public Customer() {
     }
 
+    @NonNull
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -27,6 +29,8 @@ public class Customer extends BaseEntity {
         this.firstName = firstName;
     }
 
+    @NonNull
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -35,6 +39,8 @@ public class Customer extends BaseEntity {
         this.lastName = lastName;
     }
 
+    @NonNull
+    @Column(name = "address")
     public String getAddress() {
         return address;
     }
@@ -43,14 +49,8 @@ public class Customer extends BaseEntity {
         this.address = address;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @NonNull
+    @Column(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -58,7 +58,18 @@ public class Customer extends BaseEntity {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-/*
+
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /*
     @OneToMany(targetEntity = Order.class, mappedBy = "customer")
     public List<Order> getOrderList() {
         return orderList;

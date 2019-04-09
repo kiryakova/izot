@@ -35,7 +35,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .and()
                     .authorizeRequests()
                     .antMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                    .antMatchers("/", "/users/login", "/users/register").anonymous()
+                    .antMatchers("/", "/index", "/users/login", "/users/register").anonymous()
                     //.antMatchers("/admin/**").hasAuthority("ADMIN")
                     //.antMatchers("/products/**").permitAll()
                     .anyRequest().authenticated()

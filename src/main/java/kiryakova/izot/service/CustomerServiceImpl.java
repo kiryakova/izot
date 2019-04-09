@@ -53,8 +53,12 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Customer customer = this.customerRepository.findCustomerByUserId(userServiceModel.getId()).orElse(null);
+        
+        if ( customer == null || !customer.getFirstName().toLowerCase().equals(customerServiceModel.getFirstName().toLowerCase())
+                || !customer.getLastName().toLowerCase().equals(customerServiceModel.getLastName().toLowerCase())
+                || !customer.getAddress().toLowerCase().equals(customerServiceModel.getAddress().toLowerCase())
+                || !customer.getPhone().toLowerCase().equals(customerServiceModel.getPhone().toLowerCase())) {
 
-        if(customer == null){
             customer = new Customer();
         }
 

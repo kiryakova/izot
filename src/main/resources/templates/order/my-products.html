@@ -39,7 +39,7 @@
                     </td>
                     <td class="col-md-3 text-center text-izot" th:text="${orderedProduct.product.name}"></td>
                     <td class="col-md-1 text-center text-izot" th:text="${orderedProduct.quantity}"></td>
-                    <td class="col-md-2 text-center text-izot" th:text="${orderedProduct.product.price}"></td>
+                    <td class="col-md-2 text-center text-izot" th:text="|${orderedProduct.product.price} лв&#46;|"></td>
                     <td class="col-md-3 text-center">
                         <!--<a th:href="@{/products/delete/{id}(id=${orderedProduct.id})}" class="btn btn-danger font-weight-bold text-white">Изтриване</a>-->
 
@@ -74,7 +74,7 @@
                 <td class="col-md-1 text-center text-izot"></td>-->
                 <td colspan="3" class="col-md-4"></td>
                 <td colspan="1" class="col-md-3 align-content-end">Обща стойност на поръчката:</td>
-                <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="${order.totalPrice}"></td>
+                <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="|${order.totalPrice} лв&#46;|"></td>
                 <td class="col-md-3"><a th:href="@{/customers/edit/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Продължи</a></td>
             </tr>
 

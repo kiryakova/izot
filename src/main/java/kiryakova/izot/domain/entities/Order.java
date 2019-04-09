@@ -15,7 +15,7 @@ public class Order extends BaseEntity {
     private User user;
     private Customer customer;
     private BigDecimal totalPrice;
-    private List<OrderProduct> orderProductList;
+    //private List<OrderProduct> orderProductList;
 
     public Order() {
     }
@@ -49,7 +49,7 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
-    @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order")
+ /*   @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order")
     public List<OrderProduct> getOrderProductList() {
         return orderProductList;
     }
@@ -57,7 +57,7 @@ public class Order extends BaseEntity {
     public void setOrderProductList(List<OrderProduct> orderProductList) {
         this.orderProductList = orderProductList;
     }
-
+*/
     @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     public Customer getCustomer() {

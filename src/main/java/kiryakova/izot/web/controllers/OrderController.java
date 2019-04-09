@@ -1,6 +1,7 @@
 package kiryakova.izot.web.controllers;
 
 import kiryakova.izot.domain.models.service.OrderServiceModel;
+import kiryakova.izot.domain.models.view.CustomerViewModel;
 import kiryakova.izot.domain.models.view.OrderProductViewModel;
 import kiryakova.izot.domain.models.view.OrderViewModel;
 import kiryakova.izot.domain.models.view.ProductDetailsViewModel;
@@ -84,16 +85,28 @@ public class OrderController extends BaseController {
 
         orderService.confirmOrder(id);
         //if(orderService.confirmOrder(id)) {
-            modelAndView.addObject("order", this.modelMapper.map(this.orderService
+
+
+
+        /*
+        modelAndView.addObject("order", this.modelMapper.map(this.orderService
                     .findOrderById(id), OrderViewModel.class));
 
-            modelAndView.addObject("orderedProducts", this.orderProductService
+        modelAndView.addObject("orderedProducts", this.orderProductService
                     .findOrderProductsByOrderId(id)
                     .stream()
                     .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
                     .collect(Collectors.toList()));
 
-            return this.view("order/confirmed-order", modelAndView);
+        modelAndView.addObject("customer", this.modelMapper.map(this.customerService
+                .findCustomerByOrderId(id), CustomerViewModel.class));
+
+        return this.view("order/confirmed-order", modelAndView);
+
+        */
+
+        return this.orderDetails(id, modelAndView);
+
         /*}
         else {
 
@@ -138,9 +151,9 @@ public class OrderController extends BaseController {
                 .collect(Collectors.toList()));
 
         modelAndView.addObject("customer", this.modelMapper.map(this.customerService
-                .findCustomerByOrderId(id), OrderViewModel.class));
+                .findCustomerByOrderId(id), CustomerViewModel.class));
 
-        return this.view("order/details-order", modelAndView);
+        return this.view("order/confirmed-order", modelAndView);
     }
 
     @GetMapping("/my")

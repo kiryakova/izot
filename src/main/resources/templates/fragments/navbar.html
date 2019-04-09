@@ -36,24 +36,6 @@
                         </li>
 
                         <th:block sec:authorize="hasAuthority('MODERATOR')">
-                        <li class="nav-item active">
-                            <div class="dropdown">
-                                <a class="nav-link active dropdown-toggle" href="#" role="button" id="producersDropdown"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Производители
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="producersDropdown">
-                                    <a class="dropdown-item" th:href="@{/producers/add}">Добави
-                                        Производител</a>
-                                    <!--<a class="dropdown-item" href="#" data-toggle="modal" data-target="#add-producer-modal">Добави
-                                        Производител</a>-->
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" th:href="@{/producers/all}">Всички Производители</a>
-                                </div>
-                                <!--<th:block th:replace="fragments/modals/producer/add-producer-modal"></th:block>-->
-                            </div>
-                        </li>
-
 
                         <li class="nav-item active">
                             <div class="dropdown show">
@@ -88,7 +70,7 @@
                         </th:block>
 
                         <li class="nav-item active">
-                            <a class="nav-link" th:href="@{/orders/products/my}"><i class="fas fa-address-card"></i>Заявени продукти</a>
+                            <a class="nav-link" th:href="@{/orders/products/my}"><i class="fas fa-shopping-basket"></i></a>
                         </li>
 
                         <li class="nav-item active">

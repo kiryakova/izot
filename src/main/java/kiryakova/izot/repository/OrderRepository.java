@@ -12,12 +12,18 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
-    @Query(value = "SELECT * FROM orders WHERE user_id = :userId"
+    @Query(value = "SELECT * FROM orders WHERE user_id = :userId " +
+            "AND is_finished = 1 ORDER BY order_date DESC "
             , nativeQuery = true)
-    List<Order> findAllByUserId(@Param("userId") String userId);
+    List<Order> findAllOrdersByUserId(@Param("userId") String userId);
 
-    @Query(value = "SELECT * FROM orders WHERE user_id = :userId AND is_finished = 'false' "
+    @Query(value = "SELECT * FROM orders WHERE user_id = :userId " +
+            "AND is_finished = 0 "
             , nativeQuery = true)
     Optional<Order> findUnfinishedOrderByUserId(@Param("userId") String userId);
 
+    @Query(value = "SELECT * FROM orders WHERE is_finished = 1 " +
+            "ORDER BY order_date DESC "
+            , nativeQuery = true)
+    List<Order> findAllOrders();
 }

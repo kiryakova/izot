@@ -1,10 +1,12 @@
 package kiryakova.izot.domain.models.binding;
 
 import kiryakova.izot.common.ConstantsDefinition;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class UserRegisterBindingModel {
     private String username;
@@ -19,6 +21,7 @@ public class UserRegisterBindingModel {
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 5, max = 18, message = ConstantsDefinition.BindingModelConstants.USERNAME_IS_NOT_CORRECT)
     public String getUsername() {
         return username;
     }
@@ -29,8 +32,8 @@ public class UserRegisterBindingModel {
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
-    //@Email(message = ConstantsDefinition.UserBindingModelConstants.EMAIL_IS_NOT_CORRECT)
-    @Email
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+            message = ConstantsDefinition.BindingModelConstants.EMAIL_IS_NOT_CORRECT)
     public String getEmail() {
         return email;
     }
@@ -41,6 +44,10 @@ public class UserRegisterBindingModel {
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 3, max = 18, message = ConstantsDefinition.BindingModelConstants.PASSWORD_IS_NOT_CORRECT)
     public String getPassword() {
         return password;
     }
@@ -51,6 +58,7 @@ public class UserRegisterBindingModel {
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 3, max = 18, message = ConstantsDefinition.BindingModelConstants.PASSWORD_IS_NOT_CORRECT)
     public String getConfirmPassword() {
         return confirmPassword;
     }

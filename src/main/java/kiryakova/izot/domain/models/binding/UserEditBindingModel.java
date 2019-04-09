@@ -1,5 +1,12 @@
 package kiryakova.izot.domain.models.binding;
 
+import kiryakova.izot.common.ConstantsDefinition;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class UserEditBindingModel {
     private String username;
     private String email;
@@ -13,6 +20,8 @@ public class UserEditBindingModel {
     public UserEditBindingModel() {
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
     public String getUsername() {
         return username;
     }
@@ -21,6 +30,10 @@ public class UserEditBindingModel {
         this.username = username;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+            message = ConstantsDefinition.BindingModelConstants.EMAIL_IS_NOT_CORRECT)
     public String getEmail() {
         return email;
     }
@@ -29,6 +42,7 @@ public class UserEditBindingModel {
         this.email = email;
     }
 
+    @Length(min = 3, max = 18, message = ConstantsDefinition.BindingModelConstants.PASSWORD_IS_NOT_CORRECT)
     public String getOldPassword() {
         return oldPassword;
     }
@@ -37,6 +51,7 @@ public class UserEditBindingModel {
         this.oldPassword = oldPassword;
     }
 
+    @Length(min = 3, max = 18, message = ConstantsDefinition.BindingModelConstants.PASSWORD_IS_NOT_CORRECT)
     public String getPassword() {
         return password;
     }
@@ -45,6 +60,7 @@ public class UserEditBindingModel {
         this.password = password;
     }
 
+    @Length(min = 3, max = 18, message = ConstantsDefinition.BindingModelConstants.PASSWORD_IS_NOT_CORRECT)
     public String getConfirmPassword() {
         return confirmPassword;
     }

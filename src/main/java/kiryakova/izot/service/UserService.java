@@ -9,11 +9,11 @@ import java.util.Set;
 
 public interface UserService extends UserDetailsService {
 
-    UserServiceModel registerUser(UserServiceModel userServiceModel);
+    boolean registerUser(UserServiceModel userServiceModel);
 
     UserServiceModel findUserByUsername(String username);
 
-    UserServiceModel editUserProfile(UserServiceModel userServiceModel, String oldPassword);
+    boolean editUserProfile(UserServiceModel userServiceModel);
 
     List<UserServiceModel> findAllUsers();
 

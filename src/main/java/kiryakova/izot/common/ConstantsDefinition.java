@@ -8,15 +8,19 @@ public final class ConstantsDefinition {
     }
 
     public final static class BindingModelConstants {
-        public static final String NOT_NULL= "Can not be null!";
-        public static final String NOT_EMPTY= "Cannot be empty!";
-        //public static final String EMAIL_IS_NOT_CORRECT = "Email is not correct!";
+        public static final String NOT_NULL= "Не може да бъде null!";
+        public static final String NOT_EMPTY= "Не може да бъде празно!";
+        public static final String EMAIL_IS_NOT_CORRECT = "Email-а не е коректен!";
+        public static final String PASSWORD_IS_NOT_CORRECT = "Паролата трябва да бъде от 3 до 18 символа!";
+        public static final String USERNAME_IS_NOT_CORRECT = "Името трябва да бъде от 5 до 18 символа!";
     }
 
     public final static class UserConstants {
-        public static final String NO_SUCH_USER = "Username not found!";
-        public static final String INCORRECT_PASSWORD = "Incorrect password!";
-        public static final String NO_ROLE_LOWER_THAN_USER = "There is no role, lower than USER";
+        public static final String NO_SUCH_USER = "Не е намерен такъв потребител!";
+        public static final String INCORRECT_PASSWORD = "Некоректна парола!";
+        public static final String PASSWORDS_DO_NOT_MATCH = "Паролата не е потвърдена!";
+        public static final String UNSUCCESSFUL_USER_REGISTRATION = "Регистриране на потребител %s неуспешно.";
+        public static final String UNSUCCESSFUL_USER_EDITING = "Редактиране на потребител %s неуспешно.";
     }
 }
 

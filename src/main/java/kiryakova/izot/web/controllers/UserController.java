@@ -1,23 +1,25 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.UserEditBindingModel;
-import kiryakova.izot.domain.models.binding.UserLoginBindingModel;
 import kiryakova.izot.domain.models.binding.UserRegisterBindingModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.domain.models.view.UserAllViewModel;
 import kiryakova.izot.domain.models.view.UserProfileViewModel;
+import kiryakova.izot.error.UserEditException;
+import kiryakova.izot.error.UserRegisterException;
 import kiryakova.izot.service.MailService;
-import kiryakova.izot.service.RecaptchaService;
 import kiryakova.izot.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class UserController extends BaseController {
 
     private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //private final RecaptchaService recaptchaService;
 
@@ -36,8 +39,9 @@ public class UserController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, MailService mailService, ModelMapper modelMapper) {
+    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         //this.recaptchaService = recaptchaService;
         this.mailService = mailService;
         this.modelMapper = modelMapper;
@@ -67,6 +71,10 @@ public class UserController extends BaseController {
                                         //@RequestParam(name = "g-recaptcha-response") String gRecaptchaResponse,
                                         BindingResult bindingResult) {
 
+        if (!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
+            bindingResult.addError(new FieldError("userRegisterBindingModel", "password", "Passwords don't match."));
+        }
+
         if(!userRegisterBindingModel.getPassword()
                 .equals(userRegisterBindingModel.getConfirmPassword()) ||
                 //this.recaptchaService
@@ -79,9 +87,12 @@ public class UserController extends BaseController {
             return this.view("register", modelAndView);
         }
 
-        UserServiceModel userServiceModel = this.userService
-                .registerUser(this.modelMapper
-                        .map(userRegisterBindingModel, UserServiceModel.class));
+        UserServiceModel userServiceModel = this.modelMapper
+                .map(userRegisterBindingModel, UserServiceModel.class);
+
+        if(!this.userService.registerUser(userServiceModel)){
+            throw new UserRegisterException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_REGISTRATION, userServiceModel.getEmail()));
+        }
 
         this.mailService.sentRegistrationSuccessMessage(userRegisterBindingModel.getEmail(), userRegisterBindingModel.getUsername());
 
@@ -116,6 +127,14 @@ public class UserController extends BaseController {
                                             @ModelAttribute(name = "user") @Valid UserEditBindingModel userEditBindingModel,
                                             BindingResult bindingResult){
 
+        UserServiceModel userServiceModel = this.userService.findUserByUsername(userEditBindingModel.getUsername());
+
+        if (!this.bCryptPasswordEncoder.matches(userEditBindingModel.getOldPassword(), userServiceModel.getPassword())) {
+            bindingResult.addError(new FieldError("userEditBindingModel", "oldPassword", ConstantsDefinition.UserConstants.INCORRECT_PASSWORD));
+        } else if (!userEditBindingModel.getPassword().equals(userEditBindingModel.getConfirmPassword())) {
+            bindingResult.addError(new FieldError("userEditBindingModel", "password", ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
+        }
+
         if(!userEditBindingModel.getPassword()
                 .equals(userEditBindingModel.getConfirmPassword()) ||
                 bindingResult.hasErrors()) {
@@ -124,7 +143,12 @@ public class UserController extends BaseController {
             return this.view("edit-profile", modelAndView);
         }
 
-        this.userService.editUserProfile(this.modelMapper.map(userEditBindingModel, UserServiceModel.class), userEditBindingModel.getOldPassword());
+        if (!this.userService.editUserProfile(this.modelMapper.map(userEditBindingModel, UserServiceModel.class))) {
+            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getEmail()));
+        }
+
+
+        //this.userService.editUserProfile(this.modelMapper.map(userEditBindingModel, UserServiceModel.class), userEditBindingModel.getOldPassword());
         return this.redirect("/users/profile");
     }
 

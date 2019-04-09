@@ -22,7 +22,7 @@ public class OrderAppController {
 
     @GetMapping("/add/{id}")
     @PreAuthorize("isAuthenticated()")
-    @ResponseBody
+    //@ResponseBody
     public boolean addOrder(@PathVariable(name="id") String id, Principal principal) throws Exception {
         String name = principal.getName();
 
@@ -31,7 +31,7 @@ public class OrderAppController {
 
     @GetMapping("/product/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    @ResponseBody
+    //@ResponseBody
     public BigDecimal deleteProductFromOrder(@PathVariable(name="id") String id) throws Exception {
 
         return this.orderService.deleteOrderProduct(id);

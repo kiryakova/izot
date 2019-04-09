@@ -19,16 +19,4 @@ public abstract class BaseController{
         return this.view("redirect:" + url);
     }
 
-    /*protected String getPrincipalAuthority(Authentication authentication) {
-        GrantedAuthority principalAuthority = authentication
-                .getAuthorities()
-                .stream()
-                .findFirst()
-                .orElse(null);
-
-        return principalAuthority != null
-                ? principalAuthority.getAuthority()
-                : null;
-    }*/
-
 }

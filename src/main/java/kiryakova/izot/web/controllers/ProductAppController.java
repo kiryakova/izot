@@ -24,7 +24,7 @@ public class ProductAppController {
 
     @GetMapping(value = {"/fetch", "/fetch/{categoryId}"})
     @PreAuthorize("isAuthenticated()")
-    @ResponseBody
+    //@ResponseBody
     public List<ProductAllViewModel> fetchByCategory(@PathVariable String categoryId) {
 
         return this.productService.findAllProductsByCategoryId(categoryId)

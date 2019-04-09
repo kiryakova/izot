@@ -2,7 +2,6 @@ package kiryakova.izot.service;
 
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.User;
-import kiryakova.izot.domain.entities.UserRole;
 import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleService userRoleService;
-    //private final UserRoleRepository userRoleRepository;
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -34,72 +32,8 @@ public class UserServiceImpl implements UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    /*
     @Override
-    public UserServiceModel registerUser(UserServiceModel userServiceModel) {
-        userServiceModel.setPassword(DigestUtils.sha256Hex(userServiceModel.getPassword()));
-
-        return this.modelMapper.map(
-                this.userRepository
-                        .saveAndFlush(this.modelMapper.map(userServiceModel, User.class)),
-                UserServiceModel.class);
-    }
-
-    @Override
-    public UserServiceModel loginUser(UserServiceModel userServiceModel) {
-
-        return this.userRepository.findByUsername(userServiceModel.getUsername())
-                .filter(u -> u.getPassword().equals(DigestUtils.sha256Hex(userServiceModel.getPassword())))
-                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
-                .orElse(null);
-    }
-
-    */
-/*
-    private void seedRolesInDb(){
-        UserRole userRoleRootAdmin = new UserRole();
-        userRoleRootAdmin.setAuthority("ROOT_ADMIN");
-        this.userRoleRepository.saveAndFlush(userRoleRootAdmin);
-
-        UserRole userRoleAdmin = new UserRole();
-        userRoleAdmin.setAuthority("ADMIN");
-        this.userRoleRepository.saveAndFlush(userRoleAdmin);
-
-        UserRole userRoleModerator = new UserRole();
-        userRoleModerator.setAuthority("MODERATOR");
-        this.userRoleRepository.saveAndFlush(userRoleModerator);
-
-        UserRole userRoleUser = new UserRole();
-        userRoleUser.setAuthority("USER");
-        this.userRoleRepository.saveAndFlush(userRoleUser);
-    }
-*/
-/*
-    private Set<UserRole> getAuthorities(String authority) {
-        Set<UserRole> userAuthorities = new HashSet<>();
-
-        userAuthorities.add(this.userRoleRepository.findByAuthority(authority));
-
-        return userAuthorities;
-    }
-*/
-
-/*
-    private String getUserAuthority(String userId) {
-        return this
-                .userRepository
-                .findById(userId)
-                .get()
-                .getAuthorities()
-                .stream()
-                .findFirst()
-                .get()
-                .getAuthority();
-    }
-*/
-    @Override
-    public UserServiceModel registerUser(UserServiceModel userServiceModel) {
-        //Validation
+    public boolean registerUser(UserServiceModel userServiceModel) {
 
         this.userRoleService.seedUserRolesInDb();
 
@@ -112,9 +46,9 @@ public class UserServiceImpl implements UserService {
 
         User user = this.modelMapper.map(userServiceModel, User.class);
         user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
-        user = this.userRepository.saveAndFlush(user);
+        this.userRepository.save(user);
 
-        return this.modelMapper.map(user, UserServiceModel.class);
+        return true;
     }
 
     @Override
@@ -133,20 +67,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceModel editUserProfile(UserServiceModel userServiceModel, String oldPassword) {
+    public boolean editUserProfile(UserServiceModel userServiceModel) {
         User user = this.userRepository
                 .findByUsername(userServiceModel.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER));
 
-        if(!this.bCryptPasswordEncoder.matches(oldPassword, user.getPassword())){
-            throw new IllegalArgumentException(ConstantsDefinition.UserConstants.INCORRECT_PASSWORD);
-        }
 
         user.setPassword("".equals(userServiceModel.getPassword()) ? user.getPassword() : this.bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
 
         user.setEmail(userServiceModel.getEmail());
 
-        return this.modelMapper.map(this.userRepository.saveAndFlush(user), UserServiceModel.class);
+        this.userRepository.save(user);
+
+        return true;
     }
 
     @Override
@@ -179,87 +112,4 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.saveAndFlush(this.modelMapper.map(userServiceModel, User.class));
     }
-/*
-    @Override
-    public Set<UserServiceModel> getAll() {
-        return this.userRepository
-                .findAll()
-                .stream()
-                .map(x -> this.modelMapper.map(x, UserServiceModel.class))
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    @Override
-    public UserServiceModel getById(String id) {
-        User userEntity = this.userRepository
-                .findById(id)
-                .orElse(null);
-
-        if(userEntity == null) return null;
-
-        return this.modelMapper.map(userEntity, UserServiceModel.class);
-    }
-
-    @Override
-    public UserServiceModel getByUsername(String username) {
-        User user = this.userRepository
-                .findByUsername(username)
-                .orElse(null);
-
-        if(user == null) return null;
-
-        return this.modelMapper.map(user, UserServiceModel.class);
-    }
-
-    @Override
-    public boolean promoteUser(String id) {
-        User user = this.userRepository
-                .findById(id)
-                .orElse(null);
-
-        if(user == null) return false;
-
-        String userAuthority = this.getUserAuthority(user.getId());
-
-        switch (userAuthority) {
-            case "USER":
-                user.setAuthorities(this.getAuthorities("MODERATOR"));
-                break;
-            case "MODERATOR":
-                user.setAuthorities(this.getAuthorities("ADMIN"));
-                break;
-            default:
-                throw new IllegalArgumentException(ConstantsDefinition.UserConstants.NO_ROLE_LOWER_THAN_USER);
-        }
-
-        this.userRepository.save(user);
-        return true;
-    }
-
-    @Override
-    public boolean demoteUser(String id) {
-        User user = this.userRepository
-                .findById(id)
-                .orElse(null);
-
-        if(user == null) return false;
-
-        String userAuthority = this.getUserAuthority(user.getId());
-
-        switch (userAuthority) {
-            case "ADMIN":
-                user.setAuthorities(this.getAuthorities("MODERATOR"));
-                break;
-            case "MODERATOR":
-                user.setAuthorities(this.getAuthorities("USER"));
-                break;
-            default:
-                throw new IllegalArgumentException("There is no role, lower than USER");
-        }
-
-        this.userRepository.save(user);
-        return true;
-    }
-    */
-
 }

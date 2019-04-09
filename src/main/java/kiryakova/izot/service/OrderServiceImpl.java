@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderServiceModel> findAllOrders() {
         return this.orderRepository
-                .findAll()
+                .findAllOrders()
                 .stream()
                 .map(o -> this.modelMapper.map(o, OrderServiceModel.class))
                 .collect(Collectors.toList());
@@ -136,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return this.orderRepository
-                .findAllByUserId(userServiceModel.getId())
+                .findAllOrdersByUserId(userServiceModel.getId())
                 .stream()
                 .map(x -> this.modelMapper.map(x, OrderServiceModel.class))
                 .collect(Collectors.toList());

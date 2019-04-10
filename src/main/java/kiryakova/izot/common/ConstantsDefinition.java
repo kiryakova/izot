@@ -16,11 +16,18 @@ public final class ConstantsDefinition {
     }
 
     public final static class UserConstants {
-        public static final String NO_SUCH_USER = "Не е намерен такъв потребител!";
+        public static final String NO_SUCH_USER = "Не е намерен потребител %s!";
         public static final String INCORRECT_PASSWORD = "Некоректна парола!";
         public static final String PASSWORDS_DO_NOT_MATCH = "Паролата не е потвърдена!";
         public static final String UNSUCCESSFUL_USER_REGISTRATION = "Регистриране на потребител %s неуспешно.";
         public static final String UNSUCCESSFUL_USER_EDITING = "Редактиране на потребител %s неуспешно.";
+        public static final String USER_ALREADY_EXISTS = "Потребител с име %s вече съществува";
+        public static final String EMAIL_ALREADY_EXISTS = "Потребител с email %s вече съществува";
+    }
+
+    public final static class ProductConstants {
+        public static final String NO_SUCH_PRODUCT = "Не е намерен такъв продукт!";
+        public static final String NO_SAVED_PRODUCT = "Продуктът не е записан!";
     }
 }
 

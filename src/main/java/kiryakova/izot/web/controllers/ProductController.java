@@ -95,7 +95,6 @@ public class ProductController extends BaseController {
 
         this.productService.editProduct(id, productServiceModel);
 
-        //return this.redirect("/products/all");
         return this.redirect("/products/details/" + id);
     }
 
@@ -139,26 +138,8 @@ public class ProductController extends BaseController {
     }
 
     @GetMapping(value = {"/all/products", "/all/products/{categoryId}"})
-    //@RequestMapping(value = {"/all/products", "/all/products/{categoryId}"}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView allProducts(@PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
-
-
-        /*if(categoryId != null && !categoryId.equals("")) {
-            modelAndView.addObject("categoryId", categoryId);
-            modelAndView.addObject("products", this.productService.findAllByCategoryId(categoryId)
-                    .stream()
-                    .map(c -> this.modelMapper.map(c, ProductAllViewModel.class))
-                    .collect(Collectors.toList()));
-        }
-        else{
-            modelAndView.addObject("categoryId", "");
-            modelAndView.addObject("products", this.productService.findAllProducts()
-                    .stream()
-                    .map(c -> this.modelMapper.map(c, ProductAllViewModel.class))
-                    .collect(Collectors.toList()));
-        }*/
-
 
         modelAndView.addObject("categoryId", categoryId != null && !categoryId.equals("") ? categoryId : "all");
 
@@ -170,17 +151,21 @@ public class ProductController extends BaseController {
         return this.view("product/all", modelAndView);
     }
 
-    /*
-    @GetMapping("/all/{categoryId}")
-    @PreAuthorize("hasAuthority('MODERATOR')")
-    public ModelAndView allProductsByCategory(ModelAndView modelAndView) {
-        modelAndView.addObject("products", this.productService.findAllProducts()
-                .stream()
-                .map(c -> this.modelMapper.map(c, ProductAllViewModel.class))
-                .collect(Collectors.toList()));
+    /*@ExceptionHandler({ProductNotFoundException.class})
+    public ModelAndView handleProductNotFound(ProductNotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
 
-        return this.view("product/all", modelAndView);
+        return modelAndView;
     }
-*/
 
+    @ExceptionHandler({ProductNameAlreadyExistsException.class})
+    public ModelAndView handleProductNameALreadyExist(ProductNameAlreadyExistsException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
+
+        return modelAndView;
+    }*/
 }

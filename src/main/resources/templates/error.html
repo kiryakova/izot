@@ -6,14 +6,18 @@
     <th:block th:include="~{fragments/navbar}"></th:block>
 
     <main class="mt-3">
-        <h1 class="text-center text-dark">Нещо се обърка</h1>
-        <hr class="hr-2 bg-dark ">
+        <h1 class="text-center text-izot-bold">Нещо се обърка</h1>
+        <div class="text-center">
+            <i class="fas fa-tv"></i><h5 th:text="${status}"></h5>
+        </div>
+        <hr class="hr-2 bg-izot w-75">
+        <div class="text-center">
+            <h2 th:text="${reason}" style="color: red;"></h2>
+        </div>
         <div class="text-center">
             <h3 th:text="${message}" style="color: red;"></h3>
         </div>
-        <div class="text-center" >
-            <img th:src="'https://http.cat/' + ${statusCode}" alt="Грешка">
-        </div>
+        <hr class="hr-2 bg-izot w-75">
     </main>
 
     <th:block th:include="~{fragments/footer}"></th:block>

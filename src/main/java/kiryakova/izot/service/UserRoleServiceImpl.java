@@ -46,17 +46,4 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRoleServiceModel findByAuthority(String authority) {
         return this.modelMapper.map(this.userRoleRepository.findByAuthority(authority), UserRoleServiceModel.class);
     }
-
-    /*@Override
-    public void assignUserRoles(UserServiceModel userServiceModel, long numberOfUsers) {
-        if(numberOfUsers == 0){
-            userServiceModel
-                    .setAuthorities(this.userRoleRepository
-                            .findAll()
-                            .stream()
-                            .map(r -> this.modelMapper.map(r, UserRoleServiceModel.class))
-                            .collect(Collectors.toSet()));
-        }
-    }
-    */
 }

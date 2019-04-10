@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductServiceModel addProduct(ProductServiceModel productServiceModel);
+    boolean addProduct(ProductServiceModel productServiceModel);
 
     ProductServiceModel editProduct(String id, ProductServiceModel productServiceModel);
 

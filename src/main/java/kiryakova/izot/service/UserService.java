@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface UserService extends UserDetailsService {
 
-    boolean registerUser(UserServiceModel userServiceModel);
+    void registerUser(UserServiceModel userServiceModel);
 
     UserServiceModel findUserByUsername(String username);
 
@@ -19,17 +19,7 @@ public interface UserService extends UserDetailsService {
 
     void setUserAuthority(String id, String authority);
 
-    //UserServiceModel loginUser(UserServiceModel userServiceModel);
+    boolean checkIfUsernameAlreadyExists(String username);
 
-    //boolean createUser(UserServiceModel userServiceModel);
-
-    //Set<UserServiceModel> getAll();
-
-    //UserServiceModel getById(String id);
-
-    //UserServiceModel getByUsername(String username);
-
-    //boolean promoteUser(String id);
-
-    //boolean demoteUser(String id);
+    boolean checkIfEmailAlreadyExists(String email);
 }

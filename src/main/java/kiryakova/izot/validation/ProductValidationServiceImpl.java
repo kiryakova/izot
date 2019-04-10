@@ -1,4 +1,4 @@
-package kiryakova.izot.validation.implementations;
+package kiryakova.izot.validation;
 
 import kiryakova.izot.domain.entities.Product;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
@@ -22,14 +22,4 @@ public class ProductValidationServiceImpl implements ProductValidationService {
     private boolean isCategoryValid(CategoryServiceModel categoryServiceModel) {
         return categoryServiceModel != null;
     }
-    /*
-    @Override
-    public boolean isValid(ProductServiceModel product) {
-        return product != null
-                && areCategoriesValid(product.getCategories()));
-    }
-
-    private boolean areCategoriesValid(List<CategoryServiceModel> categories) {
-        return categories != null && !categories.isEmpty();
-    }*/
 }

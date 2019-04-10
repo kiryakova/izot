@@ -2,6 +2,7 @@ package kiryakova.izot.web.controllers;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -18,6 +19,13 @@ public class GlobalExceptionController extends BaseController {
         }
 
         modelAndView.addObject("message", throwable.getMessage());
+        modelAndView.addObject("reason", throwable.getClass().isAnnotationPresent(ResponseStatus.class)
+                ? throwable.getClass().getAnnotation(ResponseStatus.class).reason()
+                : "");
+
+        modelAndView.addObject("status", throwable.getClass().isAnnotationPresent(ResponseStatus.class)
+                ? throwable.getClass().getAnnotation(ResponseStatus.class).value()
+                : "");
 
         return modelAndView;
     }

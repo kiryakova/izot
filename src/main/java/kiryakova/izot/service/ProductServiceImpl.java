@@ -5,6 +5,8 @@ import kiryakova.izot.domain.entities.Category;
 import kiryakova.izot.domain.entities.Product;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
+import kiryakova.izot.error.ProductNotFoundException;
+import kiryakova.izot.error.ProductNotSavedException;
 import kiryakova.izot.repository.ProductRepository;
 import kiryakova.izot.validation.ProductValidationService;
 import org.modelmapper.ModelMapper;
@@ -34,14 +36,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductServiceModel addProduct(ProductServiceModel productServiceModel) {
+    public boolean addProduct(ProductServiceModel productServiceModel) {
         if(!productValidation.isValid(productServiceModel)) {
-            throw new IllegalArgumentException();
+            throw new ProductNotFoundException(ConstantsDefinition.ProductConstants.NO_SUCH_PRODUCT);
         }
 
         Product product = this.modelMapper.map(productServiceModel, Product.class);
-        product = this.productRepository.saveAndFlush(product);
-        return this.modelMapper.map(product, ProductServiceModel.class);
+        try {
+            this.productRepository.save(product);
+        } catch (Exception ignored){
+            throw new ProductNotSavedException(ConstantsDefinition.ProductConstants.NO_SAVED_PRODUCT);
+        }
+
+        return true;
     }
 
     @Override

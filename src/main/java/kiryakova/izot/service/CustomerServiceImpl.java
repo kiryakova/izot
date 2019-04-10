@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
@@ -66,6 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLastName(customerServiceModel.getLastName());
         customer.setAddress(customerServiceModel.getAddress());
         customer.setPhone(customerServiceModel.getPhone());
+        customer.setLocalDateTime(LocalDateTime.now());
         customer.setUser(this.modelMapper.map(userServiceModel, User.class));
 
         customer = this.customerRepository.saveAndFlush(customer);

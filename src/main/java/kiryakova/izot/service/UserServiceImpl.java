@@ -3,7 +3,9 @@ package kiryakova.izot.service;
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.User;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.error.UserRegisterException;
 import kiryakova.izot.repository.UserRepository;
+import kiryakova.izot.validation.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,29 +13,29 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleService userRoleService;
+    private final UserValidationService userValidation;
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, UserValidationService userValidation, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.userRoleService = userRoleService;
+        this.userValidation = userValidation;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public boolean registerUser(UserServiceModel userServiceModel) {
+    public void registerUser(UserServiceModel userServiceModel) {
 
         this.userRoleService.seedUserRolesInDb();
 
@@ -46,32 +48,39 @@ public class UserServiceImpl implements UserService {
 
         User user = this.modelMapper.map(userServiceModel, User.class);
         user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
-        this.userRepository.save(user);
 
-        return true;
+        try {
+            this.userRepository.save(user);
+        }catch (Exception ignored){
+            throw new UserRegisterException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_REGISTRATION, userServiceModel.getUsername()));
+        }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER));
+    public UserDetails loadUserByUsername(String username) {
+        User user = this.userRepository.findByUsername(username).orElse(null);
 
+        this.checkIfUserFound(user);
+
+        return user;
     }
 
     @Override
     public UserServiceModel findUserByUsername(String username) {
-        return this.userRepository
-                .findByUsername(username)
-                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
-                .orElseThrow(() -> new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER));
+        User user = this.userRepository
+                .findByUsername(username).orElse(null);
+
+        this.checkIfUserFound(user);
+
+        return this.modelMapper.map(user, UserServiceModel.class);
     }
 
     @Override
     public boolean editUserProfile(UserServiceModel userServiceModel) {
         User user = this.userRepository
-                .findByUsername(userServiceModel.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER));
+                .findByUsername(userServiceModel.getUsername()).orElse(null);
 
+        this.checkIfUserFound(user);
 
         user.setPassword("".equals(userServiceModel.getPassword()) ? user.getPassword() : this.bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
 
@@ -84,13 +93,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserServiceModel> findAllUsers() {
-        return this.userRepository.findAll().stream().map(u -> this.modelMapper.map(u, UserServiceModel.class)).collect(Collectors.toList());
+        return this.userRepository
+                .findAll()
+                .stream()
+                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void setUserAuthority(String id, String authority) {
-        User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ConstantsDefinition.GlobalConstants.INCORRECT_ID));
+        User user = this.userRepository.findById(id).orElse(null);
+
+        this.checkIfUserFound(user);
 
         UserServiceModel userServiceModel = this.modelMapper.map(user, UserServiceModel.class);
         userServiceModel.getAuthorities().clear();
@@ -110,6 +124,36 @@ public class UserServiceImpl implements UserService {
                 break;
         }
 
-        this.userRepository.saveAndFlush(this.modelMapper.map(userServiceModel, User.class));
+        this.userRepository.save(this.modelMapper.map(userServiceModel, User.class));
+    }
+
+    @Override
+    public boolean checkIfUsernameAlreadyExists(String username) {
+        User user = this.userRepository
+                .findByUsername(username).orElse(null);
+
+        if(user == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean checkIfEmailAlreadyExists(String email) {
+        User user = this.userRepository
+                .findByEmail(email).orElse(null);
+
+        if(user == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void checkIfUserFound(User user) {
+        if(!userValidation.isValid(user)) {
+            throw new UsernameNotFoundException(String.format(ConstantsDefinition.UserConstants.NO_SUCH_USER, user.getUsername()));
+        }
     }
 }

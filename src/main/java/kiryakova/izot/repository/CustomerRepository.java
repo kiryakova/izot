@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
-    @Query(value = "SELECT * FROM customers WHERE user_id = :userId"
+    @Query(value = "SELECT * FROM customers WHERE user_id = :userId ORDER BY timestamp DESC LIMIT 1"
             , nativeQuery = true)
     Optional<Customer> findCustomerByUserId(@Param("userId") String userId);
 

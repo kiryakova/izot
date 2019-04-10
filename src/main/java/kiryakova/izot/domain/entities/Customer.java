@@ -3,6 +3,7 @@ package kiryakova.izot.domain.entities;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -13,6 +14,7 @@ public class Customer extends BaseEntity {
     private String address;
     private String phone;
     private User user;
+    private LocalDateTime localDateTime;
     //private List<Order> orderList;
 
 
@@ -67,6 +69,15 @@ public class Customer extends BaseEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Column(name = "timestamp")
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     /*

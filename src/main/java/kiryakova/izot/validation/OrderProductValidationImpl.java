@@ -1,4 +1,4 @@
-package kiryakova.izot.validation.implementations;
+package kiryakova.izot.validation;
 
 import kiryakova.izot.domain.entities.Order;
 import kiryakova.izot.domain.entities.OrderProduct;

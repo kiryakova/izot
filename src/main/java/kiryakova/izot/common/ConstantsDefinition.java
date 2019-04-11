@@ -13,10 +13,12 @@ public final class ConstantsDefinition {
         public static final String EMAIL_IS_NOT_CORRECT = "Email-а не е коректен!";
         public static final String PASSWORD_IS_NOT_CORRECT = "Паролата трябва да бъде от 3 до 18 символа!";
         public static final String USERNAME_IS_NOT_CORRECT = "Името трябва да бъде от 5 до 18 символа!";
+        public static final String NAME_IS_NOT_CORRECT = "Името трябва да бъде от 5 до 25 символа!";
     }
 
     public final static class UserConstants {
-        public static final String NO_SUCH_USER = "Не е намерен потребител %s!";
+        public static final String NO_SUCH_USER = "Не е намерен такъв потребител!";
+        public static final String NO_USER_WITH_USERNAME = "Не е намерен потребител %s!";
         public static final String INCORRECT_PASSWORD = "Некоректна парола!";
         public static final String PASSWORDS_DO_NOT_MATCH = "Паролата не е потвърдена!";
         public static final String UNSUCCESSFUL_USER_REGISTRATION = "Регистриране на потребител %s неуспешно.";
@@ -27,7 +29,10 @@ public final class ConstantsDefinition {
 
     public final static class ProductConstants {
         public static final String NO_SUCH_PRODUCT = "Не е намерен такъв продукт!";
-        public static final String NO_SAVED_PRODUCT = "Продуктът не е записан!";
+        public static final String NO_PRODUCT_WITH_NAME = "Не е намерен продукт %s!";
+        public static final String UNSUCCESSFUL_SAVED_PRODUCT = "Добавяне на продукт %s неуспешно!";
+        public static final String UNSUCCESSFUL_DELETE_PRODUCT = "Неуспешно изтриване на продукт %s";
+        public static final String PRODUCT_ALREADY_EXISTS = "Продукт с име %s вече съществува";
     }
 }
 

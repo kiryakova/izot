@@ -1,5 +1,6 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.ProductBindingModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
 import kiryakova.izot.domain.models.view.ProductAllViewModel;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -41,22 +44,28 @@ public class ProductController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     public ModelAndView addProductConfirm(ModelAndView modelAndView,
-                                    @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
-                                    BindingResult bindingResult) {
+                                          @RequestParam("imageUrl") MultipartFile imageUrl,
+                                          @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
+                                          BindingResult bindingResult) {
+
+        if(this.productService.checkIfProductNameAlreadyExists(productBindingModel.getName())){
+            bindingResult.addError(new FieldError("productBindingModel", "name",
+                    String.format(ConstantsDefinition.ProductConstants.PRODUCT_ALREADY_EXISTS, productBindingModel.getName())));
+        }
+
+        if(imageUrl == null || imageUrl.isEmpty()){
+            bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
+                    ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
+        }
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("product", productBindingModel);
             return this.view("product/add-product", modelAndView);
         }
 
         ProductServiceModel productServiceModel = this.modelMapper.map(productBindingModel, ProductServiceModel.class);
-
-        try {
-            productService.setImageUrl(productServiceModel, productBindingModel.getImageUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        this.productService.addProduct(productServiceModel);
+        
+        this.productService.addProduct(productServiceModel, productBindingModel.getImageUrl());
 
         return this.redirect("/products/all");
     }
@@ -76,24 +85,33 @@ public class ProductController extends BaseController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
-    public ModelAndView editCategoryConfirm(ModelAndView modelAndView,
+    public ModelAndView editProductConfirm(ModelAndView modelAndView,
                                             @PathVariable String id,
-                                            @ModelAttribute(name = "category") @Valid ProductBindingModel productBindingModel,
-                                            BindingResult bindingResult) {
+                                            @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
+                                            BindingResult bindingResult,
+                                            @RequestParam("imageUrl") MultipartFile imageUrl) {
+
+        /*if(this.productService.checkIfProductNameAlreadyExists(productBindingModel.getName())){
+            bindingResult.addError(new FieldError("productBindingModel", "name",
+                    String.format(ConstantsDefinition.ProductConstants.PRODUCT_ALREADY_EXISTS, productBindingModel.getName())));
+        }*/
+
+        if(imageUrl == null || imageUrl.isEmpty()){
+            bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
+                    ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
+        }
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("product", productBindingModel);
+            modelAndView.addObject("productId", id);
+            modelAndView.addObject("imgUrlStr", productBindingModel.getImageUrl());
+
             return this.view("product/edit-product", modelAndView);
         }
 
         ProductServiceModel productServiceModel = this.modelMapper.map(productBindingModel, ProductServiceModel.class);
 
-        try {
-            productService.setImageUrl(productServiceModel, productBindingModel.getImageUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        this.productService.editProduct(id, productServiceModel);
+        this.productService.editProduct(id, productServiceModel, productBindingModel.getImageUrl());
 
         return this.redirect("/products/details/" + id);
     }
@@ -150,22 +168,5 @@ public class ProductController extends BaseController {
 
         return this.view("product/all", modelAndView);
     }
-
-    /*@ExceptionHandler({ProductNotFoundException.class})
-    public ModelAndView handleProductNotFound(ProductNotFoundException e) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("message", e.getMessage());
-        modelAndView.addObject("statusCode", e.getStatusCode());
-
-        return modelAndView;
-    }
-
-    @ExceptionHandler({ProductNameAlreadyExistsException.class})
-    public ModelAndView handleProductNameALreadyExist(ProductNameAlreadyExistsException e) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("message", e.getMessage());
-        modelAndView.addObject("statusCode", e.getStatusCode());
-
-        return modelAndView;
-    }*/
 }
+

@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     boolean checkIfUsernameAlreadyExists(String username);
 
     boolean checkIfEmailAlreadyExists(String email);
+
+    boolean checkIfEmailExistsForOtherUser(String email, String username);
 }

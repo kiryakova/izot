@@ -48,9 +48,10 @@
         .catch((err) => console.log(err));
 
     $(document).ready(function () {
-        $('input').disabled();
-        $('input').addClass('disabled');
-        $('input[type=file]').hidden;
+        //$('input').disabled();
+        //$('input').addClass('readonly');
+        $('input').readOnly();
+        $('input[type=file]').readOnly();
     });
 
 </script>

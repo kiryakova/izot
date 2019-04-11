@@ -72,7 +72,7 @@ public class UserController extends BaseController {
                                         BindingResult bindingResult) {
 
         if(!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
-            bindingResult.addError(new FieldError("userRegisterBindingModel", "password", "Passwords don't match."));
+            bindingResult.addError(new FieldError("userRegisterBindingModel", "password", ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
         }
 
         if(this.userService.checkIfUsernameAlreadyExists(userRegisterBindingModel.getUsername())){
@@ -85,12 +85,7 @@ public class UserController extends BaseController {
                     String.format(ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS, userRegisterBindingModel.getEmail())));
         }
 
-        if(!userRegisterBindingModel.getPassword()
-                .equals(userRegisterBindingModel.getConfirmPassword()) ||
-                //this.recaptchaService
-                //        .verifyRecaptcha(request.getRemoteAddr()
-                //                , gRecaptchaResponse) == null ||
-                bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
 
             modelAndView.addObject("user", userRegisterBindingModel);
 
@@ -139,13 +134,18 @@ public class UserController extends BaseController {
 
         if (!this.bCryptPasswordEncoder.matches(userEditBindingModel.getOldPassword(), userServiceModel.getPassword())) {
             bindingResult.addError(new FieldError("userEditBindingModel", "oldPassword", ConstantsDefinition.UserConstants.INCORRECT_PASSWORD));
-        } else if (!userEditBindingModel.getPassword().equals(userEditBindingModel.getConfirmPassword())) {
+        }
+
+        if (!userEditBindingModel.getPassword().equals(userEditBindingModel.getConfirmPassword())) {
             bindingResult.addError(new FieldError("userEditBindingModel", "password", ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
         }
 
-        if(!userEditBindingModel.getPassword()
-                .equals(userEditBindingModel.getConfirmPassword()) ||
-                bindingResult.hasErrors()) {
+        if(this.userService.checkIfEmailExistsForOtherUser(userEditBindingModel.getEmail(), userEditBindingModel.getUsername())){
+            bindingResult.addError(new FieldError("userEditBindingModel", "email",
+                    String.format(ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS, userEditBindingModel.getEmail())));
+        }
+
+        if(bindingResult.hasErrors()) {
 
             modelAndView.addObject("user", userEditBindingModel);
             return this.view("edit-profile", modelAndView);

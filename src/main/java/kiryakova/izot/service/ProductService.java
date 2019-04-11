@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ProductService {
 
-    boolean addProduct(ProductServiceModel productServiceModel);
+    void addProduct(ProductServiceModel productServiceModel, MultipartFile imageUrl);
 
-    ProductServiceModel editProduct(String id, ProductServiceModel productServiceModel);
+    void editProduct(String id, ProductServiceModel productServiceModel, MultipartFile imageUrl);
 
-    ProductServiceModel deleteProduct(String id);
+    void deleteProduct(String id);
 
     ProductServiceModel findProductById(String id);
 
@@ -21,5 +21,7 @@ public interface ProductService {
 
     List<ProductServiceModel> findAllProductsByCategoryId(String categoryId);
 
-    boolean setImageUrl(ProductServiceModel productServiceModel, MultipartFile multipartFile) throws IOException;
+    boolean checkIfProductNameAlreadyExists(String name);
+
+    //boolean setImageUrl(ProductServiceModel productServiceModel, MultipartFile multipartFile) throws IOException;
 }

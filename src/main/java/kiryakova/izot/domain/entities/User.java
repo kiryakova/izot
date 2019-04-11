@@ -62,39 +62,6 @@ public class User extends BaseEntity implements UserDetails {
         this.email = email;
     }
 
-    /*@Column(name = "first_name", nullable = true)
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Column(name = "last_name", nullable = true)
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    */
-/*
-    @Column(name = "ucn", nullable = false, unique = true)
-    public String getUcn() {
-        return ucn;
-    }
-
-    public void setUcn(String ucn) {
-        this.ucn = ucn;
-    }
-*/
-
-
-
-
-
     @Override
     @ManyToMany(targetEntity = UserRole.class
             , fetch = FetchType.EAGER)
@@ -110,29 +77,6 @@ public class User extends BaseEntity implements UserDetails {
     public void setAuthorities(Set<UserRole> authorities) {
         this.authorities = authorities;
     }
-
-/*
-    @Override
-    @Transient
-    public Collection<UserRole> getAuthorities() {
-        return this.roles;
-    }
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    public Set<UserRole> getRoles() {
-        return this.roles;
-    }
-
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
-
-*/
-
-
 
     @Override
     //@Column(name = "is_account_non_expired")
@@ -184,16 +128,4 @@ public class User extends BaseEntity implements UserDetails {
         this.orders = orders;
     }
 
-
-
-    /*
-    @OneToMany(targetEntity = Order.class, mappedBy = "performer")
-    public List<Order> getPerformedOrderList() {
-        return performedOrderList;
-    }
-
-    public void setPerformedOrderList(List<Order> performedOrderList) {
-        this.performedOrderList = performedOrderList;
-    }
-    */
 }

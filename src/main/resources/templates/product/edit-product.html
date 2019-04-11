@@ -14,7 +14,7 @@
                 <h3 class="text-center text-danger" th:text="${error}"></h3>
             </th:block>-->
 
-            <form class="form w-50 mx-auto" th:action="@{/product/edit/{id}(id=${productId})}" th:method="post" th:object="${product}" enctype="multipart/form-data">
+            <form class="form w-50 mx-auto" th:action="@{/products/edit/{id}(id=${productId})}" th:method="post" th:object="${product}" enctype="multipart/form-data">
 
                 <div class="text-center">
                     <img th:src="${imgUrlStr}" class="img-responsive" alt="Category">

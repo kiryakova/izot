@@ -3,8 +3,8 @@ package kiryakova.izot.service;
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.Category;
 import kiryakova.izot.domain.entities.Product;
-import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
+import kiryakova.izot.error.ProductNotDeletedException;
 import kiryakova.izot.error.ProductNotFoundException;
 import kiryakova.izot.error.ProductNotSavedException;
 import kiryakova.izot.repository.ProductRepository;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,26 +35,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean addProduct(ProductServiceModel productServiceModel) {
-        if(!productValidation.isValid(productServiceModel)) {
-            throw new ProductNotFoundException(ConstantsDefinition.ProductConstants.NO_SUCH_PRODUCT);
+    public void addProduct(ProductServiceModel productServiceModel, MultipartFile imageUrl) {
+        if(!productValidation.isValid(productServiceModel)){
+            throw new IllegalArgumentException();
         }
 
         Product product = this.modelMapper.map(productServiceModel, Product.class);
+
+        this.setImageUrl(product, imageUrl);
+
         try {
             this.productRepository.save(product);
         } catch (Exception ignored){
-            throw new ProductNotSavedException(ConstantsDefinition.ProductConstants.NO_SAVED_PRODUCT);
+            throw new ProductNotSavedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT, product.getName()));
         }
-
-        return true;
     }
 
     @Override
-    public ProductServiceModel editProduct(String id, ProductServiceModel productServiceModel) {
-        Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        String.format(ConstantsDefinition.GlobalConstants.NO_ENTITY_WITH_ID, Product.class.getClass(), id)));
+    public void editProduct(String id, ProductServiceModel productServiceModel, MultipartFile imageUrl) {
+        Product product = this.productRepository.findById(id).orElse(null);
+
+        this.checkIfProductFound(product, productServiceModel.getName());
 
         productServiceModel.setCategory(
                 this.categoryService.findCategoryById(productServiceModel.getCategory().getId())
@@ -69,34 +69,34 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(productServiceModel.getDescription());
         product.setPrice(productServiceModel.getPrice());
         product.setCategory(this.modelMapper.map(productServiceModel.getCategory(), Category.class));
+        this.setImageUrl(product, imageUrl);
 
-        product = this.productRepository.saveAndFlush(product);
-        return this.modelMapper.map(product, ProductServiceModel.class);
+        try {
+            this.productRepository.save(product);
+        }catch (Exception ignored){
+            throw new ProductNotSavedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT, product.getName()));
+        }
 
     }
 
     @Override
-    public ProductServiceModel deleteProduct(String id) {
-        Product product = this.productRepository
-                .findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                String.format(ConstantsDefinition.GlobalConstants.NO_ENTITY_WITH_ID, Product.class.getClass(), id))
-                );
+    public void deleteProduct(String id) {
+        Product product = this.productRepository.findById(id).orElse(null);
 
-        this.productRepository.delete(product);
+        this.checkIfProductFound(product);
 
-        return this.modelMapper.map(product, ProductServiceModel.class);
+        try {
+            this.productRepository.delete(product);
+        }catch (Exception ignored){
+            throw new ProductNotDeletedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_DELETE_PRODUCT, product.getName()));
+        }
     }
 
     @Override
     public ProductServiceModel findProductById(String id) {
-        Product product = this.productRepository
-                .findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                String.format(ConstantsDefinition.GlobalConstants.NO_ENTITY_WITH_ID, Product.class.getClass(), id))
-                );
+        Product product = this.productRepository.findById(id).orElse(null);
+
+        this.checkIfProductFound(product);
 
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
@@ -118,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
                     .map(product -> this.modelMapper.map(product, ProductServiceModel.class))
                     .collect(Collectors.toList());
         }
+
         return this.productRepository.findAllByCategoryId(categoryId)
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
@@ -125,14 +126,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean setImageUrl(ProductServiceModel productServiceModel, MultipartFile multipartFile) throws IOException {
+    public boolean checkIfProductNameAlreadyExists(String name) {
+        Product product = this.productRepository
+                .findByName(name).orElse(null);
+
+        if(product == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void setImageUrl(Product product, MultipartFile multipartFile) {
         try {
-            productServiceModel.setImageUrl(
+            product.setImageUrl(
                     this.cloudinaryService.uploadImage(multipartFile)
             );
         } catch (Exception e){
-            return false;
+            throw new IllegalArgumentException();
         }
-        return true;
+    }
+
+    private void checkIfProductFound(Product product) {
+        if(!productValidation.isValid(product)) {
+            throw new ProductNotFoundException(ConstantsDefinition.ProductConstants.NO_SUCH_PRODUCT);
+        }
+    }
+
+    private void checkIfProductFound(Product product, String name) {
+        if(!productValidation.isValid(product)) {
+            throw new ProductNotFoundException(String.format(ConstantsDefinition.ProductConstants.NO_PRODUCT_WITH_NAME, name));
+        }
     }
 }

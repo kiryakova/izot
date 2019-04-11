@@ -10,11 +10,8 @@ import javax.validation.constraints.Pattern;
 public class UserEditBindingModel {
     private String username;
     private String email;
-    //@ValidPassword
     private String oldPassword;
-    //@ValidPassword
     private String password;
-    //@ValidPassword
     private String confirmPassword;
 
     public UserEditBindingModel() {

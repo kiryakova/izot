@@ -3,7 +3,6 @@ package kiryakova.izot.domain.models.binding;
 import kiryakova.izot.common.ConstantsDefinition;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -11,9 +10,7 @@ import javax.validation.constraints.Pattern;
 public class UserRegisterBindingModel {
     private String username;
     private String email;
-    //@ValidPassword
     private String password;
-    //@ValidPassword
     private String confirmPassword;
 
     public UserRegisterBindingModel() {

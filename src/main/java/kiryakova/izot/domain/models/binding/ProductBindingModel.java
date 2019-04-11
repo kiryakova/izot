@@ -2,15 +2,16 @@ package kiryakova.izot.domain.models.binding;
 
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.Category;
-import kiryakova.izot.domain.entities.OrderProduct;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class ProductBindingModel {
+    private String id;
     private String name;
     private String description;
     private BigDecimal price;
@@ -20,8 +21,17 @@ public class ProductBindingModel {
     public ProductBindingModel() {
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 5, max = 25, message = ConstantsDefinition.BindingModelConstants.NAME_IS_NOT_CORRECT)
     public String getName() {
         return name;
     }
@@ -30,6 +40,8 @@ public class ProductBindingModel {
         this.name = name;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
     public String getDescription() {
         return description;
     }
@@ -38,6 +50,8 @@ public class ProductBindingModel {
         this.description = description;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @DecimalMin("0.01")
     public BigDecimal getPrice() {
         return price;
     }
@@ -46,7 +60,7 @@ public class ProductBindingModel {
         this.price = price;
     }
 
-
+    //@NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     public MultipartFile getImageUrl() {
         return imageUrl;
     }
@@ -55,6 +69,7 @@ public class ProductBindingModel {
         this.imageUrl = imageUrl;
     }
 
+    //@NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     public Category getCategory() {
         return category;
     }

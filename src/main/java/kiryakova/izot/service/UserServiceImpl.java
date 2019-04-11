@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(UserServiceModel userServiceModel) {
 
+        if(!userValidation.isValid(userServiceModel)){
+            throw new IllegalArgumentException();
+        }
+
         this.userRoleService.seedUserRolesInDb();
 
         if(this.userRepository.count() == 0){
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) {
         User user = this.userRepository.findByUsername(username).orElse(null);
 
-        this.checkIfUserFound(user);
+        this.checkIfUserFound(user, username);
 
         return user;
     }
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findByUsername(username).orElse(null);
 
-        this.checkIfUserFound(user);
+        this.checkIfUserFound(user, username);
 
         return this.modelMapper.map(user, UserServiceModel.class);
     }
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findByUsername(userServiceModel.getUsername()).orElse(null);
 
-        this.checkIfUserFound(user);
+        this.checkIfUserFound(user, userServiceModel.getUsername());
 
         user.setPassword("".equals(userServiceModel.getPassword()) ? user.getPassword() : this.bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
 
@@ -151,9 +155,27 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public boolean checkIfEmailExistsForOtherUser(String email, String username) {
+        User user = this.userRepository
+                .findByEmail(email).orElse(null);
+
+        if((user == null) || (user.getUsername().equals(username))) {
+            return false;
+        }
+
+        return true;
+    }
+
     private void checkIfUserFound(User user) {
         if(!userValidation.isValid(user)) {
-            throw new UsernameNotFoundException(String.format(ConstantsDefinition.UserConstants.NO_SUCH_USER, user.getUsername()));
+            throw new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER);
+        }
+    }
+
+    private void checkIfUserFound(User user, String username) {
+        if(!userValidation.isValid(user)) {
+            throw new UsernameNotFoundException(String.format(ConstantsDefinition.UserConstants.NO_USER_WITH_USERNAME, username));
         }
     }
 }

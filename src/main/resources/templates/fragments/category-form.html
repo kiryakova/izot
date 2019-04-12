@@ -2,7 +2,7 @@
 
 	<div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'text-danger'" >
 		<label for="name" class="font-weight-bold text-izot">Име</label>
-		<input type="text" th:readonly="*{name}!=null" class="form-control text-izot" id="name" th:field="*{name}" placeholder="Въведи име..." autofocus="autofocus" />
+		<input type="text" th:readonly="${categoryId}!=null" class="form-control text-izot" id="name" th:field="*{name}" placeholder="Въведи име..." autofocus="autofocus" />
 		<small th:each="error : ${#fields.errors('name')}" th:text="${error}"></small>
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('imageUrl')}? 'text-danger'">

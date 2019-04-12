@@ -25,7 +25,7 @@ public class CategoryAppController {
 
     @GetMapping("/categories/fetch")
     @PreAuthorize("hasAuthority('USER')")
-    @ResponseBody
+    //@ResponseBody
     public List<CategoryViewModel> fetchCategories() {
         return this.categoryService.findAllCategories()
                 .stream()

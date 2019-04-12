@@ -49,6 +49,7 @@ public class CustomerController extends BaseController {
                                             BindingResult bindingResult) throws Exception {
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("customer", customerBindingModel);
+            modelAndView.addObject("orderId", id);
             return this.view("customer/edit-customer", modelAndView);
         }
 

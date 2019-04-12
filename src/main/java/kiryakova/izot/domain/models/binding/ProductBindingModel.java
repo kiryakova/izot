@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class ProductBindingModel {
-    private String id;
     private String name;
     private String description;
     private BigDecimal price;
@@ -19,14 +18,6 @@ public class ProductBindingModel {
     private Category category;
 
     public ProductBindingModel() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)

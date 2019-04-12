@@ -18,22 +18,22 @@
 
                 <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'" >
                     <label for="firstName" class="font-weight-bold text-izot">Име</label>
-                    <input type="text" class="form-control text-izot" id="firstName" th:field="*{firstName}" />
+                    <input type="text" class="form-control text-izot" id="firstName" th:field="*{firstName}" placeholder="Въведи име..." autofocus="autofocus" />
                     <small th:each="error : ${#fields.errors('firstName')}" th:text="${error}"></small>
                 </div>
                 <div class="form-group" th:classappend="${#fields.hasErrors('lastName')}? 'text-danger'" >
                     <label for="lastName" class="font-weight-bold text-izot">Фамилия</label>
-                    <input type="text" class="form-control text-izot" id="lastName" th:field="*{lastName}" />
+                    <input type="text" class="form-control text-izot" id="lastName" th:field="*{lastName}" placeholder="Въведи фамилия..." />
                     <small th:each="error : ${#fields.errors('lastName')}" th:text="${error}"></small>
                 </div>
                 <div class="form-group" th:classappend="${#fields.hasErrors('address')}? 'text-danger'" >
                     <label for="address" class="font-weight-bold text-izot">Адрес</label>
-                    <input type="text" class="form-control text-izot" id="address" th:field="*{address}" />
+                    <input type="text" class="form-control text-izot" id="address" th:field="*{address}" placeholder="Въведи адрес..." />
                     <small th:each="error : ${#fields.errors('address')}" th:text="${error}"></small>
                 </div>
                 <div class="form-group" th:classappend="${#fields.hasErrors('phone')}? 'text-danger'">
                     <label for="phone" class="font-weight-bold text-izot">Телефон</label>
-                    <input type="text" class="form-control text-izot" id="phone" th:field="*{phone}" />
+                    <input type="text" class="form-control text-izot" id="phone" th:field="*{phone}" placeholder="Въведи телефон..." />
                     <small th:each="error : ${#fields.errors('phone')}" th:text="${error}"></small>
                 </div>
 

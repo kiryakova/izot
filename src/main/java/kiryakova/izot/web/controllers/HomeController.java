@@ -39,41 +39,7 @@ public class HomeController extends BaseController {
                         .map(category, CategoryViewModel.class))
                 .collect(Collectors.toList()));
 
-        //modelAndView.addObject("username");
-
         return this.view("home", modelAndView);
     }
 
-    /*
-
-    @GetMapping("/home")
-    public ModelAndView home(Authentication authentication, ModelAndView modelAndView) {
-        modelAndView.addObject("username", authentication.getName());
-
-        //if(this.getPrincipalAuthority(authentication) != null
-         //       && this.getPrincipalAuthority(authentication).equals("ADMIN")){
-         //   return this.view("admin-home", modelAndView);
-        //}
-
-        return this.view("home", modelAndView);
-}
-
-
-    @GetMapping("/")
-    public ModelAndView index(ModelAndView modelAndView){
-        modelAndView.setViewName("/index");
-        return modelAndView;
-        //return this.view("index");
-    }
-
-    @GetMapping("/home")
-    public ModelAndView home(ModelAndView modelAndView, HttpSession session){
-        modelAndView.setViewName("home");
-        //modelAndView.addObject("documents", documents);
-
-
-        return modelAndView;
-    }
-
-    */
 }

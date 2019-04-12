@@ -30,11 +30,4 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 .get("url")
                 .toString();
     }
-
-    /*
-    @Override
-    public String deleteImage(String imageId) {
-        return null;
-    }
-    */
 }

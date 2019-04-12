@@ -7,15 +7,18 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryServiceModel addCategory(CategoryServiceModel categoryServiceModel);
+    void addCategory(CategoryServiceModel categoryServiceModel, MultipartFile imageUrl);
 
-    CategoryServiceModel editCategory(String id, CategoryServiceModel categoryServiceModel);
+    void editCategory(String id, CategoryServiceModel categoryServiceModel, MultipartFile imageUrl);
 
-    CategoryServiceModel deleteCategory(String id);
+    void deleteCategory(String id);
 
     CategoryServiceModel findCategoryById(String id);
 
     List<CategoryServiceModel> findAllCategories();
 
-    void setImageUrl(CategoryServiceModel categoryServiceModel, MultipartFile multipartFile) throws IOException;
+    //void setImageUrl(CategoryServiceModel categoryServiceModel, MultipartFile multipartFile);
+
+    boolean checkIfCategoryNameAlreadyExists(String name);
+
 }

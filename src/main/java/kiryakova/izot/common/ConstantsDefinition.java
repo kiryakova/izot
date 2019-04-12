@@ -3,7 +3,6 @@ package kiryakova.izot.common;
 public final class ConstantsDefinition {
 
     public final static class GlobalConstants {
-        public static final String INCORRECT_ID= "Incorrect id!";
         public static final String NO_ENTITY_WITH_ID= "No %s with id: %s";
     }
 
@@ -14,6 +13,7 @@ public final class ConstantsDefinition {
         public static final String PASSWORD_IS_NOT_CORRECT = "Паролата трябва да бъде от 3 до 18 символа!";
         public static final String USERNAME_IS_NOT_CORRECT = "Името трябва да бъде от 5 до 18 символа!";
         public static final String NAME_IS_NOT_CORRECT = "Името трябва да бъде от 5 до 25 символа!";
+        public static final String CUSTOMER_NAME_IS_NOT_CORRECT = "Името трябва да бъде поне 2 символа!";
     }
 
     public final static class UserConstants {
@@ -34,5 +34,16 @@ public final class ConstantsDefinition {
         public static final String UNSUCCESSFUL_DELETE_PRODUCT = "Неуспешно изтриване на продукт %s";
         public static final String PRODUCT_ALREADY_EXISTS = "Продукт с име %s вече съществува";
     }
-}
 
+    public final static class CategoryConstants {
+        public static final String NO_SUCH_CATEGORY = "Не е намерена такава категория!";
+        public static final String NO_CATEGORY_WITH_NAME = "Не е намерена категория %s!";
+        public static final String UNSUCCESSFUL_SAVED_CATEGORY = "Добавяне на категория %s неуспешно!";
+        public static final String UNSUCCESSFUL_DELETE_CATEGORY = "Неуспешно изтриване на категория %s";
+        public static final String CATEGORY_ALREADY_EXISTS = "Категория с име %s вече съществува";
+    }
+
+    public final static class CustomerConstants {
+        public static final String UNSUCCESSFUL_SAVED_CUSTOMER = "Добавяне на клиент %s неуспешно!";
+    }
+}

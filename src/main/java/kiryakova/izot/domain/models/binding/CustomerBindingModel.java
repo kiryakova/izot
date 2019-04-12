@@ -1,5 +1,12 @@
 package kiryakova.izot.domain.models.binding;
 
+import kiryakova.izot.common.ConstantsDefinition;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class CustomerBindingModel {
     private String firstName;
     private String lastName;
@@ -9,6 +16,9 @@ public class CustomerBindingModel {
     public CustomerBindingModel() {
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 2, message = ConstantsDefinition.BindingModelConstants.CUSTOMER_NAME_IS_NOT_CORRECT)
     public String getFirstName() {
         return firstName;
     }
@@ -17,6 +27,9 @@ public class CustomerBindingModel {
         this.firstName = firstName;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 2, message = ConstantsDefinition.BindingModelConstants.CUSTOMER_NAME_IS_NOT_CORRECT)
     public String getLastName() {
         return lastName;
     }
@@ -25,6 +38,8 @@ public class CustomerBindingModel {
         this.lastName = lastName;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
     public String getAddress() {
         return address;
     }
@@ -33,6 +48,8 @@ public class CustomerBindingModel {
         this.address = address;
     }
 
+    @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
+    @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
     public String getPhone() {
         return phone;
     }

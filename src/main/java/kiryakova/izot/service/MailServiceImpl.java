@@ -11,7 +11,7 @@ public class MailServiceImpl implements MailService {
             "Eventures Inc. - [Registration]";
 
     private static final String REGISTRATION_SUCCESS_MESSAGE
-            = "Welcome, %s!%n" + " You have successfully registered your user to IZOT Service.";
+            = "Welcome, %s!%n" + " You have successfully registered your user to IZOT Nova Zagora.";
 
     private final JavaMailSender javaMailSender;
 
@@ -28,6 +28,7 @@ public class MailServiceImpl implements MailService {
         message.setText(String.format(REGISTRATION_SUCCESS_MESSAGE, username));
 
         //message.setFrom("info@eventures.io");
+        //message.setFrom("df71968813-b3624f@inbox.mailtrap.io");
         message.setFrom("stelanz@abv.bg");
         message.setTo(email);
 

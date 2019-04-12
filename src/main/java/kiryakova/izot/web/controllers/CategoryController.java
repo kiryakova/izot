@@ -1,5 +1,6 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.CategoryBindingModel;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.view.CategoryViewModel;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -40,8 +43,20 @@ public class CategoryController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     public ModelAndView addCategoryConfirm(ModelAndView modelAndView,
-                                    @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
-                                    BindingResult bindingResult) {
+                                           //@RequestParam("imageUrl") MultipartFile imageUrl,
+                                           @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
+                                           BindingResult bindingResult) {
+
+        if(this.categoryService.checkIfCategoryNameAlreadyExists(categoryBindingModel.getName())){
+            bindingResult.addError(new FieldError("categoryBindingModel", "name",
+                    String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ALREADY_EXISTS, categoryBindingModel.getName())));
+        }
+
+        if(categoryBindingModel.getImageUrl() == null || categoryBindingModel.getImageUrl().isEmpty()){
+            bindingResult.addError(new FieldError("categoryBindingModel", "imageUrl",
+                    ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
+        }
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("category", categoryBindingModel);
             return this.view("category/add-category", modelAndView);
@@ -53,13 +68,13 @@ public class CategoryController extends BaseController {
                 this.cloudinaryService.uploadImage(categoryBindingModel.getImageUrl())
         );*/
 
-        try {
+        /*try {
             categoryService.setImageUrl(categoryServiceModel, categoryBindingModel.getImageUrl());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        this.categoryService.addCategory(categoryServiceModel);
+        this.categoryService.addCategory(categoryServiceModel, categoryBindingModel.getImageUrl());
 
         return this.redirect("/categories/all");
     }
@@ -80,11 +95,20 @@ public class CategoryController extends BaseController {
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     public ModelAndView editCategoryConfirm(ModelAndView modelAndView,
-                                     @PathVariable String id,
-                                     @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
-                                     BindingResult bindingResult) {
+                                            @PathVariable String id,
+                                            @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
+                                            BindingResult bindingResult) {
+
+        if(categoryBindingModel.getImageUrl() == null || categoryBindingModel.getImageUrl().isEmpty()){
+            bindingResult.addError(new FieldError("categoryBindingModel", "imageUrl",
+                    ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
+        }
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("category", categoryBindingModel);
+            modelAndView.addObject("categoryId", id);
+            modelAndView.addObject("imgUrlStr", categoryBindingModel.getImageUrl());
+
             return this.view("category/edit-category", modelAndView);
         }
 
@@ -94,13 +118,13 @@ public class CategoryController extends BaseController {
                 this.cloudinaryService.uploadImage(categoryBindingModel.getImageUrl())
         );*/
 
-        try {
+        /*try {
             categoryService.setImageUrl(categoryServiceModel, categoryBindingModel.getImageUrl());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        this.categoryService.editCategory(id, categoryServiceModel);
+        this.categoryService.editCategory(id, categoryServiceModel, categoryBindingModel.getImageUrl());
 
         return this.redirect("/categories/all");
         //return super.redirect("/producers/details/" + id);

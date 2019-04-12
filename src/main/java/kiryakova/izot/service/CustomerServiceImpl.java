@@ -1,10 +1,13 @@
 package kiryakova.izot.service;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.Customer;
 import kiryakova.izot.domain.entities.User;
 import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.error.CustomerNotSavedException;
 import kiryakova.izot.repository.CustomerRepository;
+import kiryakova.izot.validation.CustomerValidationService;
 import kiryakova.izot.validation.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +21,24 @@ public class CustomerServiceImpl implements CustomerService {
     private final OrderService orderService;
     private final UserService userService;
     private final UserValidationService userValidation;
-
+    private final CustomerValidationService customerValidation;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, OrderService orderService, UserService userService, UserValidationService userValidation, ModelMapper modelMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, OrderService orderService, UserService userService, UserValidationService userValidation, CustomerValidationService customerValidation, ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
         this.orderService = orderService;
         this.userService = userService;
         this.userValidation = userValidation;
+        this.customerValidation = customerValidation;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public CustomerServiceModel findCustomerByUsername(String username) throws Exception {
+    public CustomerServiceModel findCustomerByUsername(String username) {
         UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
-            throw new Exception();
+            throw new IllegalArgumentException();
         }
 
         Customer customer = this.customerRepository.findCustomerByUserId(userServiceModel.getId()).orElse(null);
@@ -48,10 +52,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void editCustomer(String username, CustomerServiceModel customerServiceModel, String orderId) throws Exception {
+    public void editCustomer(String username, CustomerServiceModel customerServiceModel, String orderId) {
         UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
-            throw new Exception();
+            throw new IllegalArgumentException();
+        }
+
+        if(!customerValidation.isValid(customerServiceModel)) {
+            throw new IllegalArgumentException();
         }
 
         Customer customer = this.customerRepository.findCustomerByUserId(userServiceModel.getId()).orElse(null);
@@ -71,7 +79,11 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLocalDateTime(LocalDateTime.now());
         customer.setUser(this.modelMapper.map(userServiceModel, User.class));
 
-        customer = this.customerRepository.saveAndFlush(customer);
+        try {
+            customer = this.customerRepository.saveAndFlush(customer);
+        }catch (Exception ignored){
+            throw new CustomerNotSavedException(String.format(ConstantsDefinition.CustomerConstants.UNSUCCESSFUL_SAVED_CUSTOMER, customer.getFirstName()));
+        }
 
         customerServiceModel = this.modelMapper.map(customer, CustomerServiceModel.class);
 

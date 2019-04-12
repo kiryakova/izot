@@ -44,7 +44,6 @@ public class ProductController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     public ModelAndView addProductConfirm(ModelAndView modelAndView,
-                                          @RequestParam("imageUrl") MultipartFile imageUrl,
                                           @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
                                           BindingResult bindingResult) {
 
@@ -53,7 +52,7 @@ public class ProductController extends BaseController {
                     String.format(ConstantsDefinition.ProductConstants.PRODUCT_ALREADY_EXISTS, productBindingModel.getName())));
         }
 
-        if(imageUrl == null || imageUrl.isEmpty()){
+        if(productBindingModel.getImageUrl() == null || productBindingModel.getImageUrl().isEmpty()){
             bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
                     ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
         }
@@ -64,7 +63,7 @@ public class ProductController extends BaseController {
         }
 
         ProductServiceModel productServiceModel = this.modelMapper.map(productBindingModel, ProductServiceModel.class);
-        
+
         this.productService.addProduct(productServiceModel, productBindingModel.getImageUrl());
 
         return this.redirect("/products/all");
@@ -88,15 +87,14 @@ public class ProductController extends BaseController {
     public ModelAndView editProductConfirm(ModelAndView modelAndView,
                                             @PathVariable String id,
                                             @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
-                                            BindingResult bindingResult,
-                                            @RequestParam("imageUrl") MultipartFile imageUrl) {
+                                            BindingResult bindingResult) {
 
         /*if(this.productService.checkIfProductNameAlreadyExists(productBindingModel.getName())){
             bindingResult.addError(new FieldError("productBindingModel", "name",
                     String.format(ConstantsDefinition.ProductConstants.PRODUCT_ALREADY_EXISTS, productBindingModel.getName())));
         }*/
 
-        if(imageUrl == null || imageUrl.isEmpty()){
+        if(productBindingModel.getImageUrl() == null || productBindingModel.getImageUrl().isEmpty()){
             bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
                     ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
         }

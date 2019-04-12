@@ -1,6 +1,7 @@
 package kiryakova.izot.domain.models.binding;
 
 import kiryakova.izot.common.ConstantsDefinition;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +16,7 @@ public class CategoryBindingModel {
 
     @NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     @NotEmpty(message = ConstantsDefinition.BindingModelConstants.NOT_EMPTY)
+    @Length(min = 3, max = 25, message = ConstantsDefinition.BindingModelConstants.NAME_IS_NOT_CORRECT)
     public String getName() {
         return name;
     }

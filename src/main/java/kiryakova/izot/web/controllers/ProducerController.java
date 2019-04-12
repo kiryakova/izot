@@ -70,6 +70,7 @@ public class ProducerController extends BaseController {
                                      BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("producer", producerBindingModel);
+            modelAndView.addObject("producerId", id);
             return this.view("producer/edit-producer", modelAndView);
         }
 

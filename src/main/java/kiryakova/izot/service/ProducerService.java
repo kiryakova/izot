@@ -5,11 +5,11 @@ import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import java.util.List;
 
 public interface ProducerService {
-    ProducerServiceModel addProducer(ProducerServiceModel producerServiceModel);
+    void addProducer(ProducerServiceModel producerServiceModel);
 
-    ProducerServiceModel editProducer(String id, ProducerServiceModel producerServiceModel);
+    void editProducer(String id, ProducerServiceModel producerServiceModel);
 
-    ProducerServiceModel deleteProducer(String id);
+    void deleteProducer(String id);
 
     ProducerServiceModel findProducerById(String id);
 

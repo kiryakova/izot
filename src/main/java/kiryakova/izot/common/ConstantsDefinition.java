@@ -30,7 +30,7 @@ public final class ConstantsDefinition {
     public final static class ProductConstants {
         public static final String NO_SUCH_PRODUCT = "Не е намерен такъв продукт!";
         public static final String NO_PRODUCT_WITH_NAME = "Не е намерен продукт %s!";
-        public static final String UNSUCCESSFUL_SAVED_PRODUCT = "Добавяне на продукт %s неуспешно!";
+        public static final String UNSUCCESSFUL_SAVED_PRODUCT = "Запис на продукт %s неуспешно!";
         public static final String UNSUCCESSFUL_DELETE_PRODUCT = "Неуспешно изтриване на продукт %s";
         public static final String PRODUCT_ALREADY_EXISTS = "Продукт с име %s вече съществува";
     }
@@ -38,12 +38,26 @@ public final class ConstantsDefinition {
     public final static class CategoryConstants {
         public static final String NO_SUCH_CATEGORY = "Не е намерена такава категория!";
         public static final String NO_CATEGORY_WITH_NAME = "Не е намерена категория %s!";
-        public static final String UNSUCCESSFUL_SAVED_CATEGORY = "Добавяне на категория %s неуспешно!";
+        public static final String UNSUCCESSFUL_SAVED_CATEGORY = "Запис на категория %s неуспешно!";
         public static final String UNSUCCESSFUL_DELETE_CATEGORY = "Неуспешно изтриване на категория %s";
         public static final String CATEGORY_ALREADY_EXISTS = "Категория с име %s вече съществува";
     }
 
     public final static class CustomerConstants {
-        public static final String UNSUCCESSFUL_SAVED_CUSTOMER = "Добавяне на клиент %s неуспешно!";
+        public static final String UNSUCCESSFUL_SAVED_CUSTOMER = "Запис на клиент %s неуспешно!";
+    }
+
+    public final static class OrderConstants {
+        public static final String UNSUCCESSFUL_SAVED_ORDER = "Неуспешно създаване на поръчка!";
+        public static final String UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER = "Неуспешно изтриване на заявен продукт!";
+        public static final String NO_SUCH_ORDER = "Няма такава поръчка!";
+        public static final String NO_SUCH_PRODUCT = "Няма такъв продукт!";
+    }
+
+    public final static class ProducerConstants {
+        public static final String UNSUCCESSFUL_SAVED_PRODUCER = "Запис на производител %s неуспешно!";
+        public static final String NO_SUCH_PRODUCER = "Няма такъв производител!";
+        public static final String NO_PRODUCER_WITH_NAME = "Не е намерен производител %s!";
+        public static final String UNSUCCESSFUL_DELETE_PRODUCER = "Неуспешно изтриване на производител %s";
     }
 }

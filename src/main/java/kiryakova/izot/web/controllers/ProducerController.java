@@ -110,7 +110,7 @@ public class ProducerController extends BaseController {
         return this.view("producer/all-producers", modelAndView);
     }
 
-    @GetMapping("/fetch")
+    /*@GetMapping("/fetch")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @ResponseBody
     public List<ProducerViewModel> fetchProducers() {
@@ -118,6 +118,6 @@ public class ProducerController extends BaseController {
                 .stream()
                 .map(c -> this.modelMapper.map(c, ProducerViewModel.class))
                 .collect(Collectors.toList());
-    }
+    }*/
 
 }

@@ -72,10 +72,6 @@ public class OrderController extends BaseController {
                 .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
                 .collect(Collectors.toList()));
 
-        /*modelAndView.addObject("orderedProducts", this.modelMapper
-                .map(this.orderProductService
-                        .findOrderProductsByUser(name), OrderProductViewModel.class));*/
-
         return this.view("order/my-products", modelAndView);
     }
 
@@ -84,42 +80,8 @@ public class OrderController extends BaseController {
     public ModelAndView confirmOrder(@PathVariable(name="id") String id, ModelAndView modelAndView) throws Exception {
 
         orderService.confirmOrder(id);
-        //if(orderService.confirmOrder(id)) {
-
-
-
-        /*
-        modelAndView.addObject("order", this.modelMapper.map(this.orderService
-                    .findOrderById(id), OrderViewModel.class));
-
-        modelAndView.addObject("orderedProducts", this.orderProductService
-                    .findOrderProductsByOrderId(id)
-                    .stream()
-                    .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
-                    .collect(Collectors.toList()));
-
-        modelAndView.addObject("customer", this.modelMapper.map(this.customerService
-                .findCustomerByOrderId(id), CustomerViewModel.class));
-
-        return this.view("order/confirmed-order", modelAndView);
-
-        */
 
         return this.orderDetails(id, modelAndView);
-
-        /*}
-        else {
-
-            modelAndView.addObject("order", this.modelMapper.map(this.orderService
-                    .findUnfinishedOrderByUserName(name), OrderViewModel.class));
-
-            modelAndView.addObject("orderedProducts", this.orderProductService
-                    .findOrderProductsByUser(name)
-                    .stream()
-                    .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
-                    .collect(Collectors.toList()));
-            return this.view("order/my-products", modelAndView);
-        }*/
 
     }
 

@@ -1,8 +1,11 @@
 package kiryakova.izot.service;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.OrderProduct;
 import kiryakova.izot.domain.models.service.OrderProductServiceModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.error.OrderProductNotDeletedException;
+import kiryakova.izot.error.OrderProductNotFoundException;
 import kiryakova.izot.repository.OrderProductRepository;
 import kiryakova.izot.validation.OrderProductValidation;
 import kiryakova.izot.validation.UserValidationService;
@@ -32,7 +35,7 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public OrderProductServiceModel findOrderProductByOrderIdAndProductId(String orderId, String productId) throws Exception {
+    public OrderProductServiceModel findOrderProductByOrderIdAndProductId(String orderId, String productId) {
         OrderProduct orderProduct = this.orderProductRepository
                 .findOrderProductByOrderIdAndProductId(orderId, productId).orElse(null);
 
@@ -51,10 +54,10 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public List<OrderProductServiceModel> findOrderProductsByUser(String username) throws Exception {
+    public List<OrderProductServiceModel> findOrderProductsByUser(String username) {
         UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
-            throw new Exception();
+            throw new IllegalArgumentException();
         }
 
         return  this.orderProductRepository
@@ -65,21 +68,18 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public OrderProduct deleteOrderProduct(String id) throws Exception {
+    public OrderProduct deleteOrderProduct(String id) {
 
-        OrderProduct orderProduct = this.orderProductRepository
-                .findById(id)
-                .orElse(null);
+        OrderProduct orderProduct = this.orderProductRepository.findById(id).orElse(null);
 
         if(!orderProductValidation.isValid(orderProduct)) {
-            throw new Exception();
+            throw new OrderProductNotFoundException(ConstantsDefinition.OrderConstants.NO_SUCH_PRODUCT);
         }
 
         try {
             this.orderProductRepository.delete(orderProduct);
         } catch (Exception ignored) {
-            //TODO: Fix this when discover exception type.
-            return null;
+            throw new OrderProductNotDeletedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
         }
 
         return orderProduct;

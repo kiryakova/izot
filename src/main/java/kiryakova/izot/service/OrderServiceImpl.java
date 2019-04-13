@@ -12,10 +12,12 @@ import kiryakova.izot.validation.ProductValidationService;
 import kiryakova.izot.validation.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public boolean addOrder(String productId, String username) throws Exception {
+    public boolean addOrder(String productId, String username, int quantity) {
 
         UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
@@ -66,14 +68,14 @@ public class OrderServiceImpl implements OrderService {
 
             order.setUser(this.modelMapper.map(userServiceModel, User.class));
             order.setFinished(false);
-            order.setTotalPrice(product.getPrice().add(new BigDecimal(0.00)));
+            order.setTotalPrice((product.getPrice().multiply(new BigDecimal(quantity))).add(new BigDecimal(0.00)));
         }
         else {
             if(order.getTotalPrice() != null){
-                order.setTotalPrice(product.getPrice().add(order.getTotalPrice()));
+                order.setTotalPrice(product.getPrice().multiply(new BigDecimal(quantity)).add(order.getTotalPrice()));
             }
             else {
-                order.setTotalPrice(product.getPrice().add(new BigDecimal(0.00)));
+                order.setTotalPrice(product.getPrice().multiply(new BigDecimal(quantity)).add(new BigDecimal(0.00)));
             }
 
         }
@@ -87,12 +89,14 @@ public class OrderServiceImpl implements OrderService {
 
             if(orderProductServiceModel != null){
                 orderProduct = this.modelMapper.map(orderProductServiceModel, OrderProduct.class);
-                orderProduct.setQuantity(orderProduct.getQuantity() + 1);
+                orderProduct.setQuantity(orderProduct.getQuantity() + quantity);
+                orderProduct.setPrice(product.getPrice());
             }
             else{
-                orderProduct.setQuantity(1);
+                orderProduct.setQuantity(quantity);
                 orderProduct.setOrder(order);
                 orderProduct.setProduct(product);
+                orderProduct.setPrice(product.getPrice());
             }
 
             this.orderProductService.addOrderProduct(orderProduct);
@@ -135,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             order.setFinished(true);
-            order.setOrderDate(LocalDate.now());
+            order.setOrderDateTime(LocalDateTime.now());
             this.orderRepository.save(order);
         } catch (Exception ignored) {
             throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
@@ -149,7 +153,8 @@ public class OrderServiceImpl implements OrderService {
             OrderProduct orderProduct = this.orderProductService.deleteOrderProduct(id);
 
             BigDecimal totalPrice = orderProduct.getOrder().getTotalPrice();
-            BigDecimal productPrice = orderProduct.getProduct().getPrice();
+            //BigDecimal productPrice = orderProduct.getProduct().getPrice();
+            BigDecimal productPrice = orderProduct.getPrice();
             Integer quantity = orderProduct.getQuantity();
             BigDecimal productsPrice = productPrice.multiply(new BigDecimal(quantity));
             BigDecimal newTotalPrice = totalPrice.subtract(productsPrice);
@@ -161,15 +166,6 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderProductNotDeletedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
         }
 
-    }
-
-    private void setNewTotalPrice(BigDecimal totalPrice, Order order) {
-        order.setTotalPrice(totalPrice);
-        try{
-            this.orderRepository.save(order);
-        } catch (Exception ignored) {
-            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
-        }
     }
 
     @Override
@@ -212,9 +208,23 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    private void setNewTotalPrice(BigDecimal totalPrice, Order order) {
+        order.setTotalPrice(totalPrice);
+        try{
+            this.orderRepository.save(order);
+        } catch (Exception ignored) {
+            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
+        }
+    }
+
     private void checkIfOrderFound(Order order) {
         if(!orderValidation.isValid(order)) {
             throw new OrderNotFoundException(ConstantsDefinition.OrderConstants.NO_SUCH_ORDER);
         }
+    }
+
+    @Scheduled(fixedRate = 300000)
+    private void deleteRandomUnfinishedOrders() {
+        this.orderRepository.deleteAllUnfinishedOrders();
     }
 }

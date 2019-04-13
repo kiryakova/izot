@@ -22,8 +22,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         //response.sendRedirect("/login");
         //return false;
 
-        boolean a = ((HandlerMethod) handler).getMethod().isAnnotationPresent(GetMapping.class);
-        System.out.println(a);
+        //boolean a = ((HandlerMethod) handler).getMethod().isAnnotationPresent(GetMapping.class);
+        //System.out.println(response.getStatus());
+        //return true;
+        if(response.getStatus() == 403){
+            response.sendRedirect("unauthorized");
+        }
+
         return true;
     }
 
@@ -32,5 +37,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         //super.postHandle(request, response, handler, modelAndView);
         //<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>
 
+        if(response.getStatus() == 403){
+            response.sendRedirect("unauthorized");
+        }
+
     }
+
+
 }

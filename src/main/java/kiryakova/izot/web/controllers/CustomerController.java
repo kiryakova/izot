@@ -3,6 +3,7 @@ package kiryakova.izot.web.controllers;
 import kiryakova.izot.domain.models.binding.CustomerBindingModel;
 import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.service.CustomerService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,7 @@ public class CustomerController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Клиент по поръчката")
     public ModelAndView editCustomer(Principal principal, @PathVariable String id, ModelAndView modelAndView) throws Exception {
         String name = principal.getName();
 
@@ -43,6 +45,7 @@ public class CustomerController extends BaseController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Клиент по поръчката")
     public ModelAndView editCustomerConfirm(Principal principal, ModelAndView modelAndView,
                                             @PathVariable(name="id") String id,
                                             @ModelAttribute(name = "customer") @Valid CustomerBindingModel customerBindingModel,

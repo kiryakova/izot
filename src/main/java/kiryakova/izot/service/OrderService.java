@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
-    boolean addOrder(String productId, String name) throws Exception;
+    boolean addOrder(String productId, String name, int quantity);
 
     List<OrderServiceModel> findAllOrders();
 

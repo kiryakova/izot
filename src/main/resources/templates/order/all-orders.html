@@ -25,7 +25,7 @@
             <th:block th:each="order, iter : ${orders}" th:object="${order}">
             <tr class="row mx-auto">
                 <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
-                <td class="col-md-4 text-center text-izot" th:text="*{#temporals.format(orderDate, 'dd/MM/yyyy')}"></td>
+                <td class="col-md-4 text-center text-izot" th:text="*{#temporals.format(orderDateTime, 'dd/MM/yyyy HH:mm')}"></td>
                 <td class="col-md-3 text-center text-izot" th:text="*{totalPrice}"></td>
                 <td class="col-md-4 text-center text-izot">
                     <form id="all-orders-form" th:action="@{/orders/details/{id}(id=${order.id})}" method="GET">

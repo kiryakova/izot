@@ -2,6 +2,7 @@ package kiryakova.izot.web.controllers;
 
 import kiryakova.izot.domain.models.view.CategoryViewModel;
 import kiryakova.izot.service.CategoryService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,12 +26,14 @@ public class HomeController extends BaseController {
 
     @GetMapping("/")
     @PreAuthorize("isAnonymous()")
+    //@PageTitle("Начало")
     public ModelAndView index() {
         return this.view("index");
     }
 
     @GetMapping("/home")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Начало")
     public ModelAndView home(ModelAndView modelAndView) {
         modelAndView.addObject("categories", this.categoryService
                 .findAllCategories()

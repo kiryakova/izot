@@ -1,9 +1,8 @@
 package kiryakova.izot.web.controllers;
 
-import kiryakova.izot.service.OrderProductService;
 import kiryakova.izot.service.OrderService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +19,16 @@ public class OrderAppController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/add/{id}")
+    //@GetMapping("/add/{id}{quantity}")
+    @RequestMapping(
+            value = "/add/",
+            params = { "id", "quantity" },
+            method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    //@ResponseBody
-    public boolean addOrder(@PathVariable(name="id") String id, Principal principal) throws Exception {
+    public boolean addOrder(@RequestParam("id") String id, @RequestParam("quantity") int quantity, Principal principal) throws Exception {
         String name = principal.getName();
 
-        return this.orderService.addOrder(id, name);
+        return this.orderService.addOrder(id, name, quantity);
     }
 
     @GetMapping("/product/delete/{id}")

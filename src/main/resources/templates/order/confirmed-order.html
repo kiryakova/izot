@@ -9,7 +9,7 @@
     <main class="mt-3">
         <th:block th:if="${order} != null">
         <h1 class="text-center text-izot">Пътвърдена поръчка</h1>
-        <h5 class="text-center text-izot" th:text="|*{#temporals.format(order.orderDate, 'dd/MM/yyyy')} - ${#strings.substring(order.id, 0, 8)}|"></h5>
+        <h5 class="text-center text-izot" th:text="|*{#temporals.format(order.orderDateTime, 'dd/MM/yyyy HH:mm')} - ${#strings.substring(order.id, 0, 8)}|"></h5>
 
         <h5 class="text-center text-izot" th:text="|клиент: ${customer.firstName} ${customer.lastName}|"></h5>
         <h5 class="text-center text-izot" th:text="|адрес: ${customer.address}|"></h5>
@@ -38,7 +38,7 @@
                         </td>
                         <td class="col-md-3 text-center text-izot" th:text="${orderedProduct.product.name}"></td>
                         <td class="col-md-3 text-center text-izot" th:text="${orderedProduct.quantity}"></td>
-                        <td class="col-md-2 text-center text-izot" th:text="|${orderedProduct.product.price} лв&#46;|"></td>
+                        <td class="col-md-2 text-center text-izot" th:text="|${orderedProduct.price} лв&#46;|"></td>
                     </tr>
 
                 </th:block>

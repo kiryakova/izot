@@ -10,6 +10,7 @@ import kiryakova.izot.error.UserEditException;
 import kiryakova.izot.error.UserRegisterException;
 import kiryakova.izot.service.MailService;
 import kiryakova.izot.service.UserService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,6 +49,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/login")
+    @PageTitle("Вход")
     public ModelAndView login() {
 
         return this.view("login");
@@ -56,6 +58,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("Регистрация на потребител")
     public ModelAndView register(ModelAndView modelAndView) {
 
         modelAndView.addObject("user", new UserRegisterBindingModel());
@@ -66,6 +69,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("Регистрация на потребител")
     public ModelAndView registerConfirm(ModelAndView modelAndView,
                                         @ModelAttribute(name = "user") @Valid UserRegisterBindingModel userRegisterBindingModel,
                                         //@RequestParam(name = "g-recaptcha-response") String gRecaptchaResponse,
@@ -104,6 +108,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Потребителски профил")
     public ModelAndView profile(Principal principal, ModelAndView modelAndView){
         modelAndView.addObject("user",
                 this.modelMapper
@@ -115,6 +120,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Редакция на потребителския профил")
     public ModelAndView editProfile(Principal principal, ModelAndView modelAndView){
         modelAndView.addObject("user",
                 this.modelMapper
@@ -126,6 +132,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/edit")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Редакция на потребителския профил")
     public ModelAndView editProfileConfirm(ModelAndView modelAndView,
                                             @ModelAttribute(name = "user") @Valid UserEditBindingModel userEditBindingModel,
                                             BindingResult bindingResult){
@@ -162,6 +169,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("Всички потребители")
     public ModelAndView allUsers(ModelAndView modelAndView) {
         List<UserAllViewModel> users = this.userService.findAllUsers()
                 .stream()
@@ -180,6 +188,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/set-authority/{id}/{authority}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("Всички потребители")
     public ModelAndView setAuthority(@PathVariable("id") String id, @PathVariable("authority") String authority) {
         this.userService.setUserAuthority(id, authority);
 

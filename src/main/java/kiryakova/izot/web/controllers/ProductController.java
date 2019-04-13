@@ -6,6 +6,7 @@ import kiryakova.izot.domain.models.service.ProductServiceModel;
 import kiryakova.izot.domain.models.view.ProductAllViewModel;
 import kiryakova.izot.domain.models.view.ProductDetailsViewModel;
 import kiryakova.izot.service.ProductService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +37,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на продукт")
     public ModelAndView addProduct(ModelAndView modelAndView) {
         modelAndView.addObject("product", new ProductBindingModel());
         return this.view("product/add-product", modelAndView);
@@ -43,6 +45,7 @@ public class ProductController extends BaseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на продукт")
     public ModelAndView addProductConfirm(ModelAndView modelAndView,
                                           @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
                                           BindingResult bindingResult) {
@@ -71,6 +74,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на продукт")
     public ModelAndView editProduct(@PathVariable String id, ModelAndView modelAndView)  {
         ProductServiceModel productServiceModel = this.productService.findProductById(id);
         ProductBindingModel productBindingModel = this.modelMapper.map(productServiceModel, ProductBindingModel.class);
@@ -84,15 +88,11 @@ public class ProductController extends BaseController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на продукт")
     public ModelAndView editProductConfirm(ModelAndView modelAndView,
                                             @PathVariable String id,
                                             @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
                                             BindingResult bindingResult) {
-
-        /*if(this.productService.checkIfProductNameAlreadyExists(productBindingModel.getName())){
-            bindingResult.addError(new FieldError("productBindingModel", "name",
-                    String.format(ConstantsDefinition.ProductConstants.PRODUCT_ALREADY_EXISTS, productBindingModel.getName())));
-        }*/
 
         if(productBindingModel.getImageUrl() == null || productBindingModel.getImageUrl().isEmpty()){
             bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
@@ -116,14 +116,29 @@ public class ProductController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Детайли на продукта")
     public ModelAndView detailsProduct(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("product", this.modelMapper.map(this.productService.findProductById(id), ProductDetailsViewModel.class));
 
         return this.view("product/details-product", modelAndView);
     }
 
+    @GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}"})
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Детайли на продукт")
+    public ModelAndView detailsProductOrder(@PathVariable(name="id") String id, @PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
+        modelAndView.addObject("product", this.modelMapper
+                .map(this.productService
+                        .findProductById(id), ProductDetailsViewModel.class));
+
+        modelAndView.addObject("categoryId", categoryId);
+
+        return this.view("product/product-details-order", modelAndView);
+    }
+
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на продукт")
     public ModelAndView deleteProduct(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("product",
                 this.modelMapper.map(this.productService.findProductById(id), ProductDetailsViewModel.class)
@@ -136,6 +151,7 @@ public class ProductController extends BaseController {
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на продукт")
     public ModelAndView deleteProductConfirm(@PathVariable String id) {
         this.productService.deleteProduct(id);
 
@@ -144,6 +160,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Всички продукти")
     public ModelAndView allProductsUpFromModerator(ModelAndView modelAndView) {
         modelAndView.addObject("products", this.productService.findAllProducts()
                 .stream()
@@ -155,6 +172,7 @@ public class ProductController extends BaseController {
 
     @GetMapping(value = {"/all/products", "/all/products/{categoryId}"})
     @PreAuthorize("hasAuthority('USER')")
+    @PageTitle("Всички продукти")
     public ModelAndView allProducts(@PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
 
         modelAndView.addObject("categoryId", categoryId != null && !categoryId.equals("") ? categoryId : "all");

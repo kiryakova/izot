@@ -6,6 +6,7 @@ import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.view.CategoryViewModel;
 import kiryakova.izot.service.CategoryService;
 import kiryakova.izot.service.CloudinaryService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на категория")
     public ModelAndView addCategory(ModelAndView modelAndView) {
         modelAndView.addObject("category", new CategoryBindingModel());
         return this.view("category/add-category", modelAndView);
@@ -42,6 +44,7 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на категория")
     public ModelAndView addCategoryConfirm(ModelAndView modelAndView,
                                            //@RequestParam("imageUrl") MultipartFile imageUrl,
                                            @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
@@ -81,6 +84,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на категория")
     public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView) {
         CategoryServiceModel categoryServiceModel = this.categoryService.findCategoryById(id);
         CategoryBindingModel categoryBindingModel = this.modelMapper.map(categoryServiceModel, CategoryBindingModel.class);
@@ -94,6 +98,7 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на категория")
     public ModelAndView editCategoryConfirm(ModelAndView modelAndView,
                                             @PathVariable String id,
                                             @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
@@ -132,6 +137,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на категория")
     public ModelAndView deleteCategory(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("category",
                 this.modelMapper.map(this.categoryService.findCategoryById(id), CategoryViewModel.class)
@@ -144,6 +150,7 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на категория")
     public ModelAndView deleteCategoryConfirm(@PathVariable String id) {
         this.categoryService.deleteCategory(id);
 
@@ -152,6 +159,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Всички категории")
     public ModelAndView allCategories(ModelAndView modelAndView) {
         modelAndView.addObject("categories", this.categoryService.findAllCategories()
                 .stream()

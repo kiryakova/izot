@@ -5,11 +5,12 @@ import kiryakova.izot.domain.entities.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderViewModel extends BaseViewModel {
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDateTime;
     private boolean finalized;
     private BigDecimal totalPrice;
     private User user;
@@ -19,12 +20,12 @@ public class OrderViewModel extends BaseViewModel {
     public OrderViewModel() {
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
     }
 
     public boolean isFinalized() {

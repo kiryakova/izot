@@ -5,12 +5,13 @@ import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
-    private LocalDate orderDate;
+    private LocalDateTime orderDateTime;
     private boolean isFinished;
     private User user;
     private Customer customer;
@@ -21,13 +22,13 @@ public class Order extends BaseEntity {
     }
 
     @NonNull
-    @Column(name = "order_date")
-    public LocalDate getOrderDate() {
-        return orderDate;
+    @Column(name = "order_date_time")
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
     }
 
     @Column(name = "is_finished")

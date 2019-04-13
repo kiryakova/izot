@@ -5,9 +5,12 @@ import kiryakova.izot.domain.entities.Product;
 import kiryakova.izot.domain.models.service.OrderServiceModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
 
+import java.math.BigDecimal;
+
 public class OrderProductViewModel extends BaseViewModel {
     private Integer quantity;
     private ProductServiceModel product;
+    private BigDecimal price;
     private OrderServiceModel order;
 
     public OrderProductViewModel() {
@@ -27,6 +30,14 @@ public class OrderProductViewModel extends BaseViewModel {
 
     public void setProduct(ProductServiceModel product) {
         this.product = product;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public OrderServiceModel getOrder() {

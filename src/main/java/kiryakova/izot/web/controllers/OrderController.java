@@ -4,11 +4,11 @@ import kiryakova.izot.domain.models.service.OrderServiceModel;
 import kiryakova.izot.domain.models.view.CustomerViewModel;
 import kiryakova.izot.domain.models.view.OrderProductViewModel;
 import kiryakova.izot.domain.models.view.OrderViewModel;
-import kiryakova.izot.domain.models.view.ProductDetailsViewModel;
 import kiryakova.izot.service.CustomerService;
 import kiryakova.izot.service.OrderProductService;
 import kiryakova.izot.service.OrderService;
 import kiryakova.izot.service.ProductService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/orders")
 public class OrderController extends BaseController {
-    private final ProductService productService;
     private final OrderService orderService;
     private final OrderProductService orderProductService;
     private final CustomerService customerService;
@@ -32,16 +31,16 @@ public class OrderController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, CustomerService customerService, ModelMapper modelMapper) {
-        this.productService = productService;
+    public OrderController(OrderService orderService, OrderProductService orderProductService, CustomerService customerService, ModelMapper modelMapper) {
         this.orderService = orderService;
         this.orderProductService = orderProductService;
         this.customerService = customerService;
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}"})
+    /*@GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}"})
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Детайли на продукт")
     public ModelAndView detailsProductOrder(@PathVariable(name="id") String id, @PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
         modelAndView.addObject("product", this.modelMapper
                 .map(this.productService
@@ -50,10 +49,11 @@ public class OrderController extends BaseController {
         modelAndView.addObject("categoryId", categoryId);
 
         return this.view("order/product-details-order", modelAndView);
-    }
+    }*/
 
     @GetMapping("/products/my")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Заявени продукти")
     public ModelAndView productsByOrder(Principal principal, ModelAndView modelAndView) throws Exception {
         String name = principal.getName();
 
@@ -77,6 +77,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/confirm/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Потвърдена поръчка")
     public ModelAndView confirmOrder(@PathVariable(name="id") String id, ModelAndView modelAndView) throws Exception {
 
         orderService.confirmOrder(id);
@@ -88,6 +89,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
+    @PageTitle("Всички поръчки")
     public ModelAndView allOrders(ModelAndView modelAndView) {
 
         modelAndView.addObject("orders", this.orderService
@@ -101,6 +103,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Потвърдена поръчка")
     public ModelAndView orderDetails(@PathVariable(name="id") String id, ModelAndView modelAndView) {
 
         modelAndView.addObject("order", this.modelMapper.map(this.orderService
@@ -120,6 +123,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/my")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Моите поръчки")
     public ModelAndView myOrders(Principal principal, ModelAndView modelAndView) throws Exception {
         String name = principal.getName();
 

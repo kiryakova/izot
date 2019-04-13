@@ -20,7 +20,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Stri
     @Query(value = "SELECT * FROM order_products p " +
                     "JOIN orders o ON(p.order_id = o.id) " +
                     "JOIN users u ON(o.user_id = u.id) " +
-                    "WHERE o.is_finished = 'false' " +
+                    "WHERE o.is_finished = 0 " +
                     "AND user_id = :userId " +
                     "GROUP BY p.id"
             , nativeQuery = true)

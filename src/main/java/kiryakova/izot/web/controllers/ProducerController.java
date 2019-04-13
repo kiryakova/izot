@@ -4,6 +4,7 @@ import kiryakova.izot.domain.models.binding.ProducerBindingModel;
 import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.domain.models.view.ProducerViewModel;
 import kiryakova.izot.service.ProducerService;
+import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ public class ProducerController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на производител")
     public ModelAndView addCategory(ModelAndView modelAndView) {
         modelAndView.addObject("producer", new ProducerBindingModel());
         return this.view("producer/add-producer", modelAndView);
@@ -37,6 +39,7 @@ public class ProducerController extends BaseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Добавяне на производител")
     public ModelAndView addProducer(ModelAndView modelAndView,
                                     @ModelAttribute(name = "producer") @Valid ProducerBindingModel producerBindingModel,
                                     BindingResult bindingResult) {
@@ -52,6 +55,7 @@ public class ProducerController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на производител")
     public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("producer",
                 this.modelMapper.map(this.producerService.findProducerById(id), ProducerBindingModel.class)
@@ -64,6 +68,7 @@ public class ProducerController extends BaseController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Редактиране на производител")
     public ModelAndView editProducer(ModelAndView modelAndView,
                                      @PathVariable String id,
                                      @ModelAttribute(name = "producer") @Valid ProducerBindingModel producerBindingModel,
@@ -81,6 +86,7 @@ public class ProducerController extends BaseController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на производител")
     public ModelAndView deleteCategory(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.addObject("producer",
                 this.modelMapper.map(this.producerService.findProducerById(id), ProducerViewModel.class)
@@ -93,6 +99,7 @@ public class ProducerController extends BaseController {
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Изтриване на производител")
     public ModelAndView deleteProducer(@PathVariable String id) {
         this.producerService.deleteProducer(id);
 
@@ -101,6 +108,7 @@ public class ProducerController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('MODERATOR')")
+    @PageTitle("Всички производители")
     public ModelAndView allProducer(ModelAndView modelAndView) {
         modelAndView.addObject("producers", this.producerService.findAllProducers()
                 .stream()

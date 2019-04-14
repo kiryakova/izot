@@ -16,7 +16,7 @@
             <hr style="height: 2px" class="bg-izot w-75" />
         </th:block>
         <th:block th:if="${order} != null">
-        <!--<hr class="hr-2 bg-dark w-75">-->
+
         <table class="table table-hover w-75 mx-auto">
             <thead>
             <tr class="row mx-auto">
@@ -41,7 +41,6 @@
                     <td class="col-md-1 text-center text-izot" th:text="${orderedProduct.quantity}"></td>
                     <td class="col-md-2 text-center text-izot" th:text="|${orderedProduct.price} лв&#46;|"></td>
                     <td class="col-md-3 text-center">
-                        <!--<a th:href="@{/products/delete/{id}(id=${orderedProduct.id})}" class="btn btn-danger font-weight-bold text-white">Изтриване</a>-->
 
                         <form id="order-product-form"  method="GET">
                             <div class="button-holder d-flex justify-content-center">
@@ -49,41 +48,22 @@
                                 <!--<input id="product-id" type="hidden" name="id" th:value="${orderedProduct.getProduct().getId()}" />-->
                                 <!--<button id="btn-submit-order" type="button" class="btn btn-danger font-weight-bold text-white" th:onclick="'deleteProductFromOrder(\''+ ${orderedProduct.getId()} +'\')'">Премахни</button>-->
                                 <!--<button th:id="${orderedProduct.getId()}" type="submit" class="btn btn-danger font-weight-bold text-white" th:onclick="deleteProduct()">Премахни</button>-->
-                                <button th:value="${orderedProduct.id}" type="submit" class="btn btn-danger font-weight-bold text-white">Премахни</button>
+                                <button id="delete-product" th:value="${orderedProduct.id}" type="submit" class="btn btn-danger font-weight-bold text-white">Премахни</button>
                             </div>
                         </form>
 
-
                     </td>
 
-                    <!--
-                    <td class="col-md-3 text-center">
-                        <button class="btn bg-izot text-white" data-toggle="modal" th:data-target="|#details-producer-modal-*{id}|">Детайли</button>
-                        <th:block th:replace="fragments/modals/producer/details-producer-modal"></th:block>
-                        <th:block th:replace="fragments/modals/producer/edit-producer-modal"></th:block>
-                        <th:block th:replace="fragments/modals/producer/delete-producer-modal"></th:block>
-                    </td>
-                    -->
                 </tr>
 
             </th:block>
             <tr class="row mx-auto">
-                <!--<td class="col-md-1 text-center text-izot"></td>
-                <td class="col-md-2 text-center text-izot"></td>
-                <td class="col-md-3 text-center text-izot"></td>
-                <td class="col-md-1 text-center text-izot"></td>-->
                 <td colspan="3" class="col-md-4"></td>
                 <td colspan="1" class="col-md-3 align-content-end">Обща стойност на поръчката:</td>
                 <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="|${order.totalPrice} лв&#46;|"></td>
                 <td class="col-md-3"><a th:href="@{/customers/edit/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Продължи</a></td>
             </tr>
 
-            <!--<tr class="row mx-auto">
-                <td colspan="5" class="col-md-7"></td>
-                <td class="col-md-3 text-center">
-                    <a th:href="@{/orders/confirm/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Приключи Поръчката</a>
-                </td>
-            </tr>-->
             </tbody>
         </table>
         <hr style="height: 2px" class="bg-izot w-75">
@@ -95,42 +75,39 @@
 <script type="text/javascript">
 
     function deleteProductFromOrder(orderedProductId) {
-        //let orderedProductId = $("#orderedProduct-id").val();
         let divIdForDelete = "#" + orderedProductId;
-        //let orderId = $("#order-id").val();
 
         fetch('/fetch/order/product/delete/' + orderedProductId)
             .then((response) => response.json())
             .then((json) => {
-                //if (json === true) {
-                    alert("Продуктът е премахнат");
+                    //alert("Продуктът е премахнат");
                     //window.location = '/orders/products/my';
                 $(divIdForDelete).hide();
                 $("#totalPrice").empty();
                 $("#totalPrice").append(json.toFixed(2));
-                //$("#totalPrice").append('лв&#46;');
-
-
-                //}
             })
             .catch((err) => console.log(err));
-
-
-        /*       http.get("/fetch/order/submit", {id})
-               .then(() => window.location = '/products/all/products');
-           ev.preventDefault();
-   */
-        //return false;
 
     }
 
     jQuery('button').on('click', function(){
+        deleteProductFromOrder($(this).val());
+        return false;
+    });
+
+/*
+$("#delete-product").on('click', function(){
         //alert($(this).text());
         deleteProductFromOrder($(this).val());
         return false;
     });
+
+*/
+
+
     /*$("#order-product-form").on('submit', (ev) => {
-        deleteProductFromOrder($(this).id);
+        deleteProductFromOrder($(this).val());
+        return false;
     });*/
 </script>
 </html>

@@ -3,10 +3,12 @@ package kiryakova.izot.repository;
 import kiryakova.izot.domain.entities.OrderProduct;
 import kiryakova.izot.domain.models.service.OrderProductServiceModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +27,15 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Stri
             , nativeQuery = true)
     List<OrderProduct> findOrderProductsByUser(@Param("userId") String userId);
 
-    /*@Query(value = "DELETE FROM order_products WHERE id = :id "
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE op FROM order_products op WHERE id = :orderProductId "
             , nativeQuery = true)
-    void deleteOrderProduct(String id);
-    */
+    void deleteOrderProductById(@Param("orderProductId") String id);
 
-    @Query(value = "SELECT * FROM order_products WHERE order_id = :order_id "
+
+    @Query(value = "SELECT * FROM order_products WHERE order_id = :orderId "
             , nativeQuery = true)
-    List<OrderProduct> findOrderProductsByOrderId(@Param("order_id") String order_id);
+    List<OrderProduct> findOrderProductsByOrderId(@Param("orderId") String order_id);
 
 }

@@ -77,7 +77,7 @@ public class OrderProductServiceImpl implements OrderProductService {
         }
 
         try {
-            this.orderProductRepository.delete(orderProduct);
+            this.orderProductRepository.deleteOrderProductById(orderProduct.getId());
         } catch (Exception ignored) {
             throw new OrderProductNotDeletedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
         }

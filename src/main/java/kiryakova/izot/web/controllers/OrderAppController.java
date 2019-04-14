@@ -33,7 +33,6 @@ public class OrderAppController {
 
     @GetMapping("/product/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    //@ResponseBody
     public BigDecimal deleteProductFromOrder(@PathVariable(name="id") String id) throws Exception {
 
         return this.orderService.deleteOrderProduct(id);

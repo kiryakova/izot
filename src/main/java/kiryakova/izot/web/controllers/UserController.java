@@ -4,10 +4,9 @@ import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.UserEditBindingModel;
 import kiryakova.izot.domain.models.binding.UserRegisterBindingModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
-import kiryakova.izot.domain.models.view.UserAllViewModel;
+import kiryakova.izot.domain.models.view.UserViewModel;
 import kiryakova.izot.domain.models.view.UserProfileViewModel;
 import kiryakova.izot.error.UserEditException;
-import kiryakova.izot.error.UserRegisterException;
 import kiryakova.izot.service.MailService;
 import kiryakova.izot.service.UserService;
 import kiryakova.izot.web.annotations.PageTitle;
@@ -171,10 +170,10 @@ public class UserController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("Всички потребители")
     public ModelAndView allUsers(ModelAndView modelAndView) {
-        List<UserAllViewModel> users = this.userService.findAllUsers()
+        List<UserViewModel> users = this.userService.findAllUsers()
                 .stream()
                 .map(u -> {
-                    UserAllViewModel user = this.modelMapper.map(u, UserAllViewModel.class);
+                    UserViewModel user = this.modelMapper.map(u, UserViewModel.class);
                     user.setAuthorities(u.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toSet()));
 
                     return user;

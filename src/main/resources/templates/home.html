@@ -17,6 +17,13 @@
                                 <a th:href="@{/products/all/products/{categoryId}(categoryId=${category.id})}" class="btn bg-exodia text-izot font-weight-bold mb-3">
                                 <img th:src="${category.imageUrl}" width="150px" height="150px" alt="Преглед на продуктите от категория ${category.name}" />
                                 </a>
+
+                                <!--<form th:action="@{/products/all/products/}">
+                                    <input id="categoryId" type="hidden" name="categoryId" th:value="${category.id}" />
+                                    <button type="submit" class="btn bg-exodia text-izot font-weight-bold mb-3">
+                                        <img th:src="${category.imageUrl}" width="150px" height="150px" alt="Преглед на продуктите от категория ${category.name}" />
+                                    </button>
+                                </form>-->
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ public interface ProductService {
 
     List<ProductServiceModel> findAllProducts();
 
-    List<ProductServiceModel> findAllProductsByCategoryId(String categoryId);
+    List<ProductServiceModel> findAllProductsByCategoryIdAndProducerId(String categoryId, String producerId);
 
     boolean checkIfProductNameAlreadyExists(String name);
 

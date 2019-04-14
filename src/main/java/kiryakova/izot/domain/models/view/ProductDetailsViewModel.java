@@ -1,6 +1,7 @@
 package kiryakova.izot.domain.models.view;
 
 import kiryakova.izot.domain.entities.Category;
+import kiryakova.izot.domain.models.service.CategoryServiceModel;
 
 import java.math.BigDecimal;
 
@@ -9,7 +10,8 @@ public class ProductDetailsViewModel extends BaseViewModel {
     private String description;
     private BigDecimal price;
     private String imageUrl;
-    private Category category;
+    private CategoryViewModel category;
+    private ProducerViewModel producer;
 
     public ProductDetailsViewModel() {
     }
@@ -46,11 +48,19 @@ public class ProductDetailsViewModel extends BaseViewModel {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
+    public CategoryViewModel getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryViewModel category) {
         this.category = category;
+    }
+
+    public ProducerViewModel getProducer() {
+        return producer;
+    }
+
+    public void setProducer(ProducerViewModel producer) {
+        this.producer = producer;
     }
 }

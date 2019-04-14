@@ -26,4 +26,9 @@ public interface OrderRepository extends JpaRepository<Order, String> {
             "ORDER BY order_date_time DESC "
             , nativeQuery = true)
     List<Order> findAllOrders();
+
+    @Query(value = "DELETE o FROM orders o LEFT JOIN order_products op " +
+            "ON (op.order_id = o.id) WHERE o.is_finished = 0 "
+            , nativeQuery = true)
+    void deleteAllUnfinishedOrders();
 }

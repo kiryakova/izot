@@ -14,6 +14,7 @@ public class Product extends BaseEntity {
     private BigDecimal price;
     private String imageUrl;
     private Category category;
+    private Producer producer;
     //private List<OrderProduct> orderProductList;
 
     public Product() {
@@ -76,6 +77,16 @@ public class Product extends BaseEntity {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @OneToOne(targetEntity = Producer.class)
+    @JoinColumn(name = "producer_id", referencedColumnName = "id")
+    public Producer getProducer() {
+        return producer;
+    }
+
+    public void setProducer(Producer producer) {
+        this.producer = producer;
     }
 
     /*

@@ -14,8 +14,8 @@ public class OrderServiceModel extends BaseServiceModel {
     private LocalDateTime orderDateTime;
     private boolean finalized;
     private BigDecimal totalPrice;
-    private User user;
-    private Customer customer;
+    private UserServiceModel user;
+    private CustomerServiceModel customer;
     //private List<OrderProduct> orderProductList;
 
 
@@ -46,19 +46,19 @@ public class OrderServiceModel extends BaseServiceModel {
         this.totalPrice = totalPrice;
     }
 
-    public User getUser() {
+    public UserServiceModel getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserServiceModel user) {
         this.user = user;
     }
 
-    public Customer getCustomer() {
+    public CustomerServiceModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerServiceModel customer) {
         this.customer = customer;
     }
 }

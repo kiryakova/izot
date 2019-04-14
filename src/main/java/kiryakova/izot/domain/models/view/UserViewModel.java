@@ -2,7 +2,7 @@ package kiryakova.izot.domain.models.view;
 
 import java.util.Set;
 
-public class UserAllViewModel extends BaseViewModel {
+public class UserViewModel extends BaseViewModel {
 
     private String username;
     private String password;
@@ -10,7 +10,7 @@ public class UserAllViewModel extends BaseViewModel {
 
     private Set<String> authorities;
 
-    public UserAllViewModel() {
+    public UserViewModel() {
     }
 
     public String getUsername() {

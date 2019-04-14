@@ -21,14 +21,16 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final ProducerService producerService;
     private final CloudinaryService cloudinaryService;
     private final ProductValidationService productValidation;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService, CloudinaryService cloudinaryService, ProductValidationService productValidation, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService, ProducerService producerService, CloudinaryService cloudinaryService, ProductValidationService productValidation, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.producerService = producerService;
         this.cloudinaryService = cloudinaryService;
         this.productValidation = productValidation;
         this.modelMapper = modelMapper;
@@ -59,6 +61,10 @@ public class ProductServiceImpl implements ProductService {
 
         productServiceModel.setCategory(
                 this.categoryService.findCategoryById(productServiceModel.getCategory().getId())
+        );
+
+        productServiceModel.setProducer(
+                this.producerService.findProducerById(productServiceModel.getProducer().getId())
         );
 
         if(!productValidation.isValid(productServiceModel)) {
@@ -110,16 +116,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductServiceModel> findAllProductsByCategoryId(String categoryId) {
+    public List<ProductServiceModel> findAllProductsByCategoryIdAndProducerId(String categoryId, String producerId) {
 
-        if(categoryId.equals("all") || categoryId.isEmpty()) {
+        if((categoryId.equals("all") || categoryId.isEmpty()) && (producerId.equals("all") || producerId.isEmpty())) {
             return this.findAllProducts()
                     .stream()
                     .map(product -> this.modelMapper.map(product, ProductServiceModel.class))
                     .collect(Collectors.toList());
         }
 
-        return this.productRepository.findAllByCategoryId(categoryId)
+        if(producerId.equals("all") || producerId.isEmpty()) {
+            return this.productRepository.findAllByCategoryId(categoryId)
+                    .stream()
+                    .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
+                    .collect(Collectors.toList());
+        }
+
+        if(categoryId.equals("all") || categoryId.isEmpty()) {
+            return this.productRepository.findAllByProducerId(producerId)
+                    .stream()
+                    .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
+                    .collect(Collectors.toList());
+        }
+
+        return this.productRepository.findAllByCategoryIdAndProducerId(categoryId, producerId)
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                 .collect(Collectors.toList());

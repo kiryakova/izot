@@ -11,6 +11,7 @@ public class ProductServiceModel extends BaseServiceModel {
     private String imageUrl;
     //private Producer producer;
     private CategoryServiceModel category;
+    private ProducerServiceModel producer;
 
     /*public ProductServiceModel() {
     }*/
@@ -62,5 +63,13 @@ public class ProductServiceModel extends BaseServiceModel {
 
     public void setCategory(CategoryServiceModel category) {
         this.category = category;
+    }
+
+    public ProducerServiceModel getProducer() {
+        return producer;
+    }
+
+    public void setProducer(ProducerServiceModel producer) {
+        this.producer = producer;
     }
 }

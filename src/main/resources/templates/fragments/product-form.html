@@ -7,7 +7,7 @@
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'text-danger'" >
 		<label for="description" class="font-weight-bold text-izot">Описание</label>
-		<input type="text" class="form-control text-izot" id="description" th:field="*{description}" placeholder="Въведи описание..." autofocus="autofocus" />
+		<textarea type="text" class="form-control text-izot" id="description" th:field="*{description}" placeholder="Въведи описание..." autofocus="autofocus" />
 		<small th:each="error : ${#fields.errors('description')}" th:text="${error}"></small>
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('price')}? 'text-danger'" >
@@ -26,6 +26,12 @@
 			<!--<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" ></option>-->
 		</select>
 		<small th:each="error : ${#fields.errors('category')}" th:text="${error}"></small>
+	</div>
+	<div class="form-group" th:classappend="${#fields.hasErrors('producer')}? 'text-danger'">
+		<label for="product-producer">Производител</label>
+		<select class="form-control" id="product-producer" th:field="*{producer}">
+		</select>
+		<small th:each="error : ${#fields.errors('producer')}" th:text="${error}"></small>
 	</div>
 	
 	<hr style="height: 2px" class="bg-izot" />

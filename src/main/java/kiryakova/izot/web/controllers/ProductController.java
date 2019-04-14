@@ -111,7 +111,8 @@ public class ProductController extends BaseController {
 
         this.productService.editProduct(id, productServiceModel, productBindingModel.getImageUrl());
 
-        return this.redirect("/products/details/" + id);
+        //return this.redirect("/products/details/" + id);
+        return this.redirect("/products/all");
     }
 
     @GetMapping("/details/{id}")
@@ -123,15 +124,19 @@ public class ProductController extends BaseController {
         return this.view("product/details-product", modelAndView);
     }
 
-    @GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}"})
+    @GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}", "/product/details/{id}/{categoryId}/{producerId}"})
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Детайли на продукт")
-    public ModelAndView detailsProductOrder(@PathVariable(name="id") String id, @PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
+    public ModelAndView detailsProductOrder(@PathVariable(name="id") String id,
+                                            @PathVariable(name="categoryId", required=false) String categoryId,
+                                            @PathVariable(name="producerId", required=false) String producerId,
+                                            ModelAndView modelAndView) {
         modelAndView.addObject("product", this.modelMapper
                 .map(this.productService
                         .findProductById(id), ProductDetailsViewModel.class));
 
         modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("producerId", producerId);
 
         return this.view("product/product-details-order", modelAndView);
     }
@@ -170,17 +175,20 @@ public class ProductController extends BaseController {
         return this.view("product/all-products", modelAndView);
     }
 
-    @GetMapping(value = {"/all/products", "/all/products/{categoryId}"})
+    @GetMapping(value = {"/all/products", "/all/products/{categoryId}", "/all/products/{categoryId}/{producerId}"})
     @PreAuthorize("hasAuthority('USER')")
     @PageTitle("Всички продукти")
-    public ModelAndView allProducts(@PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
+    public ModelAndView allProducts(@PathVariable(name="categoryId", required=false) String categoryId,
+                                    @PathVariable(name="producerId", required=false) String producerId,
+                                    ModelAndView modelAndView) {
 
-        modelAndView.addObject("categoryId", categoryId != null && !categoryId.equals("") ? categoryId : "all");
+        modelAndView.addObject("categoryId", (categoryId != null && !categoryId.equals("")) ? categoryId : "all");
+        modelAndView.addObject("producerId", (producerId != null && !producerId.equals("")) ? producerId : "all");
 
-        modelAndView.addObject("products", this.productService.findAllProducts()
+        /*modelAndView.addObject("products", this.productService.findAllProducts()
                 .stream()
                 .map(c -> this.modelMapper.map(c, ProductAllViewModel.class))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()));*/
 
         return this.view("product/all", modelAndView);
     }

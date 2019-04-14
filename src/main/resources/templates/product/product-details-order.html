@@ -10,18 +10,19 @@
 
             <th:block th:include="~{fragments/product-details-form}"></th:block>
 
-            <form id="order-form" class="form w-25 mx-auto" th:action="@{/products/all/products/{categoryId}(categoryId=${product.category.id})}" method="GET">
-                <div class="form-group">
+            <form id="order-form" class="form w-25 mx-auto" th:action="@{/products/all/products/{categoryId}(categoryId=${categoryId})/{producerId}(producerId=${producerId})}" method="GET">
+                <div class="form-group mt-2">
                     <label for="quantity" class="font-weight-bold text-izot">Количество</label>
-                    <input id="quantity" class="form-control text-izot" type="number" min="1" step="1" name="quantity" th:value="1" autofocus />
+                    <input id="quantity" class="form-control text-izot text-center" type="number" min="1" step="1" name="quantity" th:value="1" autofocus />
                 </div>
                 <div class="button-holder row d-flex justify-content-md-around">
                     <input id="product-id" type="hidden" name="id" th:value="${product.id}" />
                     <input id="category-id" type="hidden" name="id" th:value="${categoryId}" />
+                    <input id="producer-id" type="hidden" name="id" th:value="${producerId}" />
                     <div>
-                    <a id="btn-cancel-order" th:href="@{/products/all/products/{categoryId}(categoryId=${categoryId})}" class="btn bg-izot font-weight-bold text-white">Отказ</a>
+                    <a id="btn-cancel-order" th:href="@{/products/all/products/{categoryId}/{producerId}(categoryId=${categoryId}, producerId=${producerId})}" class="btn bg-izot font-weight-bold text-white">Отказ</a>
                     </div>
-                    <button id="btn-submit-order" type="submit" class="btn bg-izot font-weight-bold text-white">Поръчай</button>
+                    <button id="btn-submit-order" type="submit" class="btn btn-success font-weight-bold text-white">Поръчай</button>
                 </div>
             </form>
 
@@ -37,8 +38,12 @@
         const id = $("#product-id").val();
         const quantity = $("#quantity").val();
         let categoryId = $("#category-id").val();
+        let producerId = $("#producer-id").val();
         if(categoryId === undefined){
-            categoryId = "";
+            categoryId = "all";
+        }
+        if(producerId === undefined){
+            producerId = "all";
         }
 
         fetch('/fetch/order/add/?id=' + id + '&quantity=' + quantity)
@@ -46,7 +51,7 @@
             .then((json) => {
                 if(json === true) {
                     alert("Продуктът е добавен");
-                    window.location = '/products/all/products/' + categoryId;
+                    window.location = '/products/all/products/'+ categoryId + '/' +producerId;
                 }
             })
             .catch((err) => console.log(err));

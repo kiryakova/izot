@@ -2,6 +2,7 @@ package kiryakova.izot.domain.models.binding;
 
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.Category;
+import kiryakova.izot.domain.entities.Producer;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ public class ProductBindingModel {
     private BigDecimal price;
     private MultipartFile imageUrl;
     private Category category;
+    private Producer producer;
 
     public ProductBindingModel() {
     }
@@ -67,5 +69,13 @@ public class ProductBindingModel {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Producer getProducer() {
+        return producer;
+    }
+
+    public void setProducer(Producer producer) {
+        this.producer = producer;
     }
 }

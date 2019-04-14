@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 
 public class OrderProductViewModel extends BaseViewModel {
     private Integer quantity;
-    private ProductServiceModel product;
+    private ProductDetailsViewModel product;
     private BigDecimal price;
-    private OrderServiceModel order;
+    private OrderViewModel order;
 
     public OrderProductViewModel() {
     }
@@ -24,11 +24,11 @@ public class OrderProductViewModel extends BaseViewModel {
         this.quantity = quantity;
     }
 
-    public ProductServiceModel getProduct() {
+    public ProductDetailsViewModel getProduct() {
         return product;
     }
 
-    public void setProduct(ProductServiceModel product) {
+    public void setProduct(ProductDetailsViewModel product) {
         this.product = product;
     }
 
@@ -40,11 +40,11 @@ public class OrderProductViewModel extends BaseViewModel {
         this.price = price;
     }
 
-    public OrderServiceModel getOrder() {
+    public OrderViewModel getOrder() {
         return order;
     }
 
-    public void setOrder(OrderServiceModel order) {
+    public void setOrder(OrderViewModel order) {
         this.order = order;
     }
 }

@@ -43,7 +43,7 @@ public class OrderProduct extends BaseEntity {
     }
 
     @ManyToOne(targetEntity = Order.class)
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     public Order getOrder() {
         return order;
     }

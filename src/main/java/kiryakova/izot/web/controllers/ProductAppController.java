@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/products")
 public class ProductAppController {
     private final ProductService productService;
     private final ModelMapper modelMapper;
@@ -22,12 +21,17 @@ public class ProductAppController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = {"/fetch", "/fetch/{categoryId}"})
+    //@GetMapping(value = {"/fetch", "/fetch/{categoryId}", "/fetch/{categoryId}{producerId}"})
+    @RequestMapping(
+            value = "/products/fetch/",
+            params = { "categoryId", "producerId" },
+            method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     //@ResponseBody
-    public List<ProductAllViewModel> fetchByCategory(@PathVariable String categoryId) {
+    public List<ProductAllViewModel> fetchByCategory(@RequestParam(name = "categoryId", required = false) String categoryId,
+                                                     @RequestParam(name = "producerId", required = false) String producerId) {
 
-        return this.productService.findAllProductsByCategoryId(categoryId)
+        return this.productService.findAllProductsByCategoryIdAndProducerId(categoryId, producerId)
                 .stream()
                 .map(product -> this.modelMapper.map(product, ProductAllViewModel.class))
                 .collect(Collectors.toList());

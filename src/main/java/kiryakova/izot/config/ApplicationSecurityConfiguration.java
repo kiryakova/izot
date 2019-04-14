@@ -47,8 +47,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                     .defaultSuccessUrl("/home")
                 .and()
                     .logout()
-                    //.logoutSuccessUrl("/")
-                    .logoutSuccessUrl("/users/login?logout").permitAll()
+                    .logoutSuccessUrl("/")
+                    //.logoutSuccessUrl("/users/login?logout").permitAll()
                     //.logoutSuccessUrl("/?logout").permitAll()
                 .and()
                     .exceptionHandling().accessDeniedPage("/unauthorized");

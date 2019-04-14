@@ -16,7 +16,7 @@ public class Order extends BaseEntity {
     private User user;
     private Customer customer;
     private BigDecimal totalPrice;
-    //private List<OrderProduct> orderProductList;
+    private List<OrderProduct> orderProductList;
 
     public Order() {
     }
@@ -50,15 +50,6 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
- /*   @OneToMany(targetEntity = OrderProduct.class, mappedBy = "order")
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
-    }
-
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
-    }
-*/
     @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     public Customer getCustomer() {
@@ -77,4 +68,14 @@ public class Order extends BaseEntity {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "order", cascade = CascadeType.REMOVE)
+    public List<OrderProduct> getOrderProductList() {
+        return orderProductList;
+    }
+
+    public void setOrderProductList(List<OrderProduct> orderProductList) {
+        this.orderProductList = orderProductList;
+    }
+
 }

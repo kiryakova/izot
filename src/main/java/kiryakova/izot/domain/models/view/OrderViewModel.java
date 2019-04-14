@@ -1,20 +1,17 @@
 package kiryakova.izot.domain.models.view;
 
-import kiryakova.izot.domain.entities.Customer;
 import kiryakova.izot.domain.entities.User;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class OrderViewModel extends BaseViewModel {
 
     private LocalDateTime orderDateTime;
-    private boolean finalized;
+    private boolean isFinished;
     private BigDecimal totalPrice;
-    private User user;
-    private Customer customer;
+    private UserViewModel user;
+    private CustomerViewModel customer;
     //private List<OrderProductViewModel> orderProductList;
 
     public OrderViewModel() {
@@ -28,12 +25,12 @@ public class OrderViewModel extends BaseViewModel {
         this.orderDateTime = orderDateTime;
     }
 
-    public boolean isFinalized() {
-        return finalized;
+    public boolean isFinished() {
+        return isFinished;
     }
 
-    public void setFinalized(boolean finalized) {
-        this.finalized = finalized;
+    public void setFinished(boolean isFinished) {
+        this.isFinished = isFinished;
     }
 
     public BigDecimal getTotalPrice() {
@@ -44,19 +41,19 @@ public class OrderViewModel extends BaseViewModel {
         this.totalPrice = totalPrice;
     }
 
-    public User getUser() {
+    public UserViewModel getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserViewModel user) {
         this.user = user;
     }
 
-    public Customer getCustomer() {
+    public CustomerViewModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerViewModel customer) {
         this.customer = customer;
     }
 

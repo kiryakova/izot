@@ -89,6 +89,18 @@ public class ProducerServiceImpl implements ProducerService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean checkIfProducerNameAlreadyExists(String name) {
+        Producer producer = this.producerRepository
+                .findByName(name).orElse(null);
+
+        if(producer == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     private void checkIfProducerFound(Producer producer) {
         if(!producerValidation.isValid(producer)) {
             throw new ProducerNotFoundException(ConstantsDefinition.ProducerConstants.NO_SUCH_PRODUCER);

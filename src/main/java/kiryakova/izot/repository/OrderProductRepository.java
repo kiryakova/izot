@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface OrderProductRepository extends JpaRepository<OrderProduct, String> {
-    //Optional<OrderProduct> findByDescription(String description);
     @Query(value = "SELECT * FROM order_products WHERE order_id = :orderId AND product_id = :productId "
             , nativeQuery = true)
     Optional<OrderProduct> findOrderProductByOrderIdAndProductId(@Param("orderId") String orderId, @Param("productId") String productId);

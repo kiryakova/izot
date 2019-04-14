@@ -59,5 +59,6 @@ public final class ConstantsDefinition {
         public static final String NO_SUCH_PRODUCER = "Няма такъв производител!";
         public static final String NO_PRODUCER_WITH_NAME = "Не е намерен производител %s!";
         public static final String UNSUCCESSFUL_DELETE_PRODUCER = "Неуспешно изтриване на производител %s";
+        public static final String PRODUCER_ALREADY_EXISTS = "Производител с име %s вече съществува";
     }
 }

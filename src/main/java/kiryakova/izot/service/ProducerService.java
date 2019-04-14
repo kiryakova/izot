@@ -14,4 +14,6 @@ public interface ProducerService {
     ProducerServiceModel findProducerById(String id);
 
     List<ProducerServiceModel> findAllProducers();
+
+    boolean checkIfProducerNameAlreadyExists(String name);
 }

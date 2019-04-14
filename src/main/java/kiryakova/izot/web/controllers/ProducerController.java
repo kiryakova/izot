@@ -1,5 +1,6 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.ProducerBindingModel;
 import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.domain.models.view.ProducerViewModel;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +45,11 @@ public class ProducerController extends BaseController {
     public ModelAndView addProducer(ModelAndView modelAndView,
                                     @ModelAttribute(name = "producer") @Valid ProducerBindingModel producerBindingModel,
                                     BindingResult bindingResult) {
+
+        if(this.producerService.checkIfProducerNameAlreadyExists(producerBindingModel.getName())){
+            bindingResult.addError(new FieldError("producerBindingModel", "name",
+                    String.format(ConstantsDefinition.ProducerConstants.PRODUCER_ALREADY_EXISTS, producerBindingModel.getName())));
+        }
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("producer", producerBindingModel);
             return this.view("producer/add-producer", modelAndView);

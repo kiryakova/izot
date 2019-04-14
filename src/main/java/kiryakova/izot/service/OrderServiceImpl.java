@@ -223,9 +223,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    //@Scheduled(fixedRate = 60000)
     //@Scheduled(fixedRate = 300000)
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 86400000)
     private void deleteRandomUnfinishedOrders() {
-        //this.orderRepository.deleteAllUnfinishedOrders();
+        this.orderRepository.deleteAllUnfinishedOrders();
     }
 }

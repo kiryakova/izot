@@ -42,7 +42,7 @@ public class OrderProduct extends BaseEntity {
         this.price = price;
     }
 
-    @ManyToOne(targetEntity = Order.class, cascade = CascadeType.REMOVE)
+    @ManyToOne(targetEntity = Order.class, cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     public Order getOrder() {
         return order;

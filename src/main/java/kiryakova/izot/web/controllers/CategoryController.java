@@ -46,7 +46,6 @@ public class CategoryController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Добавяне на категория")
     public ModelAndView addCategoryConfirm(ModelAndView modelAndView,
-                                           //@RequestParam("imageUrl") MultipartFile imageUrl,
                                            @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
                                            BindingResult bindingResult) {
 

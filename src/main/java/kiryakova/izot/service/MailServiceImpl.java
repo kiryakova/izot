@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailServiceImpl implements MailService {
     private static final String REGISTRATION_MAIL_SUBJECT =
-            "Eventures Inc. - [Registration]";
+            "IZOT - Registration";
 
     private static final String REGISTRATION_SUCCESS_MESSAGE
             = "Welcome, %s!%n" + " You have successfully registered your user to IZOT Nova Zagora.";
@@ -27,7 +27,6 @@ public class MailServiceImpl implements MailService {
         message.setSubject(REGISTRATION_MAIL_SUBJECT);
         message.setText(String.format(REGISTRATION_SUCCESS_MESSAGE, username));
 
-        //message.setFrom("info@eventures.io");
         //message.setFrom("df71968813-b3624f@inbox.mailtrap.io");
         message.setFrom("stelanz@abv.bg");
         message.setTo(email);

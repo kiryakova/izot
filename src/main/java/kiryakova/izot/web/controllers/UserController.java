@@ -32,8 +32,6 @@ public class UserController extends BaseController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //private final RecaptchaService recaptchaService;
-
     private final MailService mailService;
 
     private final ModelMapper modelMapper;
@@ -42,7 +40,6 @@ public class UserController extends BaseController {
     public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, ModelMapper modelMapper) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        //this.recaptchaService = recaptchaService;
         this.mailService = mailService;
         this.modelMapper = modelMapper;
     }
@@ -71,7 +68,6 @@ public class UserController extends BaseController {
     @PageTitle("Регистрация на потребител")
     public ModelAndView registerConfirm(ModelAndView modelAndView,
                                         @ModelAttribute(name = "user") @Valid UserRegisterBindingModel userRegisterBindingModel,
-                                        //@RequestParam(name = "g-recaptcha-response") String gRecaptchaResponse,
                                         BindingResult bindingResult) {
 
         if(!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
@@ -161,8 +157,6 @@ public class UserController extends BaseController {
             throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getEmail()));
         }
 
-
-        //this.userService.editUserProfile(this.modelMapper.map(userEditBindingModel, UserServiceModel.class), userEditBindingModel.getOldPassword());
         return this.redirect("/users/profile");
     }
 

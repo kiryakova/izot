@@ -71,7 +71,7 @@ public class ProductServiceTests {
     }
 
     @Test
-    public void getProducts_whenTwoProducts() {
+    public void productService_getProducts_whenTwoProducts() {
 
         productRepository.deleteAll();
         productRepository.save(product);

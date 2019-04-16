@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class CustomerCategoryTests {
+public class CustomerServiceTests {
     @Autowired
     private CustomerRepository customerRepository;
     private OrderRepository orderRepository;

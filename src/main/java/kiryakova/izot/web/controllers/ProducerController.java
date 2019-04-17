@@ -4,6 +4,7 @@ import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.ProducerBindingModel;
 import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.domain.models.view.ProducerViewModel;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.service.ProducerService;
 import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
@@ -16,18 +17,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.security.Principal;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/producers")
 public class ProducerController extends BaseController {
     private final ProducerService producerService;
+    private final LogService logService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProducerController(ProducerService producerService, ModelMapper modelMapper) {
+    public ProducerController(ProducerService producerService, LogService logService, ModelMapper modelMapper) {
         this.producerService = producerService;
+        this.logService = logService;
         this.modelMapper = modelMapper;
     }
 
@@ -42,7 +45,8 @@ public class ProducerController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Добавяне на производител")
-    public ModelAndView addProducer(ModelAndView modelAndView,
+    public ModelAndView addProducer(Principal principal,
+                                    ModelAndView modelAndView,
                                     @ModelAttribute(name = "producer") @Valid ProducerBindingModel producerBindingModel,
                                     BindingResult bindingResult) {
 
@@ -55,7 +59,11 @@ public class ProducerController extends BaseController {
             return this.view("producer/add-producer", modelAndView);
         }
 
-        this.producerService.addProducer(this.modelMapper.map(producerBindingModel, ProducerServiceModel.class));
+        ProducerServiceModel producerServiceModel = this.modelMapper.map(producerBindingModel, ProducerServiceModel.class);
+
+        this.producerService.addProducer(producerServiceModel);
+
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.ProducerConstants.PRODUCER_ADDED_SUCCESSFUL, producerServiceModel.getName()));
 
         return this.redirect("/producers/all");
     }

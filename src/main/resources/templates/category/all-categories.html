@@ -28,7 +28,7 @@
                     <td class="col-md-5 text-center text-izot" th:text="*{name}"></td>
                     <td class="col-md-3 text-center text-izot">
                         <div class="text-center">
-                        <img th:src="${category.imageUrl}" width="40" height="40" alt="Category" />
+                        <img th:src="*{imageUrl}" width="40" height="40" alt="Category" />
                         </div>
                     </td>
                     <!--<td class="col-md-3 text-center" th:text="*{isImporter} ? '&#9989;' : '&#10062;'"></td>-->

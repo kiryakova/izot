@@ -3,6 +3,7 @@ package kiryakova.izot.service;
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.User;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.error.UserEditException;
 import kiryakova.izot.error.UserRegisterException;
 import kiryakova.izot.repository.UserRepository;
 import kiryakova.izot.validation.UserValidationService;
@@ -90,7 +91,11 @@ public class UserServiceImpl implements UserService {
 
         user.setEmail(userServiceModel.getEmail());
 
-        this.userRepository.save(user);
+        try {
+            this.userRepository.save(user);
+        }catch (Exception ignored){
+            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getUsername()));
+        }
 
         return true;
     }
@@ -128,7 +133,11 @@ public class UserServiceImpl implements UserService {
                 break;
         }
 
-        this.userRepository.save(this.modelMapper.map(userServiceModel, User.class));
+        try {
+            this.userRepository.save(this.modelMapper.map(userServiceModel, User.class));
+        }catch (Exception ignored){
+            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_SET_AUTHORITY, userServiceModel.getUsername()));
+        }
     }
 
     @Override

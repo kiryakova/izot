@@ -26,15 +26,15 @@
             <th:block th:each="product, iter : ${products}" th:object="${product}">
                 <tr class="row mx-auto">
                     <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
-                    <td class="col-md-2 text-center text-izot">
+                    <td class="col-md-3 text-center text-izot">
                         <div class="text-center">
-                        <img th:src="${product.imageUrl}" width="40" height="40" alt="Product" />
+                        <img th:src="*{imageUrl}" width="40" height="40" alt="Product" />
                         </div>
                     </td>
                     <td class="col-md-3 text-center text-izot" th:text="*{name}"></td>
                     <td class="col-md-2 text-center text-izot" th:text="*{price}"></td>
 
-                    <td class="col-md-4 text-center">
+                    <td class="col-md-3 text-center">
                         <a th:href="@{/products/details/{id}(id=${product.id})}" class="btn bg-izot font-weight-bold text-white">Детайли</a>
                         <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success font-weight-bold text-white">Редакция</a>
                         <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger font-weight-bold text-white">Изтриване</a>

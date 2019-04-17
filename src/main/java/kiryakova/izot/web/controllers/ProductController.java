@@ -5,6 +5,7 @@ import kiryakova.izot.domain.models.binding.ProductBindingModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
 import kiryakova.izot.domain.models.view.ProductAllViewModel;
 import kiryakova.izot.domain.models.view.ProductDetailsViewModel;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.service.ProductService;
 import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
@@ -14,12 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.List;
+import java.security.Principal;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,11 +26,14 @@ import java.util.stream.Collectors;
 public class ProductController extends BaseController {
 
     private final ProductService productService;
+    private final LogService logService;
+
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductController(ProductService productService, ModelMapper modelMapper) {
+    public ProductController(ProductService productService, LogService logService, ModelMapper modelMapper) {
         this.productService = productService;
+        this.logService = logService;
         this.modelMapper = modelMapper;
     }
 
@@ -46,7 +48,8 @@ public class ProductController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Добавяне на продукт")
-    public ModelAndView addProductConfirm(ModelAndView modelAndView,
+    public ModelAndView addProductConfirm(Principal principal,
+                                          ModelAndView modelAndView,
                                           @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
                                           BindingResult bindingResult) {
 
@@ -69,6 +72,8 @@ public class ProductController extends BaseController {
 
         this.productService.addProduct(productServiceModel, productBindingModel.getImageUrl());
 
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.ProductConstants.PRODUCT_ADDED_SUCCESSFUL, productServiceModel.getName()));
+
         return this.redirect("/products/all");
     }
 
@@ -89,10 +94,11 @@ public class ProductController extends BaseController {
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Редактиране на продукт")
-    public ModelAndView editProductConfirm(ModelAndView modelAndView,
-                                            @PathVariable String id,
-                                            @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
-                                            BindingResult bindingResult) {
+    public ModelAndView editProductConfirm(Principal principal,
+                                           ModelAndView modelAndView,
+                                           @PathVariable String id,
+                                           @ModelAttribute(name = "product") @Valid ProductBindingModel productBindingModel,
+                                           BindingResult bindingResult) {
 
         if(productBindingModel.getImageUrl() == null || productBindingModel.getImageUrl().isEmpty()){
             bindingResult.addError(new FieldError("productBindingModel", "imageUrl",
@@ -110,6 +116,8 @@ public class ProductController extends BaseController {
         ProductServiceModel productServiceModel = this.modelMapper.map(productBindingModel, ProductServiceModel.class);
 
         this.productService.editProduct(id, productServiceModel, productBindingModel.getImageUrl());
+
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.ProductConstants.PRODUCT_EDITED_SUCCESSFUL, productServiceModel.getName()));
 
         //return this.redirect("/products/details/" + id);
         return this.redirect("/products/all");
@@ -157,8 +165,11 @@ public class ProductController extends BaseController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на продукт")
-    public ModelAndView deleteProductConfirm(@PathVariable String id) {
+    public ModelAndView deleteProductConfirm(Principal principal,
+                                             @PathVariable String id) {
         this.productService.deleteProduct(id);
+
+        this.logService.logAction(principal.getName(), ConstantsDefinition.ProductConstants.PRODUCT_DELETED_SUCCESSFUL);
 
         return this.redirect("/products/all");
     }

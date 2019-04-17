@@ -1,13 +1,11 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.service.OrderServiceModel;
 import kiryakova.izot.domain.models.view.CustomerViewModel;
 import kiryakova.izot.domain.models.view.OrderProductViewModel;
 import kiryakova.izot.domain.models.view.OrderViewModel;
-import kiryakova.izot.service.CustomerService;
-import kiryakova.izot.service.OrderProductService;
-import kiryakova.izot.service.OrderService;
-import kiryakova.izot.service.ProductService;
+import kiryakova.izot.service.*;
 import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +25,16 @@ public class OrderController extends BaseController {
     private final OrderService orderService;
     private final OrderProductService orderProductService;
     private final CustomerService customerService;
+    private final LogService logService;
 
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderProductService orderProductService, CustomerService customerService, ModelMapper modelMapper) {
+    public OrderController(OrderService orderService, OrderProductService orderProductService, CustomerService customerService, LogService logService, ModelMapper modelMapper) {
         this.orderService = orderService;
         this.orderProductService = orderProductService;
         this.customerService = customerService;
+        this.logService = logService;
         this.modelMapper = modelMapper;
     }
 
@@ -78,9 +78,13 @@ public class OrderController extends BaseController {
     @GetMapping("/confirm/{id}")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Потвърдена поръчка")
-    public ModelAndView confirmOrder(@PathVariable(name="id") String id, ModelAndView modelAndView) throws Exception {
+    public ModelAndView confirmOrder(Principal principal,
+                                     @PathVariable(name="id") String id,
+                                     ModelAndView modelAndView) throws Exception {
 
         orderService.confirmOrder(id);
+
+        this.logService.logAction(principal.getName(), ConstantsDefinition.OrderConstants.ORDER_CONFIRMED_SUCCESSFUL);
 
         return this.orderDetails(id, modelAndView);
 

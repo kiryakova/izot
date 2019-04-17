@@ -60,7 +60,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.setName(categoryServiceModel.getName());
         this.setImageUrl(category, imageUrl);
-        //category.setImageUrl(categoryServiceModel.getImageUrl());
 
         try {
             this.categoryRepository.save(category);

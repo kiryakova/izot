@@ -1,8 +1,9 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,9 @@ public class OrderAppController {
 
     @GetMapping("/product/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    public BigDecimal deleteProductFromOrder(@PathVariable(name="id") String id) throws Exception {
+    public BigDecimal deleteProductFromOrder(Principal principal, @PathVariable(name="id") String id) throws Exception {
 
         return this.orderService.deleteOrderProduct(id);
+
     }
 }

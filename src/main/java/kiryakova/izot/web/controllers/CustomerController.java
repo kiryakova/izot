@@ -1,8 +1,10 @@
 package kiryakova.izot.web.controllers;
 
+import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.CustomerBindingModel;
 import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.service.CustomerService;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,13 @@ import java.security.Principal;
 @RequestMapping("/customers")
 public class CustomerController extends BaseController {
     private final CustomerService customerService;
+    private final LogService logService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CustomerController(CustomerService customerService, ModelMapper modelMapper) {
+    public CustomerController(CustomerService customerService, LogService logService, ModelMapper modelMapper) {
         this.customerService = customerService;
+        this.logService = logService;
         this.modelMapper = modelMapper;
     }
 
@@ -61,6 +65,11 @@ public class CustomerController extends BaseController {
         CustomerServiceModel customerServiceModel = this.modelMapper.map(customerBindingModel, CustomerServiceModel.class);
 
         this.customerService.editCustomer(name, customerServiceModel, id);
+
+        this.logService.logAction(principal.getName(),
+                String.format(ConstantsDefinition.CustomerConstants.CUSTOMER_ADDED_SUCCESSFUL,
+                        customerServiceModel.getFirstName(),
+                        customerServiceModel.getLastName()));
 
         return this.redirect("/orders/confirm/" + id);
     }

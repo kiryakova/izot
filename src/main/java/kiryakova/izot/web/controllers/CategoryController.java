@@ -69,7 +69,7 @@ public class CategoryController extends BaseController {
 
         this.categoryService.addCategory(categoryServiceModel, categoryBindingModel.getImageUrl());
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ADDED, categoryServiceModel.getName()));
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ADDED_SUCCESSFUL, categoryServiceModel.getName()));
 
         return this.redirect("/categories/all");
     }
@@ -91,7 +91,8 @@ public class CategoryController extends BaseController {
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Редактиране на категория")
-    public ModelAndView editCategoryConfirm(ModelAndView modelAndView,
+    public ModelAndView editCategoryConfirm(Principal principal,
+                                            ModelAndView modelAndView,
                                             @PathVariable String id,
                                             @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
                                             BindingResult bindingResult) {
@@ -113,6 +114,8 @@ public class CategoryController extends BaseController {
 
         this.categoryService.editCategory(id, categoryServiceModel, categoryBindingModel.getImageUrl());
 
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_EDITED_SUCCESSFUL, categoryServiceModel.getName()));
+
         return this.redirect("/categories/all");
         //return super.redirect("/producers/details/" + id);
     }
@@ -133,8 +136,10 @@ public class CategoryController extends BaseController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на категория")
-    public ModelAndView deleteCategoryConfirm(@PathVariable String id) {
+    public ModelAndView deleteCategoryConfirm(Principal principal, @PathVariable String id) {
         this.categoryService.deleteCategory(id);
+
+        this.logService.logAction(principal.getName(), ConstantsDefinition.CategoryConstants.CATEGORY_DELETED_SUCCESSFUL);
 
         return this.redirect("/categories/all");
     }

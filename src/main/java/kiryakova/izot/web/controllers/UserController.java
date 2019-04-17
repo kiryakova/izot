@@ -4,9 +4,11 @@ import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.models.binding.UserEditBindingModel;
 import kiryakova.izot.domain.models.binding.UserRegisterBindingModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.domain.models.view.LogViewModel;
 import kiryakova.izot.domain.models.view.UserViewModel;
 import kiryakova.izot.domain.models.view.UserProfileViewModel;
 import kiryakova.izot.error.UserEditException;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.service.MailService;
 import kiryakova.izot.service.UserService;
 import kiryakova.izot.web.annotations.PageTitle;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class UserController extends BaseController {
 
     private final UserService userService;
+    private final LogService logService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final MailService mailService;
@@ -37,8 +40,9 @@ public class UserController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, ModelMapper modelMapper) {
+    public UserController(UserService userService, LogService logService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.logService = logService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
         this.modelMapper = modelMapper;
@@ -66,7 +70,8 @@ public class UserController extends BaseController {
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
     @PageTitle("Регистрация на потребител")
-    public ModelAndView registerConfirm(ModelAndView modelAndView,
+    public ModelAndView registerConfirm(Principal principal,
+                                        ModelAndView modelAndView,
                                         @ModelAttribute(name = "user") @Valid UserRegisterBindingModel userRegisterBindingModel,
                                         BindingResult bindingResult) {
 
@@ -95,6 +100,8 @@ public class UserController extends BaseController {
                 .map(userRegisterBindingModel, UserServiceModel.class);
 
         this.userService.registerUser(userServiceModel);
+
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.UserConstants.USER_REGISTERED_SUCCESSFUL, userServiceModel.getUsername()));
 
         this.mailService.sentRegistrationSuccessMessage(userRegisterBindingModel.getEmail(), userRegisterBindingModel.getUsername());
 
@@ -128,9 +135,10 @@ public class UserController extends BaseController {
     @PostMapping("/edit")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Редакция на потребителския профил")
-    public ModelAndView editProfileConfirm(ModelAndView modelAndView,
-                                            @ModelAttribute(name = "user") @Valid UserEditBindingModel userEditBindingModel,
-                                            BindingResult bindingResult){
+    public ModelAndView editProfileConfirm(Principal principal,
+                                           ModelAndView modelAndView,
+                                           @ModelAttribute(name = "user") @Valid UserEditBindingModel userEditBindingModel,
+                                           BindingResult bindingResult){
 
         UserServiceModel userServiceModel = this.userService.findUserByUsername(userEditBindingModel.getUsername());
 
@@ -153,9 +161,13 @@ public class UserController extends BaseController {
             return this.view("edit-profile", modelAndView);
         }
 
-        if (!this.userService.editUserProfile(this.modelMapper.map(userEditBindingModel, UserServiceModel.class))) {
+        userServiceModel = this.modelMapper.map(userEditBindingModel, UserServiceModel.class);
+
+        if (!this.userService.editUserProfile(userServiceModel)) {
             throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getEmail()));
         }
+
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.UserConstants.USER_PROFILE_EDITED_SUCCESSFUL, userServiceModel.getUsername()));
 
         return this.redirect("/users/profile");
     }
@@ -186,5 +198,20 @@ public class UserController extends BaseController {
         this.userService.setUserAuthority(id, authority);
 
         return this.redirect("/users/all");
+    }
+
+    @GetMapping("/logs")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ModelAndView logs(ModelAndView modelAndView) {
+
+        List<LogViewModel> logs = this.logService.findAllLogsByDateTimeDesc()
+                .stream()
+                .map(l -> this.modelMapper.map(l, LogViewModel.class))
+                .collect(Collectors.toList());
+
+        modelAndView.addObject("logs", logs);
+
+        return this.view("logs", modelAndView);
+
     }
 }

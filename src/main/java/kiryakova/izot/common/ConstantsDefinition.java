@@ -41,6 +41,7 @@ public final class ConstantsDefinition {
         public static final String UNSUCCESSFUL_SAVED_CATEGORY = "Запис на категория %s неуспешно!";
         public static final String UNSUCCESSFUL_DELETE_CATEGORY = "Вече има продукти от категория %s";
         public static final String CATEGORY_ALREADY_EXISTS = "Категория с име %s вече съществува";
+        public static final String CATEGORY_ADDED = "Успешно добавена категория";
     }
 
     public final static class CustomerConstants {

@@ -5,7 +5,7 @@ import kiryakova.izot.domain.models.binding.CategoryBindingModel;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.view.CategoryViewModel;
 import kiryakova.izot.service.CategoryService;
-import kiryakova.izot.service.CloudinaryService;
+import kiryakova.izot.service.LogService;
 import kiryakova.izot.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +14,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.List;
+import java.security.Principal;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/categories")
 public class CategoryController extends BaseController {
     private final CategoryService categoryService;
+    private final LogService logService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CategoryController(CategoryService categoryService, ModelMapper modelMapper) {
+    public CategoryController(CategoryService categoryService, LogService logService, ModelMapper modelMapper) {
         this.categoryService = categoryService;
+        this.logService = logService;
         this.modelMapper = modelMapper;
     }
 
@@ -45,7 +45,8 @@ public class CategoryController extends BaseController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Добавяне на категория")
-    public ModelAndView addCategoryConfirm(ModelAndView modelAndView,
+    public ModelAndView addCategoryConfirm(Principal principal,
+                                           ModelAndView modelAndView,
                                            @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
                                            BindingResult bindingResult) {
 
@@ -66,17 +67,9 @@ public class CategoryController extends BaseController {
 
         CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel, CategoryServiceModel.class);
 
-        /*categoryServiceModel.setImageUrl(
-                this.cloudinaryService.uploadImage(categoryBindingModel.getImageUrl())
-        );*/
-
-        /*try {
-            categoryService.setImageUrl(categoryServiceModel, categoryBindingModel.getImageUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
         this.categoryService.addCategory(categoryServiceModel, categoryBindingModel.getImageUrl());
+
+        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ADDED, categoryServiceModel.getName()));
 
         return this.redirect("/categories/all");
     }
@@ -117,16 +110,6 @@ public class CategoryController extends BaseController {
         }
 
         CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel, CategoryServiceModel.class);
-
-        /*categoryServiceModel.setImageUrl(
-                this.cloudinaryService.uploadImage(categoryBindingModel.getImageUrl())
-        );*/
-
-        /*try {
-            categoryService.setImageUrl(categoryServiceModel, categoryBindingModel.getImageUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
         this.categoryService.editCategory(id, categoryServiceModel, categoryBindingModel.getImageUrl());
 

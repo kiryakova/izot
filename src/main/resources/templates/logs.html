@@ -1,0 +1,36 @@
+<th:block>
+    <div class="container justify-content-center col-md-11 my-4">
+        <div class="jumbotron bg-forms d-flex justify-content-center">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <h1 class="text text-center text-danger">Log</h1>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Event</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="log,iter : ${logViewModel}">
+                            <tr>
+                                <th scope="row" th:text="${iter.index + 1}"></th>
+                                <td th:text="${#temporals.format(log.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                                <td th:text="${log.user.email}"></td>
+                                <td th:text="${log.user.firstName} + ' ' + ${log.user.lastName}"></td>
+                                <td th:text="${log.event}"></td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>

@@ -14,7 +14,8 @@
 
                 <th:block th:include="~{fragments/category-form}"></th:block>
 
-                <div class="button-holder d-flex justify-content-center">
+                <div class="button-holder row d-flex justify-content-md-around">
+                    <div><a th:href="@{/categories/all}" class="btn bg-izot font-weight-bold text-white">Откажи</a></div>
                     <button type="submit" class="btn bg-izot font-weight-bold text-white">Добави</button>
                 </div>
             </form>

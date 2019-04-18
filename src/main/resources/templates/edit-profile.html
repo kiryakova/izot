@@ -9,11 +9,6 @@
         <div class="jumbotron bg-white">
             <h1 class="text-center text-izot">Профил - Редакция</h1>
             <hr style="height: 2px" class="bg-izot w-25" />
-
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
             <form class="form w-25 mx-auto" th:action="@{/users/edit}" th:method="post" th:object="${user}">
                 <div class="form-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
                     <label for="username" class="text-izot">Име</label>
@@ -47,7 +42,6 @@
                     <button type="submit" class="btn bg-izot font-weight-bold text-white">Потвърди промените</button>
                 </div>
             </form>
-            <!--<hr style="height: 2px" class="bg-izot w-25" />-->
         </div>
     </main>
 

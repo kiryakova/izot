@@ -10,10 +10,6 @@
             <h1 class="text-center text-izot">Вашите данни</h1>
             <hr style="height: 2px" class="bg-izot w-25" />
 
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
             <form class="form w-25 mx-auto" th:action="@{/customers/edit/{id}(id=${orderId})}" th:method="post" th:object="${customer}">
 
                 <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'" >

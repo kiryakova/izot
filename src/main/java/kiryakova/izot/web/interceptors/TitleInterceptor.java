@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 public class TitleInterceptor extends HandlerInterceptorAdapter {
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response,
+                           Object handler,
+                           ModelAndView modelAndView) {
         String title = "ИЗОТ";
 
         if (modelAndView == null) {
@@ -24,13 +27,11 @@ public class TitleInterceptor extends HandlerInterceptorAdapter {
             PageTitle methodAnnotation = ((HandlerMethod) handler).getMethodAnnotation(PageTitle.class);
 
             if (methodAnnotation != null) {
-                modelAndView
-                        .addObject("title", title + " - " + methodAnnotation.value());
+                title += " - " + methodAnnotation.value();
             }
-            else {
-                modelAndView
+
+            modelAndView
                         .addObject("title", title);
-            }
         }
 
     }

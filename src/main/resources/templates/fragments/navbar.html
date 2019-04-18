@@ -1,5 +1,5 @@
 <th:block th:fragment="navbar">
-    <header><!--"@{/}"-->
+    <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-izot rounded">
             <th:block sec:authorize="isAnonymous()">
                 <a class="navbar-brand nav-link-white" th:href="@{/}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н.Загора</span></a>
@@ -7,7 +7,7 @@
             <th:block sec:authorize="hasAnyAuthority('ROOT_ADMIN', 'ADMIN', 'MODERATOR', 'USER')">
                 <a class="navbar-brand nav-link-white" th:href="@{/home}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н.Загора</span></a>
             </th:block>
-            <!--<a class="navbar-brand nav-link-white" th:href="isAnonymous().Boolean.String==true ? @{/} : @{/home}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н.Загора</span></a>-->
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -75,8 +75,7 @@
                             <div class="dropdown">
                                 <a class="nav-link active dropdown-toggle" href="#" role="button" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-user"></i>
-                                    <!--<i class="fas fa-user" sec:authorize="hasRole('ROLE_USER')"></i>-->
-                                    <span th:text="${#authentication.getName()}"></span>
+                                    <span th:text="|${messageWelcome}${#authentication.getName()}|"></span>
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownProfile">
@@ -91,22 +90,6 @@
                         <li class="nav-item active">
                             <a href="#">&#160;&#160;&#160;&#160;&#160;&#160;&#160;</a>
                         </li>
-  <!--                  <li class="nav-item active">
-                            <a class="nav-link" href="/users/profile">Profile</a>
-                        </li>
-
-                        <li class="nav-item active">
-                            <form th:action="@{/logout}" th:method="POST">
-                                <button type="submit" class="btn bg-izot text-white"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                            </form>
-                        </li>
--->
-
-
-
-
-
-
 
                     </th:block>
 

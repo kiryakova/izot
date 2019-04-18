@@ -17,21 +17,6 @@ import java.util.Locale;
 @Configuration
 public class ApplicationBeanConfiguration {
 
-    //@Value("${spring.activemq.broker-url}")
-    //private String DEFAULT_BROKER_URL;
-
-    /*static ModelMapper mapper;
-
-    static {
-        mapper = new ModelMapper();
-        MappingsInitializer.initMappings(mapper);
-    }
-
-    @Bean
-    public ModelMapper modelMapper() {
-        return mapper;
-    }*/
-
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
@@ -41,25 +26,6 @@ public class ApplicationBeanConfiguration {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /*@Bean
-    public ActiveMQConnectionFactory activeMQConnectionFactory() {
-        ActiveMQConnectionFactory activeMQConnectionFactory
-                = new ActiveMQConnectionFactory();
-
-        activeMQConnectionFactory.setBrokerURL(DEFAULT_BROKER_URL);
-
-        return activeMQConnectionFactory;
-    }
-
-    @Bean
-    public JmsTemplate jmsTemplate() {
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(activeMQConnectionFactory());
-
-        return jmsTemplate;
-    }
-    */
 
     @Bean
     public LocaleResolver localeResolver()  {
@@ -78,10 +44,6 @@ public class ApplicationBeanConfiguration {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-
-        //javaMailSender.setHost("smtp.mailtrap.io");
-        //javaMailSender.setUsername("82101ff904438f");
-        //javaMailSender.setPassword("2fe5682fa940fd");
 
         javaMailSender.setHost("smtp.mailtrap.io");
         javaMailSender.setUsername("abef134cf763e4");

@@ -2,10 +2,6 @@ package kiryakova.izot.common;
 
 public final class ConstantsDefinition {
 
-    /*public final static class GlobalConstants {
-        public static final String NO_ENTITY_WITH_ID= "No %s with id: %s";
-    }*/
-
     public final static class BindingModelConstants {
         public static final String NOT_NULL= "Не може да бъде null!";
         public static final String NOT_EMPTY= "Не може да бъде празно!";

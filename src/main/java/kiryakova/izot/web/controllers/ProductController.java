@@ -196,11 +196,6 @@ public class ProductController extends BaseController {
         modelAndView.addObject("categoryId", (categoryId != null && !categoryId.equals("")) ? categoryId : "all");
         modelAndView.addObject("producerId", (producerId != null && !producerId.equals("")) ? producerId : "all");
 
-        /*modelAndView.addObject("products", this.productService.findAllProducts()
-                .stream()
-                .map(c -> this.modelMapper.map(c, ProductAllViewModel.class))
-                .collect(Collectors.toList()));*/
-
         return this.view("product/all", modelAndView);
     }
 }

@@ -10,11 +10,7 @@
             <h1 class="text-center text-izot">Добави Производител</h1>
             <hr style="height: 2px" class="bg-izot w-25" />
 
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
-            <form class="form w-50 mx-auto" th:action="@{/producers/add}" th:method="post" th:object="${producer}">
+            <form class="form w-25 mx-auto" th:action="@{/producers/add}" th:method="post" th:object="${producer}">
 
                 <th:block th:include="~{fragments/producer-form}"></th:block>
 

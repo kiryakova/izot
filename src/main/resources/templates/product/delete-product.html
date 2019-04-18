@@ -10,10 +10,6 @@
             <h1 class="text-center text-izot">Изтрий Продукт</h1>
             <hr style="height: 2px" class="bg-izot w-25" />
 
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
             <form class="form w-25 mx-auto" th:action="@{/products/delete/{id}(id=${productId})}" th:method="post" th:object="${product}">
 
                 <div class="text-center">
@@ -61,10 +57,10 @@
         .catch((err) => console.log(err));
 
     $(document).ready(function () {
-        //$('input').disabled();
-        //$('input').addClass('readonly');
-        $('input').readOnly();
-        $('input[type=file]').readOnly();
+        $("input").attr("readonly",true);
+        $("textarea").attr("disabled",true);
+        $("select").attr("disabled",true);
+        $('input[type=file]').attr("disabled",true);
     });
 
 </script>

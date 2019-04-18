@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="~{fragments/head}"></th:block>
 </head>
@@ -44,10 +43,7 @@
 
                         <form id="order-product-form"  method="GET">
                             <div class="button-holder d-flex justify-content-center">
-                                <!--<input id="orderedProduct-id" type="hidden" name="id" th:value="${orderedProduct.getId()}" />-->
-                                <!--<input id="product-id" type="hidden" name="id" th:value="${orderedProduct.getProduct().getId()}" />-->
-                                <!--<button id="btn-submit-order" type="button" class="btn btn-danger font-weight-bold text-white" th:onclick="'deleteProductFromOrder(\''+ ${orderedProduct.getId()} +'\')'">Премахни</button>-->
-                                <!--<button th:id="${orderedProduct.getId()}" type="submit" class="btn btn-danger font-weight-bold text-white" th:onclick="deleteProduct()">Премахни</button>-->
+                                <input id="orderedProduct-id" type="hidden" name="id" th:value="${orderedProduct.id}" />
                                 <button id="delete-product" th:value="${orderedProduct.id}" type="submit" class="btn btn-danger font-weight-bold text-white">Премахни</button>
                             </div>
                         </form>
@@ -80,8 +76,6 @@
         fetch('/fetch/order/product/delete/' + orderedProductId)
             .then((response) => response.json())
             .then((json) => {
-                    //alert("Продуктът е премахнат");
-                    //window.location = '/orders/products/my';
                 $(divIdForDelete).hide();
                 $("#totalPrice").empty();
                 $("#totalPrice").append(json.toFixed(2));
@@ -90,24 +84,15 @@
 
     }
 
-    jQuery('button').on('click', function(){
-        deleteProductFromOrder($(this).val());
-        return false;
-    });
-
-/*
-$("#delete-product").on('click', function(){
-        //alert($(this).text());
-        deleteProductFromOrder($(this).val());
-        return false;
-    });
-
-*/
-
-
-    /*$("#order-product-form").on('submit', (ev) => {
+    /*jQuery('button').on('click', function(){
         deleteProductFromOrder($(this).val());
         return false;
     });*/
+
+    $("#delete-product").on('click', function(){
+        deleteProductFromOrder($("#orderedProduct-id").val());
+        return false;
+    });
+
 </script>
 </html>

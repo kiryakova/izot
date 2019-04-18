@@ -12,7 +12,7 @@
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('price')}? 'text-danger'" >
 		<label for="price" class="font-weight-bold text-izot">Цена</label>
-		<input type="text" class="form-control text-izot" id="price" th:field="*{price}" placeholder="Въведи цена..." autofocus="autofocus" />
+		<input type="number" min="0.01" step="0.01" class="form-control text-izot" id="price" th:field="*{price}" placeholder="Въведи цена..." autofocus="autofocus" />
 		<small th:each="error : ${#fields.errors('price')}" th:text="${error}"></small>
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('imageUrl')}? 'text-danger'">

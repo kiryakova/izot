@@ -25,4 +25,11 @@
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        $("input").attr("readonly",true);
+    });
+
+</script>
 </html>

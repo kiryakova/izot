@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailServiceImpl implements MailService {
     private static final String REGISTRATION_MAIL_SUBJECT =
-            "IZOT - Registration";
+            "ИЗОТ - Регистрация";
 
     private static final String REGISTRATION_SUCCESS_MESSAGE
-            = "Welcome, %s!%n" + " You have successfully registered your user to IZOT Nova Zagora.";
+            = "Добре дошли, %s!%n" + " Успешно се регистрирахте в сайта на ИЗОТ Н.Загора.";
 
     private final JavaMailSender javaMailSender;
 

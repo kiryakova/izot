@@ -10,12 +10,7 @@
             <h1 class="text-center text-izot mc-colorize">Вход</h1>
             <hr style="height: 2px" class="bg-izot w-25" />
 
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
             <form class="form w-25 mx-auto" th:action="@{/users/login}" th:method="post">
-                <!--<div class="username-and-password-holder d-flex justify-content-between">-->
                 <div class="form-group">
                     <label for="username" class="font-weight-bold text-izot">Име</label>
                     <input type="text" class="form-control text-izot" id="username" name="username" placeholder="Username..." autofocus="autofocus" />
@@ -24,7 +19,6 @@
                     <label for="password" class="font-weight-bold text-izot">Парола</label>
                     <input type="password" class="form-control text-izot" id="password" name="password" placeholder="Password..." />
                 </div>
-                <!--</div>-->
 
                 <div class="button-holder d-flex justify-content-center">
                     <button type="submit" class="btn bg-izot font-weight-bold text-white">Вход</button>
@@ -34,9 +28,6 @@
 
                     <a class="nav-link text-izot" th:href="@{/users/register}">Ако нямате регистрация направете я от тук <i class="fas fa-sign-in-alt"></i></a>
 
-
-                    <!--<div class="form-group text-izot">Все още нямате регистрация? Направете я </div>
-                    <div class="form-group"><a class="nav-link text-danger" th:href="@{/users/register}">тук</a></div>-->
                 </div>
             </form>
 

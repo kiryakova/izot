@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="~{fragments/head}"></th:block>
 </head>
@@ -11,7 +10,6 @@
         <h1 class="text-center text-izot">Всички Продукти</h1>
         <hr style="height: 2px" class="bg-izot w-75" />
 
-        <!--<hr class="hr-2 bg-dark w-75">-->
         <table class="table table-hover w-75 mx-auto">
             <thead>
             <tr class="row mx-auto">
@@ -39,15 +37,6 @@
                         <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success font-weight-bold text-white">Редакция</a>
                         <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger font-weight-bold text-white">Изтриване</a>
                     </td>
-
-                    <!--
-                    <td class="col-md-3 text-center">
-                        <button class="btn bg-izot text-white" data-toggle="modal" th:data-target="|#details-producer-modal-*{id}|">Детайли</button>
-                        <th:block th:replace="fragments/modals/producer/details-producer-modal"></th:block>
-                        <th:block th:replace="fragments/modals/producer/edit-producer-modal"></th:block>
-                        <th:block th:replace="fragments/modals/producer/delete-producer-modal"></th:block>
-                    </td>
-                    -->
 
                 </tr>
             </th:block>

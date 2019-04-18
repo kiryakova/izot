@@ -12,7 +12,6 @@
             <form class="form w-25 mx-auto" th:action="@{/users/edit}" th:method="post" th:object="${user}">
                 <div class="form-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
                     <label for="username" class="text-izot">Име</label>
-                    <!--<input type="text" class="form-control" id="username" name="username" th:value="*{username}" placeholder="Username..." autofocus="autofocus" />-->
                     <input type="text" class="form-control" id="username" th:field="*{username}" readonly />
                     <small th:each="error : ${#fields.errors('username')}" th:text="${error}"></small>
                 </div>

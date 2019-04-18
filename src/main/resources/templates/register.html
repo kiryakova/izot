@@ -10,10 +10,6 @@
             <h1 class="text-center text-izot">Регистрация</h1>
             <hr style="height: 2px" class="bg-izot w-50" />
 
-            <!--<th:block th:each="error: ${errors}">
-                <h3 class="text-center text-danger" th:text="${error}"></h3>
-            </th:block>-->
-
             <form class="form w-50 mx-auto" th:action="@{/users/register}" th:method="post" th:object="${user}">
                 <div class="username-and-email-holder d-flex justify-content-between">
                     <div class="form-group w-40" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
@@ -40,33 +36,6 @@
                         <small th:each="error : ${#fields.errors('confirmPassword')}" th:text="${error}"></small>
                     </div>
                 </div>
-
-
-<!--
-                <hr class="hr-2 bg-eventures">
-                <div class="first-name-and-last-name-holder d-flex justify-content-between">
-                    <div class="form-group w-40">
-                        <label for="firstName">First Name</label>
-                        <input type="text" name="firstName" class="form-control" id="firstName"
-                               placeholder="First Name..."/>
-                    </div>
-                    <div class="form-group w-40">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" name="lastName" class="form-control" id="lastName" placeholder="Last Name..."/>
-                    </div>
-                </div>
-                <div class="form-group mx-auto">
-                    <div class="d-flex justify-content-center">
-                        <label for="ucn">UCN</label>
-                    </div>
-                    <input type="text" name="ucn" class="form-control" id="ucn" placeholder="Unique Citizen Number..."/>
-                </div>
-                <hr class="hr-2 bg-eventures">
-                <div class="recaptcha-holder d-flex justify-content-center">
-                    <div class="g-recaptcha" data-sitekey="6LdZW2kUAAAAAJ9EuUXAIy777v4LhVl0LUbg1KAv"></div>
-                </div>
--->
-
 
                 <hr style="height: 2px" class="bg-izot" />
                 <div class="button-holder d-flex justify-content-center">

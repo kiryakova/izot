@@ -38,19 +38,6 @@ public class OrderController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
-    /*@GetMapping(value = {"/product/details/{id}", "/product/details/{id}/{categoryId}"})
-    @PreAuthorize("isAuthenticated()")
-    @PageTitle("Детайли на продукт")
-    public ModelAndView detailsProductOrder(@PathVariable(name="id") String id, @PathVariable(name="categoryId", required=false) String categoryId, ModelAndView modelAndView) {
-        modelAndView.addObject("product", this.modelMapper
-                .map(this.productService
-                        .findProductById(id), ProductDetailsViewModel.class));
-
-        modelAndView.addObject("categoryId", categoryId);
-
-        return this.view("order/product-details-order", modelAndView);
-    }*/
-
     @GetMapping("/products/my")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Заявени продукти")
@@ -90,6 +77,20 @@ public class OrderController extends BaseController {
 
     }
 
+    @GetMapping("/cancel/order/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Отказ поръчка")
+    public ModelAndView cancelOrder(Principal principal,
+                                     @PathVariable(name="id") String id,
+                                     ModelAndView modelAndView) throws Exception {
+
+        orderService.cancelOrder(id);
+
+        this.logService.logAction(principal.getName(), ConstantsDefinition.OrderConstants.ORDER_CANCELED_SUCCESSFUL);
+
+        return this.redirect("/orders/products/my");
+
+    }
 
     @GetMapping("/all")
     @PreAuthorize(value = "hasAuthority('ADMIN')")

@@ -32,7 +32,7 @@
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
 
     $("#order-form").on('submit', (ev) => {
         const id = $("#product-id").val();

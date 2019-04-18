@@ -22,9 +22,7 @@
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('category')}? 'text-danger'">
 		<label for="product-category">Категория</label>
-		<select class="form-control" id="product-category" th:field="*{category}"> <!--th:selected="${product.category}"-->
-			<!--<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" ></option>-->
-		</select>
+		<select class="form-control" id="product-category" th:field="*{category}"></select>
 		<small th:each="error : ${#fields.errors('category')}" th:text="${error}"></small>
 	</div>
 	<div class="form-group" th:classappend="${#fields.hasErrors('producer')}? 'text-danger'">

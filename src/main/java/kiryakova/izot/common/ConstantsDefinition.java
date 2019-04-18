@@ -56,9 +56,11 @@ public final class ConstantsDefinition {
     public final static class OrderConstants {
         public static final String UNSUCCESSFUL_SAVED_ORDER = "Неуспешно създаване на поръчка !";
         public static final String UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER = "Неуспешно изтриване на заявен продукт !";
+        public static final String UNSUCCESSFUL_CANCELED_ORDER = "Неуспешно отказване на поръчка !";
         public static final String NO_SUCH_ORDER = "Няма такава поръчка !";
         public static final String NO_SUCH_PRODUCT = "Няма такъв продукт !";
         public static final String ORDER_CONFIRMED_SUCCESSFUL = "Успешно потвърдена поръчка.";
+        public static final String ORDER_CANCELED_SUCCESSFUL = "Успешно отказана поръчка !";
     }
 
     public final static class ProducerConstants {

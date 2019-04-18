@@ -120,7 +120,6 @@ public class ProductController extends BaseController {
         this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.ProductConstants.PRODUCT_EDITED_SUCCESSFUL, productServiceModel.getName()));
 
         return this.redirect("/products/details/" + id);
-        //return this.redirect("/products/all");
     }
 
     @GetMapping("/details/{id}")

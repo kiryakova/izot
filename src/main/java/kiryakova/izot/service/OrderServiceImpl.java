@@ -3,9 +3,7 @@ package kiryakova.izot.service;
 import kiryakova.izot.common.ConstantsDefinition;
 import kiryakova.izot.domain.entities.*;
 import kiryakova.izot.domain.models.service.*;
-import kiryakova.izot.error.OrderNotFoundException;
-import kiryakova.izot.error.OrderNotSavedException;
-import kiryakova.izot.error.OrderProductNotDeletedException;
+import kiryakova.izot.error.*;
 import kiryakova.izot.repository.OrderRepository;
 import kiryakova.izot.validation.OrderValidationService;
 import kiryakova.izot.validation.ProductValidationService;
@@ -147,6 +145,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void cancelOrder(String id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+
+        this.checkIfOrderFound(order);
+
+        if(order.isFinished()){
+            throw new OrderIsFinishedAndCannotBeCanceled(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
+        }
+
+        try {
+            this.orderRepository.cancelOrderById(order.getId());
+        } catch (Exception ignored) {
+            throw new OrderNotCanceledException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
+        }
+    }
+
+    @Override
     public BigDecimal deleteOrderProduct(String id) {
 
         try {
@@ -226,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
     //@Scheduled(fixedRate = 60000)
     //@Scheduled(fixedRate = 300000)
     @Scheduled(fixedRate = 86400000)
-    private void deleteRandomUnfinishedOrders() {
+    private void deleteUnfinishedOrdersFromTaskScheduler() {
         this.orderRepository.deleteAllUnfinishedOrders();
     }
 }

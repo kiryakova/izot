@@ -57,7 +57,10 @@
                 <td colspan="3" class="col-md-4"></td>
                 <td colspan="1" class="col-md-3 align-content-end">Обща стойност на поръчката:</td>
                 <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="|${order.totalPrice} лв&#46;|"></td>
-                <td class="col-md-3"><a th:href="@{/customers/edit/{id}(id=${order.id})}" class="btn btn-danger font-weight-bold text-white">Продължи</a></td>
+                <td class="col-md-3">
+                    <a th:href="@{/orders/cancel/order/{id}(id=${order.id})}" class="btn bg-izot font-weight-bold text-white">Откажи поръчката</a>
+                    <a th:href="@{/customers/edit/{id}(id=${order.id})}" id="forward" class="btn btn-danger font-weight-bold text-white">Продължи</a>
+                </td>
             </tr>
 
             </tbody>
@@ -68,7 +71,7 @@
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>
-<script type="text/javascript">
+<script th:inline="javascript">
 
     function deleteProductFromOrder(orderedProductId) {
         let divIdForDelete = "#" + orderedProductId;
@@ -79,20 +82,24 @@
                 $(divIdForDelete).hide();
                 $("#totalPrice").empty();
                 $("#totalPrice").append(json.toFixed(2));
+
+                if(json.toString() === "0"){
+                    $("#forward").hide();
+                }
             })
             .catch((err) => console.log(err));
 
     }
 
-    /*jQuery('button').on('click', function(){
+    jQuery('button').on('click', function(){
         deleteProductFromOrder($(this).val());
         return false;
-    });*/
+    });
 
-    $("#delete-product").on('click', function(){
+    /*$("#delete-product").on('click', function(){
         deleteProductFromOrder($("#orderedProduct-id").val());
         return false;
-    });
+    });*/
 
 </script>
 </html>

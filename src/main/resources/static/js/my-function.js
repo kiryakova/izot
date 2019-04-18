@@ -7,6 +7,16 @@
         .catch((err) => console.log(err));
 }
 
+function getProducers(){alert("aaa");
+    fetch('/producers/fetch')
+        .then((response) => response.json())
+        .then((json) => {
+            json.forEach((producer) => $('#product-producer').append(`<option value="${producer.id}">${producer.name}</option>`));
+        })
+        .catch((err) => console.log(err));
+}
+*/
+/*
 function getCategoriesAndSelect(){
     fetch('/categories/fetch')
         .then((response) => response.json())

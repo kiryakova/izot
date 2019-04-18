@@ -70,8 +70,7 @@ public class UserController extends BaseController {
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
     @PageTitle("Регистрация на потребител")
-    public ModelAndView registerConfirm(Principal principal,
-                                        ModelAndView modelAndView,
+    public ModelAndView registerConfirm(ModelAndView modelAndView,
                                         @ModelAttribute(name = "user") @Valid UserRegisterBindingModel userRegisterBindingModel,
                                         BindingResult bindingResult) {
 
@@ -101,9 +100,9 @@ public class UserController extends BaseController {
 
         this.userService.registerUser(userServiceModel);
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.UserConstants.USER_REGISTERED_SUCCESSFUL, userServiceModel.getUsername()));
+        this.logService.logAction(userServiceModel.getUsername(), String.format(ConstantsDefinition.UserConstants.USER_REGISTERED_SUCCESSFUL, userServiceModel.getUsername()));
 
-        this.mailService.sentRegistrationSuccessMessage(userRegisterBindingModel.getEmail(), userRegisterBindingModel.getUsername());
+        //this.mailService.sentRegistrationSuccessMessage(userRegisterBindingModel.getEmail(), userRegisterBindingModel.getUsername());
 
         return this.redirect("login");
     }

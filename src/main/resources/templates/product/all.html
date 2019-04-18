@@ -83,7 +83,6 @@
                     $('.products-data').append(`<h1 class="text-center font-weight-bold bg-izot">Няма продукти в категория ${categoryName}</h1>`)
                 } else {
                     for (let i = 0; i < json.length; i += 3) {
-                        //$('.products-data').append('');
                         if(i < json.length) $('.products-data:last-child').append(formatProduct(json[i], categoryId, producerId));
                         if(i + 1 < json.length) $('.products-data:last-child').append(formatProduct(json[i + 1], categoryId, producerId));
                         if(i + 2 < json.length) $('.products-data:last-child').append(formatProduct(json[i + 2], categoryId, producerId));

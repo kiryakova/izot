@@ -16,6 +16,8 @@ public interface OrderService {
 
     void confirmOrder(String id) throws Exception;
 
+    void cancelOrder(String id) throws Exception;
+
     BigDecimal deleteOrderProduct(String id) throws Exception;
 
     //void setNewTotalPrice(BigDecimal totalPrice, Order order);

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="~{fragments/head}"></th:block>
 </head>
@@ -11,7 +10,6 @@
         <h1 class="text-center text-izot">Всички Потребители</h1>
         <hr style="height: 2px" class="bg-izot w-75" />
 
-        <!--<hr class="hr-2 bg-dark w-75">-->
         <table class="table table-hover w-75 mx-auto">
             <thead>
             <tr class="row mx-auto">
@@ -64,9 +62,6 @@
                             </th:block>
 
                         </div>
-                        <!--<th:block sec:authorize="${#lists.contains(*{authorities}, 'USER') && !#lists.contains(*{authorities}, 'MODERATOR') && !#lists.contains(*{authorities}, 'ADMIN')}">
-
-                        </th:block>-->
 
                     </td>
                 </tr>

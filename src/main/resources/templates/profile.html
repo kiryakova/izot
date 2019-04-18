@@ -8,9 +8,6 @@
     <main class="mt-3">
 
         <div class="jumbotron bg-white" th:object="${user}">
-            <!--<div class="text-center text-izot">
-                <img src="https://res.cloudinary.com/rado-cloud/image/upload/v1553353764/manager-512.png" class="img-responsive" alt="profileImg">
-            </div>-->
             <div class="row">
                 <div class="col col-md-12 text-center">
                     <h1 class="text-izot" th:text="*{username}"></h1>
@@ -25,7 +22,6 @@
             <hr class="hr-2 bg-dark w-25">
             <div class="button-holder d-flex justify-content-center">
                 <a th:href="@{/users/edit}" class="btn bg-izot font-weight-bold text-white">Редакция</a>
-                <!--<a th:href="@{/users/edit/{id}(id = #{model.id})}" class="btn bg-izot text-white">Редакция</a>-->
             </div>
         </div>
 

@@ -35,8 +35,9 @@
 
                 <hr style="height: 2px" class="bg-izot" />
 
-                <div class="button-holder d-flex justify-content-center">
-                    <button type="submit" class="btn bg-izot font-weight-bold text-white">Потвърдете</button>
+                <div class="button-holder row d-flex justify-content-md-around">
+                    <div><a th:href="@{/orders/cancel/order/{id}(id=${orderId})}" class="btn bg-izot font-weight-bold text-white">Откажи поръчката</a></div>
+                    <button type="submit" class="btn btn-danger font-weight-bold text-white">Потвърди</button>
                 </div>
             </form>
 

@@ -1,22 +1,24 @@
 package kiryakova.izot.service;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class MailServiceTests {
-    @Autowired
+    @MockBean
     private MailService mailService;
+
+    @MockBean
     private JavaMailSender javaMailSender;
 
     @Before
@@ -28,7 +30,7 @@ public class MailServiceTests {
     @Test
     public void mailService_sentRegistrationSuccessMessage() {
 
-        mailService.sentRegistrationSuccessMessage("stelanz@abv.bg","stela");
+        //this.mailService.sentRegistrationSuccessMessage("stelanz@abv.bg","stela");
 
     }
 }

@@ -8,11 +8,13 @@ import kiryakova.izot.repository.CustomerRepository;
 import kiryakova.izot.repository.OrderRepository;
 import kiryakova.izot.repository.UserRepository;
 import kiryakova.izot.validation.CustomerValidationService;
+import kiryakova.izot.validation.CustomerValidationServiceImpl;
 import kiryakova.izot.validation.UserValidationService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -31,7 +33,7 @@ public class CustomerServiceTests {
     private OrderRepository orderRepository;
     private CustomerService customerService;
     private UserService userService;
-    private UserRepository userRepository;
+    //private UserRepository userRepository;
     private OrderService orderService;
     private UserValidationService userValidation;
     private CustomerValidationService customerValidation;
@@ -39,9 +41,14 @@ public class CustomerServiceTests {
     private Customer customer;
     private User user;
 
+    @Mock
+    private UserRepository userRepository;
+
     @Before
     public void init(){
         this.modelMapper = new ModelMapper();
+        this.customerValidation = new CustomerValidationServiceImpl();
+
         this.customerService = new CustomerServiceImpl(this.customerRepository, this.orderService, this.userService, this.userValidation, this.customerValidation, this.modelMapper);
 
         customer = new Customer();
@@ -56,6 +63,7 @@ public class CustomerServiceTests {
         customer.setPhone("111");
         customer.setAddress("Address1");
 
+        user = this.userRepository.saveAndFlush(user);
     }
 
     @Test(expected = Exception.class)
@@ -76,7 +84,7 @@ public class CustomerServiceTests {
     @Test(expected = Exception.class)
     public void customerService_editCustomer() throws Exception {
 
-        user = userRepository.saveAndFlush(user);
+        //user = userRepository.saveAndFlush(user);
         Order order = new Order();
 
         customer = this.customerRepository.save(customer);

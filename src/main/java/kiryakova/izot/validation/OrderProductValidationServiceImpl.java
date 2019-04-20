@@ -5,7 +5,7 @@ import kiryakova.izot.domain.entities.OrderProduct;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderProductValidationImpl implements OrderProductValidation {
+public class OrderProductValidationServiceImpl implements OrderProductValidationService {
     @Override
     public boolean isValid(OrderProduct orderProduct) {
         return orderProduct != null && isOrderValid(orderProduct.getOrder());

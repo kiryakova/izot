@@ -5,7 +5,7 @@ import kiryakova.izot.domain.models.service.*;
 import kiryakova.izot.repository.OrderProductRepository;
 import kiryakova.izot.repository.OrderRepository;
 import kiryakova.izot.repository.ProductRepository;
-import kiryakova.izot.validation.OrderProductValidation;
+import kiryakova.izot.validation.OrderProductValidationService;
 import kiryakova.izot.validation.UserValidationService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class OrderProductServiceTests {
     private OrderProductService orderProductService;
     private UserService userService;
     private UserValidationService userValidation;
-    private OrderProductValidation orderProductValidation;
+    private OrderProductValidationService orderProductValidation;
     private ModelMapper modelMapper;
     private OrderProduct orderProduct;
     private Product product;

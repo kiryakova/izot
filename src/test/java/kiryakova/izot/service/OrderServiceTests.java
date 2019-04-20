@@ -6,7 +6,6 @@ import kiryakova.izot.domain.models.service.OrderServiceModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.repository.OrderProductRepository;
 import kiryakova.izot.repository.OrderRepository;
-import kiryakova.izot.validation.OrderProductValidation;
 import kiryakova.izot.validation.OrderValidationService;
 import kiryakova.izot.validation.ProductValidationService;
 import kiryakova.izot.validation.UserValidationService;

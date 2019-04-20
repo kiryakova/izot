@@ -1,8 +1,10 @@
 package kiryakova.izot.validation;
 
 import kiryakova.izot.domain.entities.Category;
+import kiryakova.izot.domain.entities.Producer;
 import kiryakova.izot.domain.entities.Product;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
+import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +15,7 @@ public class ProductValidationServiceTests {
     private ProductValidationService productValidationService;
 
     @Before
-    public void setupTest() {
+    public void init() {
         productValidationService = new ProductValidationServiceImpl();
     }
 
@@ -21,6 +23,7 @@ public class ProductValidationServiceTests {
     public void isValidWithProduct_whenValid_true() {
         Product product = new Product();
         product.setCategory(new Category());
+        product.setProducer(new Producer());
         boolean result = productValidationService.isValid(product);
         Assert.assertTrue(result);
     }
@@ -33,36 +36,36 @@ public class ProductValidationServiceTests {
     }
 
     @Test
+    public void isValidWithProductServiceModel_whenValidTrue() {
+        ProductServiceModel productServiceModel = new ProductServiceModel();
+        productServiceModel.setCategory(new CategoryServiceModel());
+        productServiceModel.setProducer(new ProducerServiceModel());
+        boolean result = productValidationService.isValid(productServiceModel);
+        Assert.assertTrue(result);
+    }
+
+    @Test
     public void isValidWithProductServiceModel_whenNull_false() {
-        ProductServiceModel product = null;
-        boolean result = productValidationService.isValid(product);
+        ProductServiceModel productServiceModel = null;
+        boolean result = productValidationService.isValid(productServiceModel);
         Assert.assertFalse(result);
     }
 
     @Test
-    public void isValidWithProductServiceModel_whenValid_true() {
-        ProductServiceModel product = new ProductServiceModel();
-        product.setCategory(new CategoryServiceModel());
-        boolean result = productValidationService.isValid(product);
+    public void isValidWithProductServiceModel_whenNullCategory_false() {
+        ProductServiceModel productServiceModel = new ProductServiceModel();
+        productServiceModel.setCategory(null);
+        productServiceModel.setProducer(new ProducerServiceModel());
+        boolean result = productValidationService.isValid(productServiceModel);
         Assert.assertFalse(result);
     }
 
     @Test
-    public void t1() {
-        ProductServiceModel product = new ProductServiceModel();
-        product.setCategory(null);
-
-        boolean result = productValidationService.isValid(product);
-        Assert.assertFalse(result);
-    }
-
-
-    @Test
-    public void t2() {
-        ProductServiceModel product = new ProductServiceModel();
-        product.setCategory(new CategoryServiceModel());
-
-        boolean result = productValidationService.isValid(product);
+    public void isValidWithProductServiceModel_whenNullProducer_false() {
+        ProductServiceModel productServiceModel = new ProductServiceModel();
+        productServiceModel.setCategory(new CategoryServiceModel());
+        productServiceModel.setProducer(null);
+        boolean result = productValidationService.isValid(productServiceModel);
         Assert.assertFalse(result);
     }
 }

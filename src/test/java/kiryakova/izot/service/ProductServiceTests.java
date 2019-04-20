@@ -1,5 +1,6 @@
 package kiryakova.izot.service;
 
+import com.cloudinary.Cloudinary;
 import kiryakova.izot.domain.entities.Category;
 import kiryakova.izot.domain.entities.Producer;
 import kiryakova.izot.domain.entities.Product;
@@ -10,6 +11,7 @@ import kiryakova.izot.repository.CategoryRepository;
 import kiryakova.izot.repository.ProducerRepository;
 import kiryakova.izot.repository.ProductRepository;
 import kiryakova.izot.validation.ProductValidationService;
+import kiryakova.izot.validation.ProductValidationServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,18 +44,30 @@ public class ProductServiceTests {
     private CategoryService categoryService;
     private ProducerService producerService;
     private CloudinaryService cloudinaryService;
-    private ProductValidationService productValidationService;
+    private ProductValidationService productValidation;
     private ModelMapper modelMapper;
     private Product product;
     private Category category;
     private Producer producer;
     private MultipartFile multipartFile;
+    private Cloudinary cloudinary;
     List<Product> products;
 
     @Before
     public void init(){
+
         this.modelMapper = new ModelMapper();
-        this.productService = new ProductServiceImpl(this.productRepository, this.categoryService, this.producerService, this.cloudinaryService, this.productValidationService, this.modelMapper);
+        this.productValidation = new ProductValidationServiceImpl();
+
+        /*this.cloudinary = new Cloudinary(new HashMap<String, Object>(){{
+            put("cloud_name", "stela-cloud");
+            put("api_key", "593543314343541");
+            put("api_secret", "FZC2yyWnWoGvlrrShpH1TZYW--g");
+        }});*/
+
+        this.cloudinaryService = new CloudinaryServiceImpl(this.cloudinary);
+
+        this.productService = new ProductServiceImpl(this.productRepository, this.categoryService, this.producerService, this.cloudinaryService, this.productValidation, this.modelMapper);
 
         product = new Product();
         product.setName("Product1");
@@ -87,7 +101,6 @@ public class ProductServiceTests {
         producer.setName("producer1");
         producer.setPhone("111");
 
-        productRepository.save(product);
         productRepository.save(product1);
 
         List<ProductServiceModel> productsFromDB = productService.findAllProducts();
@@ -118,25 +131,25 @@ public class ProductServiceTests {
     @Test(expected = Exception.class)
     public void productService_addProduct() throws IOException {
 
-        ProductServiceModel toBeSaved = new ProductServiceModel();
-        toBeSaved.setName("Product1");
-        toBeSaved.setDescription("Description1");
-        toBeSaved.setImageUrl("Image1.jpg");
-        toBeSaved.setPrice(new BigDecimal("0.01"));
-        category = new Category();
-        category.setName("Category1");
+        ProductServiceModel toBeSaved = this.modelMapper.map(product, ProductServiceModel.class);
+        //toBeSaved.setName("Product1");
+        //toBeSaved.setDescription("Description1");
+        //toBeSaved.setImageUrl("Image1.jpg");
+        //toBeSaved.setPrice(new BigDecimal("0.01"));
+        //category = new Category();
+        //category.setName("Category1");
         toBeSaved.setCategory(modelMapper.map(category, CategoryServiceModel.class));
-        producer = new Producer();
-        producer.setName("producer1");
-        producer.setPhone("111");
+        // producer = new Producer();
+        //producer.setName("producer1");
+        //producer.setPhone("111");
         toBeSaved.setProducer(modelMapper.map(producer, ProducerServiceModel.class));
 
         multipartFile = new MockMultipartFile(toBeSaved.getImageUrl(), new FileInputStream(new File("C:/test_img_files/Image1.jpg")));
 
         productService.addProduct(toBeSaved, multipartFile);
 
-        Product actual = productRepository.findByName(toBeSaved.getName()).orElse(null);
-        Product expected = productRepository.findAll().get(0);
+        Product expected = productRepository.findByName(toBeSaved.getName()).orElse(null);
+        Product actual = productRepository.findAll().get(0);
 
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
@@ -180,7 +193,7 @@ public class ProductServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void productService_deleteProduct(){
 
         product = productRepository.save(product);
@@ -202,7 +215,7 @@ public class ProductServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void productService_findByIdProductWithValidId() {
 
         product = productRepository.saveAndFlush(product);

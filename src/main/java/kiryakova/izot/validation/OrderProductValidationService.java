@@ -2,6 +2,6 @@ package kiryakova.izot.validation;
 
 import kiryakova.izot.domain.entities.OrderProduct;
 
-public interface OrderProductValidation {
+public interface OrderProductValidationService {
     boolean isValid(OrderProduct orderProduct);
 }

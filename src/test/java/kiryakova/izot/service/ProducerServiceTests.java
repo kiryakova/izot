@@ -4,6 +4,7 @@ import kiryakova.izot.domain.entities.Producer;
 import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.repository.ProducerRepository;
 import kiryakova.izot.validation.ProducerValidationService;
+import kiryakova.izot.validation.ProducerValidationServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class ProducerServiceTests {
     @Autowired
     private ProducerRepository producerRepository;
     private ProducerService producerService;
-    private ProducerValidationService producerValidationService;
+    private ProducerValidationService producerValidation;
     private ModelMapper modelMapper;
     private Producer producer;
     private MultipartFile multipartFile;
@@ -35,7 +36,8 @@ public class ProducerServiceTests {
     @Before
     public void init(){
         this.modelMapper = new ModelMapper();
-        this.producerService = new ProducerServiceImpl(this.producerRepository, this.producerValidationService, this.modelMapper);
+        this.producerValidation = new ProducerValidationServiceImpl();
+        this.producerService = new ProducerServiceImpl(this.producerRepository, this.producerValidation, this.modelMapper);
 
         producer = new Producer();
         producer.setName("Producer1");
@@ -71,17 +73,15 @@ public class ProducerServiceTests {
         Assert.assertTrue(exists);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void producerService_addProducer() {
 
-        ProducerServiceModel toBeSaved = new ProducerServiceModel();
-        toBeSaved.setName("Producer1");
-        toBeSaved.setPhone("111");
+        ProducerServiceModel toBeSaved = this.modelMapper.map(producer, ProducerServiceModel.class);
 
         producerService.addProducer(toBeSaved);
 
-        Producer actual = this.producerRepository.findByName(toBeSaved.getName()).orElse(null);
-        Producer expected = this.producerRepository.findAll().get(0);
+        Producer expected = this.producerRepository.findByName(toBeSaved.getName()).orElse(null);
+        Producer actual = this.producerRepository.findAll().get(0);
 
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
@@ -89,7 +89,7 @@ public class ProducerServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void producerService_editProducer() {
 
         producer = this.producerRepository.save(producer);
@@ -101,8 +101,8 @@ public class ProducerServiceTests {
 
         producerService.editProducer(producer.getId(), toBeEdited);
 
-        Producer actual = this.producerRepository.findByName(producer.getName()).orElse(null);
-        Producer expected = this.producerRepository.findAll().get(0);
+        Producer expected = this.producerRepository.findByName(producer.getName()).orElse(null);
+        Producer actual = this.producerRepository.findAll().get(0);
 
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
@@ -110,7 +110,7 @@ public class ProducerServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void producerService_deleteProducer(){
 
         producer = this.producerRepository.save(producer);
@@ -132,7 +132,7 @@ public class ProducerServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void producerService_findByIdProducer() {
 
         producer = this.producerRepository.saveAndFlush(producer);

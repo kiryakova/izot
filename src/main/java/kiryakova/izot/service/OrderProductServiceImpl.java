@@ -7,13 +7,12 @@ import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.error.OrderProductNotDeletedException;
 import kiryakova.izot.error.OrderProductNotFoundException;
 import kiryakova.izot.repository.OrderProductRepository;
-import kiryakova.izot.validation.OrderProductValidation;
+import kiryakova.izot.validation.OrderProductValidationService;
 import kiryakova.izot.validation.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +21,11 @@ public class OrderProductServiceImpl implements OrderProductService {
     private final OrderProductRepository orderProductRepository;
     private final UserService userService;
     private final UserValidationService userValidation;
-    private final OrderProductValidation orderProductValidation;
+    private final OrderProductValidationService orderProductValidation;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderProductServiceImpl(OrderProductRepository orderProductRepository, UserService userService, UserValidationService userValidation, OrderProductValidation orderProductValidation, ModelMapper modelMapper) {
+    public OrderProductServiceImpl(OrderProductRepository orderProductRepository, UserService userService, UserValidationService userValidation, OrderProductValidationService orderProductValidation, ModelMapper modelMapper) {
         this.orderProductRepository = orderProductRepository;
         this.userService = userService;
         this.userValidation = userValidation;

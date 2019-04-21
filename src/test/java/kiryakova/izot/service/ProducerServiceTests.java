@@ -9,28 +9,31 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class ProducerServiceTests {
-    @Autowired
-    private ProducerRepository producerRepository;
+    @Mock
     private ProducerService producerService;
+    @Mock
     private ProducerValidationService producerValidation;
+    @Mock
     private ModelMapper modelMapper;
     private Producer producer;
-    private MultipartFile multipartFile;
+
+    @Autowired
+    private ProducerRepository producerRepository;
+
     List<Producer> producers;
 
     @Before

@@ -40,7 +40,11 @@ public class UserController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, LogService logService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, ModelMapper modelMapper) {
+    public UserController(UserService userService,
+                          LogService logService,
+                          BCryptPasswordEncoder bCryptPasswordEncoder,
+                          MailService mailService,
+                          ModelMapper modelMapper) {
         this.userService = userService;
         this.logService = logService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -74,18 +78,29 @@ public class UserController extends BaseController {
                                         @ModelAttribute(name = "user") @Valid UserRegisterBindingModel userRegisterBindingModel,
                                         BindingResult bindingResult) {
 
-        if(!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
-            bindingResult.addError(new FieldError("userRegisterBindingModel", "password", ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
+        if(!userRegisterBindingModel.getPassword()
+                .equals(userRegisterBindingModel.getConfirmPassword())) {
+            bindingResult.addError(
+                    new FieldError("userRegisterBindingModel", "password",
+                            ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
         }
 
         if(this.userService.checkIfUsernameAlreadyExists(userRegisterBindingModel.getUsername())){
-            bindingResult.addError(new FieldError("userRegisterBindingModel", "username",
-                    String.format(ConstantsDefinition.UserConstants.USER_ALREADY_EXISTS, userRegisterBindingModel.getUsername())));
+            bindingResult.addError(
+                    new FieldError("userRegisterBindingModel", "username",
+                    String.format(
+                            ConstantsDefinition.UserConstants.USER_ALREADY_EXISTS,
+                            userRegisterBindingModel.getUsername()))
+            );
         }
 
         if(this.userService.checkIfEmailAlreadyExists(userRegisterBindingModel.getEmail())){
-            bindingResult.addError(new FieldError("userRegisterBindingModel", "email",
-                    String.format(ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS, userRegisterBindingModel.getEmail())));
+            bindingResult.addError(
+                    new FieldError("userRegisterBindingModel", "email",
+                    String.format(
+                            ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS,
+                            userRegisterBindingModel.getEmail()))
+            );
         }
 
         if(bindingResult.hasErrors()) {
@@ -100,7 +115,11 @@ public class UserController extends BaseController {
 
         this.userService.registerUser(userServiceModel);
 
-        this.logService.logAction(userServiceModel.getUsername(), String.format(ConstantsDefinition.UserConstants.USER_REGISTERED_SUCCESSFUL, userServiceModel.getUsername()));
+        this.logService.logAction(userServiceModel.getUsername(),
+                String.format(
+                        ConstantsDefinition.UserConstants.USER_REGISTERED_SUCCESSFUL,
+                        userServiceModel.getUsername())
+        );
 
         //this.mailService.sentRegistrationSuccessMessage(userRegisterBindingModel.getEmail(), userRegisterBindingModel.getUsername());
 
@@ -110,11 +129,13 @@ public class UserController extends BaseController {
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Потребителски профил")
-    public ModelAndView profile(Principal principal, ModelAndView modelAndView){
+    public ModelAndView profile(Principal principal,
+                                ModelAndView modelAndView){
         modelAndView.addObject("user",
                 this.modelMapper
                         .map(this.userService
-                                .findUserByUsername(principal.getName()), UserProfileViewModel.class));
+                                .findUserByUsername(principal.getName()),
+                                UserProfileViewModel.class));
 
         return this.view("profile", modelAndView);
     }
@@ -122,11 +143,13 @@ public class UserController extends BaseController {
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Редакция на потребителския профил")
-    public ModelAndView editProfile(Principal principal, ModelAndView modelAndView){
+    public ModelAndView editProfile(Principal principal,
+                                    ModelAndView modelAndView){
         modelAndView.addObject("user",
                 this.modelMapper
                         .map(this.userService
-                                .findUserByUsername(principal.getName()), UserEditBindingModel.class));
+                                .findUserByUsername(principal.getName()),
+                                UserEditBindingModel.class));
 
         return this.view("edit-profile", modelAndView);
     }
@@ -139,19 +162,31 @@ public class UserController extends BaseController {
                                            @ModelAttribute(name = "user") @Valid UserEditBindingModel userEditBindingModel,
                                            BindingResult bindingResult){
 
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(userEditBindingModel.getUsername());
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(userEditBindingModel.getUsername());
 
-        if (!this.bCryptPasswordEncoder.matches(userEditBindingModel.getOldPassword(), userServiceModel.getPassword())) {
-            bindingResult.addError(new FieldError("userEditBindingModel", "oldPassword", ConstantsDefinition.UserConstants.INCORRECT_PASSWORD));
+        if (!this.bCryptPasswordEncoder.matches(userEditBindingModel.getOldPassword(),
+                userServiceModel.getPassword())) {
+            bindingResult.addError(
+                    new FieldError("userEditBindingModel", "oldPassword",
+                            ConstantsDefinition.UserConstants.INCORRECT_PASSWORD));
         }
 
-        if (!userEditBindingModel.getPassword().equals(userEditBindingModel.getConfirmPassword())) {
-            bindingResult.addError(new FieldError("userEditBindingModel", "password", ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
+        if (!userEditBindingModel.getPassword()
+                .equals(userEditBindingModel.getConfirmPassword())) {
+            bindingResult.addError(
+                    new FieldError("userEditBindingModel", "password",
+                            ConstantsDefinition.UserConstants.PASSWORDS_DO_NOT_MATCH));
         }
 
-        if(this.userService.checkIfEmailExistsForOtherUser(userEditBindingModel.getEmail(), userEditBindingModel.getUsername())){
-            bindingResult.addError(new FieldError("userEditBindingModel", "email",
-                    String.format(ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS, userEditBindingModel.getEmail())));
+        if(this.userService.checkIfEmailExistsForOtherUser(userEditBindingModel.getEmail(),
+                userEditBindingModel.getUsername())){
+            bindingResult.addError(
+                    new FieldError("userEditBindingModel", "email",
+                    String.format(
+                            ConstantsDefinition.UserConstants.EMAIL_ALREADY_EXISTS,
+                            userEditBindingModel.getEmail()))
+            );
         }
 
         if(bindingResult.hasErrors()) {
@@ -163,10 +198,18 @@ public class UserController extends BaseController {
         userServiceModel = this.modelMapper.map(userEditBindingModel, UserServiceModel.class);
 
         if (!this.userService.editUserProfile(userServiceModel)) {
-            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getEmail()));
+            throw new UserEditException(
+                    String.format(
+                            ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING,
+                            userServiceModel.getEmail())
+            );
         }
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.UserConstants.USER_PROFILE_EDITED_SUCCESSFUL, userServiceModel.getUsername()));
+        this.logService.logAction(principal.getName(),
+                String.format(
+                        ConstantsDefinition.UserConstants.USER_PROFILE_EDITED_SUCCESSFUL,
+                        userServiceModel.getUsername())
+        );
 
         return this.redirect("/users/profile");
     }
@@ -179,7 +222,9 @@ public class UserController extends BaseController {
                 .stream()
                 .map(u -> {
                     UserViewModel user = this.modelMapper.map(u, UserViewModel.class);
-                    user.setAuthorities(u.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toSet()));
+                    user.setAuthorities(u.getAuthorities()
+                            .stream().map(a -> a.getAuthority())
+                            .collect(Collectors.toSet()));
 
                     return user;
                 })
@@ -193,7 +238,8 @@ public class UserController extends BaseController {
     @PostMapping("/set-authority/{id}/{authority}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("Всички потребители")
-    public ModelAndView setAuthority(@PathVariable("id") String id, @PathVariable("authority") String authority) {
+    public ModelAndView setAuthority(@PathVariable("id") String id,
+                                     @PathVariable("authority") String authority) {
         this.userService.setUserAuthority(id, authority);
 
         return this.redirect("/users/all");

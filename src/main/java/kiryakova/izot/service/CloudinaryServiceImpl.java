@@ -21,7 +21,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public String uploadImage(MultipartFile multipartFile) throws IOException {
-        File fileToUpload = File.createTempFile("temp-file", multipartFile.getOriginalFilename());
+        File fileToUpload = File
+                .createTempFile("temp-file", multipartFile.getOriginalFilename());
         multipartFile.transferTo(fileToUpload);
 
         return this.cloudinary

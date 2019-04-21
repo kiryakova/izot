@@ -27,7 +27,12 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService, ProducerService producerService, CloudinaryService cloudinaryService, ProductValidationService productValidation, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryService categoryService,
+                              ProducerService producerService,
+                              CloudinaryService cloudinaryService,
+                              ProductValidationService productValidation,
+                              ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
         this.producerService = producerService;
@@ -37,7 +42,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(ProductServiceModel productServiceModel, MultipartFile imageUrl) {
+    public void addProduct(ProductServiceModel productServiceModel,
+                           MultipartFile imageUrl) {
         if(!productValidation.isValid(productServiceModel)){
             throw new IllegalArgumentException();
         }
@@ -49,22 +55,30 @@ public class ProductServiceImpl implements ProductService {
         try {
             this.productRepository.save(product);
         } catch (Exception ignored){
-            throw new ProductNotSavedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT, product.getName()));
+            throw new ProductNotSavedException(
+                    String.format(
+                            ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT,
+                            product.getName())
+            );
         }
     }
 
     @Override
-    public void editProduct(String id, ProductServiceModel productServiceModel, MultipartFile imageUrl) {
+    public void editProduct(String id,
+                            ProductServiceModel productServiceModel,
+                            MultipartFile imageUrl) {
         Product product = this.productRepository.findById(id).orElse(null);
 
         this.checkIfProductFound(product, productServiceModel.getName());
 
         productServiceModel.setCategory(
-                this.categoryService.findCategoryById(productServiceModel.getCategory().getId())
+                this.categoryService
+                        .findCategoryById(productServiceModel.getCategory().getId())
         );
 
         productServiceModel.setProducer(
-                this.producerService.findProducerById(productServiceModel.getProducer().getId())
+                this.producerService
+                        .findProducerById(productServiceModel.getProducer().getId())
         );
 
         if(!productValidation.isValid(productServiceModel)) {
@@ -74,15 +88,18 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productServiceModel.getName());
         product.setDescription(productServiceModel.getDescription());
         product.setPrice(productServiceModel.getPrice());
-        product.setCategory(this.modelMapper.map(productServiceModel.getCategory(), Category.class));
+        product.setCategory(this.modelMapper
+                .map(productServiceModel.getCategory(), Category.class));
         this.setImageUrl(product, imageUrl);
 
         try {
             this.productRepository.save(product);
         }catch (Exception ignored){
-            throw new ProductNotSavedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT, product.getName()));
+            throw new ProductNotSavedException(
+                    String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_SAVED_PRODUCT,
+                            product.getName())
+            );
         }
-
     }
 
     @Override
@@ -94,13 +111,17 @@ public class ProductServiceImpl implements ProductService {
         try {
             this.productRepository.delete(product);
         }catch (Exception ignored){
-            throw new ProductNotDeletedException(String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_DELETE_PRODUCT, product.getName()));
+            throw new ProductNotDeletedException(
+                    String.format(ConstantsDefinition.ProductConstants.UNSUCCESSFUL_DELETE_PRODUCT,
+                            product.getName())
+            );
         }
     }
 
     @Override
     public ProductServiceModel findProductById(String id) {
-        Product product = this.productRepository.findById(id).orElse(null);
+        Product product = this.productRepository
+                .findById(id).orElse(null);
 
         this.checkIfProductFound(product);
 
@@ -116,9 +137,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductServiceModel> findAllProductsByCategoryIdAndProducerId(String categoryId, String producerId) {
+    public List<ProductServiceModel> findAllProductsByCategoryIdAndProducerId(String categoryId,
+                                                                              String producerId) {
 
-        if((categoryId.equals("all") || categoryId.isEmpty()) && (producerId.equals("all") || producerId.isEmpty())) {
+        if((categoryId.equals("all") || categoryId.isEmpty())
+                && (producerId.equals("all") || producerId.isEmpty())) {
             return this.findAllProducts()
                     .stream()
                     .map(product -> this.modelMapper.map(product, ProductServiceModel.class))
@@ -126,20 +149,23 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if(producerId.equals("all") || producerId.isEmpty()) {
-            return this.productRepository.findAllByCategoryId(categoryId)
+            return this.productRepository
+                    .findAllByCategoryId(categoryId)
                     .stream()
                     .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                     .collect(Collectors.toList());
         }
 
         if(categoryId.equals("all") || categoryId.isEmpty()) {
-            return this.productRepository.findAllByProducerId(producerId)
+            return this.productRepository
+                    .findAllByProducerId(producerId)
                     .stream()
                     .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                     .collect(Collectors.toList());
         }
 
-        return this.productRepository.findAllByCategoryIdAndProducerId(categoryId, producerId)
+        return this.productRepository
+                .findAllByCategoryIdAndProducerId(categoryId, producerId)
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                 .collect(Collectors.toList());

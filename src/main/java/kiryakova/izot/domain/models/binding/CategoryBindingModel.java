@@ -25,7 +25,6 @@ public class CategoryBindingModel {
         this.name = name;
     }
 
-    //@NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     public MultipartFile getImageUrl() {
         return imageUrl;
     }

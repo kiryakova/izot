@@ -1,8 +1,5 @@
 package kiryakova.izot.domain.models.service;
 
-import kiryakova.izot.domain.entities.Order;
-import kiryakova.izot.domain.entities.UserRole;
-
 import java.util.Set;
 
 public class UserServiceModel extends BaseServiceModel {

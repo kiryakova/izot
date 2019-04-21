@@ -3,9 +3,7 @@ package kiryakova.izot.service;
 import kiryakova.izot.domain.entities.OrderProduct;
 import kiryakova.izot.domain.models.service.OrderProductServiceModel;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderProductService {
     OrderProductServiceModel findOrderProductByOrderIdAndProductId(String orderId, String productId) throws Exception;

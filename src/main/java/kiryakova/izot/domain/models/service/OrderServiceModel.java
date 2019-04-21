@@ -1,13 +1,7 @@
 package kiryakova.izot.domain.models.service;
 
-import kiryakova.izot.domain.entities.Customer;
-import kiryakova.izot.domain.entities.OrderProduct;
-import kiryakova.izot.domain.entities.User;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class OrderServiceModel extends BaseServiceModel {
 
@@ -16,8 +10,6 @@ public class OrderServiceModel extends BaseServiceModel {
     private BigDecimal totalPrice;
     private UserServiceModel user;
     private CustomerServiceModel customer;
-    //private List<OrderProduct> orderProductList;
-
 
     public OrderServiceModel() {
     }

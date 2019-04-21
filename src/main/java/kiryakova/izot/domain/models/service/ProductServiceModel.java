@@ -1,7 +1,5 @@
 package kiryakova.izot.domain.models.service;
 
-import kiryakova.izot.domain.entities.Category;
-
 import java.math.BigDecimal;
 
 public class ProductServiceModel extends BaseServiceModel {
@@ -9,12 +7,11 @@ public class ProductServiceModel extends BaseServiceModel {
     private String description;
     private BigDecimal price;
     private String imageUrl;
-    //private Producer producer;
     private CategoryServiceModel category;
     private ProducerServiceModel producer;
 
-    /*public ProductServiceModel() {
-    }*/
+    public ProductServiceModel() {
+    }
 
     public String getName() {
         return name;
@@ -47,15 +44,6 @@ public class ProductServiceModel extends BaseServiceModel {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-/*
-    public Producer getProducer() {
-        return producer;
-    }
-
-    public void setProducer(Producer producer) {
-        this.producer = producer;
-    }
-*/
 
     public CategoryServiceModel getCategory() {
         return category;

@@ -25,7 +25,9 @@ public class CustomerController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CustomerController(CustomerService customerService, LogService logService, ModelMapper modelMapper) {
+    public CustomerController(CustomerService customerService,
+                              LogService logService,
+                              ModelMapper modelMapper) {
         this.customerService = customerService;
         this.logService = logService;
         this.modelMapper = modelMapper;
@@ -34,12 +36,16 @@ public class CustomerController extends BaseController {
     @GetMapping("/edit/{id}")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Клиент по поръчката")
-    public ModelAndView editCustomer(Principal principal, @PathVariable String id, ModelAndView modelAndView) throws Exception {
+    public ModelAndView editCustomer(Principal principal,
+                                     @PathVariable String id,
+                                     ModelAndView modelAndView) throws Exception {
         String name = principal.getName();
 
-        CustomerServiceModel customerServiceModel = this.customerService.findCustomerByUsername(name);
+        CustomerServiceModel customerServiceModel = this.customerService
+                .findCustomerByUsername(name);
 
-        CustomerBindingModel customerBindingModel = this.modelMapper.map(customerServiceModel, CustomerBindingModel.class);
+        CustomerBindingModel customerBindingModel = this.modelMapper
+                .map(customerServiceModel, CustomerBindingModel.class);
 
         modelAndView.addObject("customer", customerBindingModel);
         modelAndView.addObject("orderId", id);
@@ -50,7 +56,8 @@ public class CustomerController extends BaseController {
     @PostMapping("/edit/{id}")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Клиент по поръчката")
-    public ModelAndView editCustomerConfirm(Principal principal, ModelAndView modelAndView,
+    public ModelAndView editCustomerConfirm(Principal principal,
+                                            ModelAndView modelAndView,
                                             @PathVariable(name="id") String id,
                                             @ModelAttribute(name = "customer") @Valid CustomerBindingModel customerBindingModel,
                                             BindingResult bindingResult) throws Exception {
@@ -62,14 +69,17 @@ public class CustomerController extends BaseController {
 
         String name = principal.getName();
 
-        CustomerServiceModel customerServiceModel = this.modelMapper.map(customerBindingModel, CustomerServiceModel.class);
+        CustomerServiceModel customerServiceModel = this.modelMapper
+                .map(customerBindingModel, CustomerServiceModel.class);
 
         this.customerService.editCustomer(name, customerServiceModel, id);
 
         this.logService.logAction(principal.getName(),
-                String.format(ConstantsDefinition.CustomerConstants.CUSTOMER_ADDED_SUCCESSFUL,
+                String.format(
+                        ConstantsDefinition.CustomerConstants.CUSTOMER_ADDED_SUCCESSFUL,
                         customerServiceModel.getFirstName(),
-                        customerServiceModel.getLastName()));
+                        customerServiceModel.getLastName())
+        );
 
         return this.redirect("/orders/confirm/" + id);
     }

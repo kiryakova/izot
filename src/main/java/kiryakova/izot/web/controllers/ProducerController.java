@@ -28,7 +28,9 @@ public class ProducerController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProducerController(ProducerService producerService, LogService logService, ModelMapper modelMapper) {
+    public ProducerController(ProducerService producerService,
+                              LogService logService,
+                              ModelMapper modelMapper) {
         this.producerService = producerService;
         this.logService = logService;
         this.modelMapper = modelMapper;
@@ -51,19 +53,28 @@ public class ProducerController extends BaseController {
                                     BindingResult bindingResult) {
 
         if(this.producerService.checkIfProducerNameAlreadyExists(producerBindingModel.getName())){
-            bindingResult.addError(new FieldError("producerBindingModel", "name",
-                    String.format(ConstantsDefinition.ProducerConstants.PRODUCER_ALREADY_EXISTS, producerBindingModel.getName())));
+            bindingResult.addError(
+                    new FieldError("producerBindingModel", "name",
+                    String.format(
+                            ConstantsDefinition.ProducerConstants.PRODUCER_ALREADY_EXISTS,
+                            producerBindingModel.getName()))
+            );
         }
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("producer", producerBindingModel);
             return this.view("producer/add-producer", modelAndView);
         }
 
-        ProducerServiceModel producerServiceModel = this.modelMapper.map(producerBindingModel, ProducerServiceModel.class);
+        ProducerServiceModel producerServiceModel = this.modelMapper
+                .map(producerBindingModel, ProducerServiceModel.class);
 
         this.producerService.addProducer(producerServiceModel);
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.ProducerConstants.PRODUCER_ADDED_SUCCESSFUL, producerServiceModel.getName()));
+        this.logService.logAction(principal.getName(),
+                String.format(
+                        ConstantsDefinition.ProducerConstants.PRODUCER_ADDED_SUCCESSFUL,
+                        producerServiceModel.getName())
+        );
 
         return this.redirect("/producers/all");
     }
@@ -71,9 +82,11 @@ public class ProducerController extends BaseController {
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Редактиране на производител")
-    public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView editCategory(@PathVariable String id,
+                                     ModelAndView modelAndView) {
         modelAndView.addObject("producer",
-                this.modelMapper.map(this.producerService.findProducerById(id), ProducerBindingModel.class)
+                this.modelMapper.map(this.producerService.findProducerById(id),
+                        ProducerBindingModel.class)
         );
 
         modelAndView.addObject("producerId", id);
@@ -94,7 +107,8 @@ public class ProducerController extends BaseController {
             return this.view("producer/edit-producer", modelAndView);
         }
 
-        this.producerService.editProducer(id, this.modelMapper.map(producerBindingModel, ProducerServiceModel.class));
+        this.producerService.editProducer(id, this.modelMapper
+                .map(producerBindingModel, ProducerServiceModel.class));
 
         return this.redirect("/producers/all");
     }
@@ -102,9 +116,11 @@ public class ProducerController extends BaseController {
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на производител")
-    public ModelAndView deleteCategory(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView deleteCategory(@PathVariable String id,
+                                       ModelAndView modelAndView) {
         modelAndView.addObject("producer",
-                this.modelMapper.map(this.producerService.findProducerById(id), ProducerViewModel.class)
+                this.modelMapper.map(this.producerService.findProducerById(id),
+                        ProducerViewModel.class)
         );
 
         modelAndView.addObject("producerId", id);
@@ -125,22 +141,12 @@ public class ProducerController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Всички производители")
     public ModelAndView allProducer(ModelAndView modelAndView) {
-        modelAndView.addObject("producers", this.producerService.findAllProducers()
+        modelAndView.addObject("producers",
+                this.producerService.findAllProducers()
                 .stream()
                 .map(c -> this.modelMapper.map(c, ProducerViewModel.class))
                 .collect(Collectors.toList()));
 
         return this.view("producer/all-producers", modelAndView);
     }
-
-    /*@GetMapping("/fetch")
-    @PreAuthorize("hasAuthority('MODERATOR')")
-    @ResponseBody
-    public List<ProducerViewModel> fetchProducers() {
-        return this.producerService.findAllProducers()
-                .stream()
-                .map(c -> this.modelMapper.map(c, ProducerViewModel.class))
-                .collect(Collectors.toList());
-    }*/
-
 }

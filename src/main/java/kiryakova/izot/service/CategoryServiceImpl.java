@@ -24,7 +24,10 @@ public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CloudinaryService cloudinaryService, CategoryValidationService categoryValidation, ModelMapper modelMapper) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository,
+                               CloudinaryService cloudinaryService,
+                               CategoryValidationService categoryValidation,
+                               ModelMapper modelMapper) {
         this.categoryRepository = categoryRepository;
         this.cloudinaryService = cloudinaryService;
         this.categoryValidation = categoryValidation;
@@ -32,7 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void addCategory(CategoryServiceModel categoryServiceModel, MultipartFile imageUrl) {
+    public void addCategory(CategoryServiceModel categoryServiceModel,
+                            MultipartFile imageUrl) {
         if(!categoryValidation.isValid(categoryServiceModel)){
             throw new IllegalArgumentException();
         }
@@ -44,12 +48,17 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             this.categoryRepository.save(category);
         } catch (Exception ignored){
-            throw new CategoryNotSavedException(String.format(ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_SAVED_CATEGORY, category.getName()));
+            throw new CategoryNotSavedException(
+                    String.format(
+                            ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_SAVED_CATEGORY,
+                            category.getName())
+            );
         }
     }
 
     @Override
-    public void editCategory(String id, CategoryServiceModel categoryServiceModel, MultipartFile imageUrl) {
+    public void editCategory(String id, CategoryServiceModel categoryServiceModel,
+                             MultipartFile imageUrl) {
         Category category = this.categoryRepository.findById(id).orElse(null);
 
         this.checkIfCategoryFound(category, categoryServiceModel.getName());
@@ -64,7 +73,11 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             this.categoryRepository.save(category);
         }catch (Exception ignored){
-            throw new CategoryNotSavedException(String.format(ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_SAVED_CATEGORY, category.getName()));
+            throw new CategoryNotSavedException(
+                    String.format(
+                            ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_SAVED_CATEGORY,
+                            category.getName())
+            );
         }
     }
 
@@ -77,7 +90,11 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             this.categoryRepository.delete(category);
         }catch (Exception ignored){
-            throw new CategoryNotDeletedException(String.format(ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_DELETE_CATEGORY, category.getName()));
+            throw new CategoryNotDeletedException(
+                    String.format(
+                            ConstantsDefinition.CategoryConstants.UNSUCCESSFUL_DELETE_CATEGORY,
+                            category.getName())
+            );
         }
     }
 
@@ -97,14 +114,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(p -> this.modelMapper.map(p, CategoryServiceModel.class))
                 .collect(Collectors.toList());
     }
-
-/*    @Override
-    public void setImageUrl(CategoryServiceModel categoryServiceModel, MultipartFile multipartFile) throws IOException {
-        categoryServiceModel.setImageUrl(
-                this.cloudinaryService.uploadImage(multipartFile)
-        );
-    }
-*/
 
     @Override
     public boolean checkIfCategoryNameAlreadyExists(String name) {
@@ -130,13 +139,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void checkIfCategoryFound(Category category) {
         if(!categoryValidation.isValid(category)) {
-            throw new CategoryNotFoundException(ConstantsDefinition.CategoryConstants.NO_SUCH_CATEGORY);
+            throw new CategoryNotFoundException(
+                    ConstantsDefinition.CategoryConstants.NO_SUCH_CATEGORY);
         }
     }
 
     private void checkIfCategoryFound(Category category, String name) {
         if(!categoryValidation.isValid(category)) {
-            throw new CategoryNotFoundException(String.format(ConstantsDefinition.CategoryConstants.NO_CATEGORY_WITH_NAME, name));
+            throw new CategoryNotFoundException(
+                    String.format(
+                            ConstantsDefinition.CategoryConstants.NO_CATEGORY_WITH_NAME,
+                            name));
         }
     }
 

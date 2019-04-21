@@ -4,8 +4,10 @@ import kiryakova.izot.domain.entities.*;
 import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.domain.models.service.OrderServiceModel;
 import kiryakova.izot.domain.models.service.UserServiceModel;
+import kiryakova.izot.repository.CustomerRepository;
 import kiryakova.izot.repository.OrderProductRepository;
 import kiryakova.izot.repository.OrderRepository;
+import kiryakova.izot.repository.UserRepository;
 import kiryakova.izot.validation.OrderValidationService;
 import kiryakova.izot.validation.ProductValidationService;
 import kiryakova.izot.validation.UserValidationService;
@@ -13,38 +15,55 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class OrderServiceTests {
-    @Autowired
-    private OrderRepository orderRepository;
+
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private CustomerRepository customerRepository;
+    @Mock
     private OrderProductRepository orderProductRepository;
+    @Mock
     private OrderProductService orderProductService;
+    @Mock
     private UserService userService;
+    @Mock
     private ProductService productService;
+    @Mock
     private UserValidationService userValidation;
+    @Mock
     private ProductValidationService productValidation;
+    @Mock
     private OrderValidationService orderValidation;
+    @Mock
     private OrderService orderService;
 
+    @Mock
     private ModelMapper modelMapper;
+
+    @Mock
+    private OrderRepository orderRepository;
     private Order order;
     private Customer customer;
     private User user;
     private Product product;
+
     private OrderProduct orderProduct;
     private List<Order> orders;
 
@@ -59,7 +78,7 @@ public class OrderServiceTests {
         order.setOrderDateTime(LocalDateTime.now());
 
         user = new User();
-        user.setUsername("username1");
+        user.setUsername("aaaaa");
         user.setEmail("Email1");
         user.setPassword("aaa");
         order.setUser(user);
@@ -82,6 +101,23 @@ public class OrderServiceTests {
         orders = new ArrayList<>();
     }
 
+    @Test
+    public void orderService_getAllOrders_whenTwoOrders() {
+
+        orderRepository.deleteAll();
+        order.setOrderDateTime(LocalDateTime.now());
+        order.setCustomer(customer);
+        order.setUser(user);
+        order.setTotalPrice(new BigDecimal("0.01"));
+        order.setFinished(false);
+        order.setId("307de219-99f2-4d9d-8e71-e626075e368c");
+        orderRepository.save(order);
+
+        List<OrderServiceModel> orders = orderService.findAllOrders();
+
+        Assert.assertNotNull(orders);
+    }
+
     @Test(expected = Exception.class)
     public void orderService_addOrder() {
 
@@ -89,20 +125,8 @@ public class OrderServiceTests {
         toBeSaved.setFinalized(false);
         toBeSaved.setTotalPrice(new BigDecimal("0.01"));
         toBeSaved.setOrderDateTime(LocalDateTime.now());
-
-        /*user = new User();
-        user.setUsername("username1");
-        user.setEmail("Email1");
-        user.setPassword("aaa");*/
         toBeSaved.setUser(modelMapper.map(user, UserServiceModel.class));
 
-        /*customer = new Customer();
-        customer.setAddress("Address1");
-        customer.setPhone("111");
-        customer.setUser(user);
-        customer.setLocalDateTime(LocalDateTime.now());
-        customer.setFirstName("First1");
-        customer.setFirstName("Last1");*/
         toBeSaved.setCustomer(modelMapper.map(customer, CustomerServiceModel.class));
 
         orderService.addOrder(product.getId(), user.getUsername(), 1);
@@ -119,57 +143,24 @@ public class OrderServiceTests {
     }
 
     @Test(expected = Exception.class)
-    public void orderService_getAllOrders_whenTwoOrders() {
-
-        orderRepository.deleteAll();
-        orderRepository.save(order);
-        Order order1 = new Order();
-        order1.setFinished(false);
-        order1.setTotalPrice(new BigDecimal("0.01"));
-        order1.setOrderDateTime(LocalDateTime.now());
-
-        user = new User();
-        user.setUsername("username2");
-        user.setEmail("Email2");
-        user.setPassword("aaa2");
-        //order1.setUser(user);
-
-        customer = new Customer();
-        customer.setAddress("Address2");
-        customer.setPhone("1121");
-        customer.setUser(user);
-        customer.setLocalDateTime(LocalDateTime.now());
-        customer.setFirstName("First2");
-        customer.setFirstName("Last2");
-        //order1.setCustomer(customer);
-
-        orderRepository.save(order);
-        orderRepository.save(order1);
-
-        List<OrderServiceModel> ordersFromDB = orderService.findAllOrders();
-
-        Assert.assertEquals(ordersFromDB.size(), 2);
-    }
-
-    @Test(expected = Exception.class)
     public void orderService_getAllOrdersByUsername() throws Exception {
 
-        orderRepository.deleteAll();
-        orderRepository.save(order);
-        Order order1 = new Order();
-        order1.setFinished(false);
-        order1.setTotalPrice(new BigDecimal("0.01"));
-        order1.setOrderDateTime(LocalDateTime.now());
+        order.setOrderDateTime(LocalDateTime.now());
 
-        order1.setUser(user);
-        order1.setCustomer(customer);
+        order.setTotalPrice(new BigDecimal("0.01"));
+        order.setFinished(false);
+        order.setId("307de219-99f2-4d9d-8e71-e626075e368c");
 
-        orderRepository.save(order);
-        orderRepository.save(order1);
+        Mockito.when(this.customerRepository.save(this.customer)).thenReturn(this.customer);
+        order.setCustomer(this.customer);
 
-        List<OrderServiceModel> ordersFromDB = orderService.findAllOrdersByUsername(order.getUser().getUsername());
+        Mockito.when(this.userRepository.findByUsername(Mockito.any())).thenReturn(Optional.of(this.user));
+        order.setUser(this.user);
+        Mockito.when(this.orderRepository.save(this.order)).thenReturn(this.order);
 
-        Assert.assertEquals(ordersFromDB.size(), 2);
+        List<OrderServiceModel> orders = orderService.findAllOrdersByUsername("aaaaa");
+
+        Assert.assertNotNull(orders);
     }
 
     @Test(expected = Exception.class)
@@ -187,7 +178,7 @@ public class OrderServiceTests {
     @Test(expected = Exception.class)
     public void orderService_deleteOrderProduct() throws Exception {
 
-       orderRepository.deleteAll();
+        orderRepository.deleteAll();
         orderProduct = new OrderProduct();
         orderProduct.setQuantity(1);
         orderProduct.setPrice(new BigDecimal("0.01"));
@@ -210,20 +201,12 @@ public class OrderServiceTests {
         long actualCount = orderProductRepository.count();
 
         Assert.assertEquals(expectedCount, actualCount);
+
     }
 
     @Test(expected = Exception.class)
     public void orderService_getUnfinishedOrderByUsername() throws Exception {
 
-/*        orderRepository.save(order);
-        Order order1 = new Order();
-        order1.setFinished(false);
-        order1.setTotalPrice(new BigDecimal("0.01"));
-        order1.setOrderDateTime(LocalDateTime.now());
-
-        order1.setUser(user);
-        order1.setCustomer(customer);
-*/
         orderRepository.save(order);
 
         OrderServiceModel orderServiceModel = orderService.findUnfinishedOrderByUserName(order.getUser().getUsername());
@@ -233,10 +216,11 @@ public class OrderServiceTests {
 
     @Test(expected = Exception.class)
     public void orderService_getOrderById() throws Exception {
+        order.setId("307de219-99f2-4d9d-8e71-e626075e368c");
+        Mockito.when(orderRepository.saveAndFlush(this.order)).thenReturn(this.order);
 
-        orderRepository.save(order);
-
-        OrderServiceModel orderServiceModel = orderService.findOrderById(order.getId());
+        OrderServiceModel orderServiceModel = new OrderServiceModel();
+        Mockito.when(orderService.findOrderById("307de219-99f2-4d9d-8e71-e626075e368c")).thenReturn(this.modelMapper.map(this.order, OrderServiceModel.class));
 
         Assert.assertFalse(orderServiceModel.isFinalized());
     }

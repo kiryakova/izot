@@ -13,16 +13,18 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, String> {
     Optional<Product> findByName(String name);
 
-    @Query(value = "SELECT * FROM products WHERE category_id = :categoryId "
+    @Query(value = "SELECT * FROM products WHERE category_id = :categoryId " +
+            "ORDER BY product_name ASC"
             , nativeQuery = true)
     List<Product> findAllByCategoryId(@Param("categoryId") String categoryId);
 
-    @Query(value = "SELECT * FROM products WHERE producer_id = :producerId "
+    @Query(value = "SELECT * FROM products WHERE producer_id = :producerId " +
+            "ORDER BY product_name ASC"
             , nativeQuery = true)
     List<Product> findAllByProducerId(@Param("producerId") String producerId);
 
     @Query(value = "SELECT * FROM products WHERE category_id = :categoryId " +
-            "AND producer_id = :producerId "
+            "AND producer_id = :producerId ORDER BY product_name ASC"
             , nativeQuery = true)
     List<Product> findAllByCategoryIdAndProducerId(@Param("categoryId") String categoryId,
                                                    @Param("producerId") String producerId);

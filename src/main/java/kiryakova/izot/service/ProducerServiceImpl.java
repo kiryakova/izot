@@ -22,7 +22,9 @@ public class ProducerServiceImpl implements ProducerService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProducerServiceImpl(ProducerRepository producerRepository, ProducerValidationService producerValidation, ModelMapper modelMapper) {
+    public ProducerServiceImpl(ProducerRepository producerRepository,
+                               ProducerValidationService producerValidation,
+                               ModelMapper modelMapper) {
         this.producerRepository = producerRepository;
         this.producerValidation = producerValidation;
         this.modelMapper = modelMapper;
@@ -39,12 +41,17 @@ public class ProducerServiceImpl implements ProducerService {
         try {
             this.producerRepository.save(producer);
         } catch (Exception ignored){
-            throw new ProducerNotSavedException(String.format(ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_SAVED_PRODUCER, producer.getName()));
+            throw new ProducerNotSavedException(
+                    String.format(
+                            ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_SAVED_PRODUCER,
+                            producer.getName())
+            );
         }
     }
 
     @Override
-    public void editProducer(String id, ProducerServiceModel producerServiceModel) {
+    public void editProducer(String id,
+                             ProducerServiceModel producerServiceModel) {
         Producer producer = this.producerRepository.findById(id).orElse(null);
 
         this.checkIfProducerFound(producer, producerServiceModel.getName());
@@ -55,26 +62,36 @@ public class ProducerServiceImpl implements ProducerService {
         try {
             this.producerRepository.save(producer);
         } catch (Exception ignored){
-            throw new ProducerNotSavedException(String.format(ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_SAVED_PRODUCER, producer.getName()));
+            throw new ProducerNotSavedException(
+                    String.format(
+                            ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_SAVED_PRODUCER,
+                            producer.getName())
+            );
         }
     }
 
     @Override
     public void deleteProducer(String id) {
-        Producer producer = this.producerRepository.findById(id).orElse(null);
+        Producer producer = this.producerRepository
+                .findById(id).orElse(null);
 
         this.checkIfProducerFound(producer);
 
         try {
             this.producerRepository.delete(producer);
         }catch (Exception ignored){
-            throw new ProducerNotDeletedException(String.format(ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_DELETE_PRODUCER, producer.getName()));
+            throw new ProducerNotDeletedException(
+                    String.format(
+                            ConstantsDefinition.ProducerConstants.UNSUCCESSFUL_DELETE_PRODUCER,
+                            producer.getName())
+            );
         }
     }
 
     @Override
     public ProducerServiceModel findProducerById(String id) {
-        Producer producer = this.producerRepository.findById(id).orElse(null);
+        Producer producer = this.producerRepository
+                .findById(id).orElse(null);
 
         this.checkIfProducerFound(producer);
 
@@ -103,13 +120,18 @@ public class ProducerServiceImpl implements ProducerService {
 
     private void checkIfProducerFound(Producer producer) {
         if(!producerValidation.isValid(producer)) {
-            throw new ProducerNotFoundException(ConstantsDefinition.ProducerConstants.NO_SUCH_PRODUCER);
+            throw new ProducerNotFoundException(ConstantsDefinition
+                    .ProducerConstants.NO_SUCH_PRODUCER);
         }
     }
 
     private void checkIfProducerFound(Producer producer, String name) {
         if(!producerValidation.isValid(producer)) {
-            throw new ProducerNotFoundException(String.format(ConstantsDefinition.ProducerConstants.NO_PRODUCER_WITH_NAME, name));
+            throw new ProducerNotFoundException(
+                    String.format(
+                            ConstantsDefinition.ProducerConstants.NO_PRODUCER_WITH_NAME,
+                            name)
+            );
         }
     }
 }

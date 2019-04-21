@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +31,14 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderProductService orderProductService, UserService userService, ProductService productService, UserValidationService userValidation, ProductValidationService productValidation, OrderValidationService orderValidation, ModelMapper modelMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            OrderProductService orderProductService,
+                            UserService userService,
+                            ProductService productService,
+                            UserValidationService userValidation,
+                            ProductValidationService productValidation,
+                            OrderValidationService orderValidation,
+                            ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
         this.orderProductService = orderProductService;
         this.userService = userService;
@@ -47,33 +53,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean addOrder(String productId, String username, int quantity) {
 
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();
         }
 
-        ProductServiceModel productServiceModel = this.productService.findProductById(productId);
+        ProductServiceModel productServiceModel = this.productService
+                .findProductById(productId);
         if(!productValidation.isValid(productServiceModel)) {
             throw new IllegalArgumentException();
         }
 
         Product product = this.modelMapper.map(productServiceModel, Product.class);
 
-        Order order = this.orderRepository.findUnfinishedOrderByUserId(userServiceModel.getId()).orElse(null);
+        Order order = this.orderRepository
+                .findUnfinishedOrderByUserId(userServiceModel.getId()).orElse(null);
 
         if(order == null){
             order = new Order();
 
             order.setUser(this.modelMapper.map(userServiceModel, User.class));
             order.setFinished(false);
-            order.setTotalPrice((product.getPrice().multiply(new BigDecimal(quantity))).add(new BigDecimal(0.00)));
+            order.setTotalPrice((product.getPrice()
+                    .multiply(new BigDecimal(quantity)))
+                    .add(new BigDecimal(0.00)));
         }
         else {
             if(order.getTotalPrice() != null){
-                order.setTotalPrice(product.getPrice().multiply(new BigDecimal(quantity)).add(order.getTotalPrice()));
+                order.setTotalPrice(product.getPrice()
+                        .multiply(new BigDecimal(quantity))
+                        .add(order.getTotalPrice()));
             }
             else {
-                order.setTotalPrice(product.getPrice().multiply(new BigDecimal(quantity)).add(new BigDecimal(0.00)));
+                order.setTotalPrice(product.getPrice()
+                        .multiply(new BigDecimal(quantity))
+                        .add(new BigDecimal(0.00)));
             }
 
         }
@@ -83,10 +98,12 @@ public class OrderServiceImpl implements OrderService {
         try {
             order = this.orderRepository.saveAndFlush(order);
 
-            OrderProductServiceModel orderProductServiceModel = this.orderProductService.findOrderProductByOrderIdAndProductId(order.getId(), productId);
+            OrderProductServiceModel orderProductServiceModel = this.orderProductService
+                    .findOrderProductByOrderIdAndProductId(order.getId(), productId);
 
             if(orderProductServiceModel != null){
-                orderProduct = this.modelMapper.map(orderProductServiceModel, OrderProduct.class);
+                orderProduct = this.modelMapper
+                        .map(orderProductServiceModel, OrderProduct.class);
                 orderProduct.setQuantity(orderProduct.getQuantity() + quantity);
                 orderProduct.setPrice(product.getPrice());
             }
@@ -100,7 +117,8 @@ public class OrderServiceImpl implements OrderService {
             this.orderProductService.addOrderProduct(orderProduct);
 
         } catch (Exception ignored) {
-            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
+            throw new OrderNotSavedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
         }
 
         return true;
@@ -117,7 +135,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderServiceModel> findAllOrdersByUsername(String username) {
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();
         }
@@ -140,7 +159,8 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderDateTime(LocalDateTime.now());
             this.orderRepository.save(order);
         } catch (Exception ignored) {
-            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
+            throw new OrderNotSavedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
         }
     }
 
@@ -151,13 +171,15 @@ public class OrderServiceImpl implements OrderService {
         this.checkIfOrderFound(order);
 
         if(order.isFinished()){
-            throw new OrderIsFinishedAndCannotBeCanceled(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
+            throw new OrderIsFinishedAndCannotBeCanceled(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
         }
 
         try {
             this.orderRepository.cancelOrderById(order.getId());
         } catch (Exception ignored) {
-            throw new OrderNotCanceledException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
+            throw new OrderNotCanceledException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_CANCELED_ORDER);
         }
     }
 
@@ -165,10 +187,10 @@ public class OrderServiceImpl implements OrderService {
     public BigDecimal deleteOrderProduct(String id) {
 
         try {
-            OrderProduct orderProduct = this.orderProductService.deleteOrderProduct(id);
+            OrderProduct orderProduct = this.orderProductService
+                    .deleteOrderProduct(id);
 
             BigDecimal totalPrice = orderProduct.getOrder().getTotalPrice();
-            //BigDecimal productPrice = orderProduct.getProduct().getPrice();
             BigDecimal productPrice = orderProduct.getPrice();
             Integer quantity = orderProduct.getQuantity();
             BigDecimal productsPrice = productPrice.multiply(new BigDecimal(quantity));
@@ -178,19 +200,22 @@ public class OrderServiceImpl implements OrderService {
 
             return newTotalPrice;
         }catch (Exception ignored){
-            throw new OrderProductNotDeletedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
+            throw new OrderProductNotDeletedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
         }
 
     }
 
     @Override
     public OrderServiceModel findUnfinishedOrderByUserName(String username) {
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();
         }
 
-        Order order = this.orderRepository.findUnfinishedOrderByUserId(userServiceModel.getId()).orElse(null);
+        Order order = this.orderRepository
+                .findUnfinishedOrderByUserId(userServiceModel.getId()).orElse(null);
         if(order != null) {
             return this.modelMapper.map(order, OrderServiceModel.class);
         }
@@ -210,8 +235,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void setCustomerForOrder(String orderId, CustomerServiceModel customerServiceModel) {
-        Order order = this.orderRepository.findById(orderId).orElse(null);
+    public void setCustomerForOrder(String orderId,
+                                    CustomerServiceModel customerServiceModel) {
+        Order order = this.orderRepository
+                .findById(orderId).orElse(null);
 
         this.checkIfOrderFound(order);
 
@@ -219,7 +246,8 @@ public class OrderServiceImpl implements OrderService {
         try{
             this.orderRepository.save(order);
         } catch (Exception ignored) {
-            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
+            throw new OrderNotSavedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
         }
     }
 
@@ -228,13 +256,15 @@ public class OrderServiceImpl implements OrderService {
         try{
             this.orderRepository.save(order);
         } catch (Exception ignored) {
-            throw new OrderNotSavedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
+            throw new OrderNotSavedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_SAVED_ORDER);
         }
     }
 
     private void checkIfOrderFound(Order order) {
         if(!orderValidation.isValid(order)) {
-            throw new OrderNotFoundException(ConstantsDefinition.OrderConstants.NO_SUCH_ORDER);
+            throw new OrderNotFoundException(ConstantsDefinition
+                    .OrderConstants.NO_SUCH_ORDER);
         }
     }
 

@@ -17,7 +17,8 @@ public class ProducerAppController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProducerAppController(ProducerService producerService, ModelMapper modelMapper) {
+    public ProducerAppController(ProducerService producerService,
+                                 ModelMapper modelMapper) {
         this.producerService = producerService;
         this.modelMapper = modelMapper;
     }

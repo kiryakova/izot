@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_roles")
 public class UserRole extends BaseEntity implements GrantedAuthority {
-    //private String name;
     private String authority;
 
     public UserRole() {
@@ -27,20 +26,4 @@ public class UserRole extends BaseEntity implements GrantedAuthority {
         this.authority = authority;
     }
 
-/*
-    @Column(name = "name", nullable = false, unique = true)
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    @Transient
-    public String getAuthority() {
-        return this.getName();
-    }
-*/
 }

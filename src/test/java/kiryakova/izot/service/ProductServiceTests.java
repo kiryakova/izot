@@ -7,8 +7,6 @@ import kiryakova.izot.domain.entities.Product;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.domain.models.service.ProducerServiceModel;
 import kiryakova.izot.domain.models.service.ProductServiceModel;
-import kiryakova.izot.repository.CategoryRepository;
-import kiryakova.izot.repository.ProducerRepository;
 import kiryakova.izot.repository.ProductRepository;
 import kiryakova.izot.validation.ProductValidationService;
 import kiryakova.izot.validation.ProductValidationServiceImpl;
@@ -16,12 +14,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,23 +32,27 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class ProductServiceTests {
-    @Autowired
-    private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
-    private ProducerRepository producerRepository;
     private ProductService productService;
+    @Mock
     private CategoryService categoryService;
+    @Mock
     private ProducerService producerService;
+    @Mock
     private CloudinaryService cloudinaryService;
+    @Mock
     private ProductValidationService productValidation;
+    @Mock
     private ModelMapper modelMapper;
     private Product product;
     private Category category;
     private Producer producer;
     private MultipartFile multipartFile;
+    @Mock
     private Cloudinary cloudinary;
+    @Autowired
+    private ProductRepository productRepository;
     List<Product> products;
 
     @Before
@@ -58,12 +60,6 @@ public class ProductServiceTests {
 
         this.modelMapper = new ModelMapper();
         this.productValidation = new ProductValidationServiceImpl();
-
-        /*this.cloudinary = new Cloudinary(new HashMap<String, Object>(){{
-            put("cloud_name", "stela-cloud");
-            put("api_key", "593543314343541");
-            put("api_secret", "FZC2yyWnWoGvlrrShpH1TZYW--g");
-        }});*/
 
         this.cloudinaryService = new CloudinaryServiceImpl(this.cloudinary);
 
@@ -82,6 +78,19 @@ public class ProductServiceTests {
         producer.setPhone("111");
 
         products = new ArrayList<>();
+    }
+
+    @Test
+    public void productService_deleteProduct(){
+
+        product = productRepository.save(product);
+
+        productService.deleteProduct(product.getId());
+
+        long expectedCount = 0;
+        long actualCount = productRepository.count();
+
+        Assert.assertEquals(expectedCount, actualCount);
     }
 
     @Test
@@ -132,16 +141,9 @@ public class ProductServiceTests {
     public void productService_addProduct() throws IOException {
 
         ProductServiceModel toBeSaved = this.modelMapper.map(product, ProductServiceModel.class);
-        //toBeSaved.setName("Product1");
-        //toBeSaved.setDescription("Description1");
-        //toBeSaved.setImageUrl("Image1.jpg");
-        //toBeSaved.setPrice(new BigDecimal("0.01"));
-        //category = new Category();
-        //category.setName("Category1");
+
         toBeSaved.setCategory(modelMapper.map(category, CategoryServiceModel.class));
-        // producer = new Producer();
-        //producer.setName("producer1");
-        //producer.setPhone("111");
+
         toBeSaved.setProducer(modelMapper.map(producer, ProducerServiceModel.class));
 
         multipartFile = new MockMultipartFile(toBeSaved.getImageUrl(), new FileInputStream(new File("C:/test_img_files/Image1.jpg")));
@@ -177,7 +179,6 @@ public class ProductServiceTests {
         producer.setPhone("111");
         toBeEdited.setProducer(modelMapper.map(producer, ProducerServiceModel.class));
 
-
         multipartFile = new MockMultipartFile(toBeEdited.getImageUrl(), new FileInputStream(new File("C:/test_img_files/Image2.jpg")));
 
         productService.editProduct(product.getId(), toBeEdited, multipartFile);
@@ -191,19 +192,6 @@ public class ProductServiceTests {
         Assert.assertEquals(expected.getPrice(), actual.getPrice());
         Assert.assertEquals(expected.getDescription(), actual.getDescription());
 
-    }
-
-    @Test
-    public void productService_deleteProduct(){
-
-        product = productRepository.save(product);
-
-        productService.deleteProduct(product.getId());
-
-        long expectedCount = 0;
-        long actualCount = productRepository.count();
-
-        Assert.assertEquals(expectedCount, actualCount);
     }
 
     @Test(expected = Exception.class)

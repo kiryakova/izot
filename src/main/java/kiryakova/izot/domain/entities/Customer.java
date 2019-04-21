@@ -4,7 +4,6 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -15,8 +14,6 @@ public class Customer extends BaseEntity {
     private String phone;
     private User user;
     private LocalDateTime localDateTime;
-    //private List<Order> orderList;
-
 
     public Customer() {
     }
@@ -80,14 +77,4 @@ public class Customer extends BaseEntity {
         this.localDateTime = localDateTime;
     }
 
-    /*
-    @OneToMany(targetEntity = Order.class, mappedBy = "customer")
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
-    }
-*/
 }

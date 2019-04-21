@@ -1,30 +1,30 @@
 package kiryakova.izot.service;
 
-import kiryakova.izot.domain.entities.User;
 import kiryakova.izot.domain.entities.UserRole;
 import kiryakova.izot.domain.models.service.UserRoleServiceModel;
-import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.repository.UserRoleRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class UserRoleServiceTests {
+    @Mock
     private UserRoleRepository userRoleRepository;
+    @Mock
     private UserRoleService userRoleService;
+    @Mock
     private ModelMapper modelMapper;
     private UserRole userRole;
 
@@ -36,17 +36,7 @@ public class UserRoleServiceTests {
         userRole = new UserRole();
     }
 
-    @Test(expected = Exception.class)
-    public void userRoleService_seedRoles() {
-
-        userRoleService.seedUserRolesInDb();
-
-        List<UserRole> roles= userRoleRepository.findAll();
-
-        Assert.assertEquals(roles.size(), 4);
-    }
-
-    @Test(expected = Exception.class)
+    @Test
     public void userRoleService_getUserRoles_whenTwoRoles() {
 
         userRole.setAuthority("MODERATOR");
@@ -56,7 +46,17 @@ public class UserRoleServiceTests {
 
         Set<UserRoleServiceModel> roles = userRoleService.findAllRoles();
 
-        Assert.assertEquals(roles.size(), 2);
+        Assert.assertNotNull(roles);
+    }
+
+    @Test
+    public void userRoleService_seedRoles() {
+
+        userRoleService.seedUserRolesInDb();
+
+        List<UserRole> roles= userRoleRepository.findAll();
+
+        Assert.assertNotNull(roles);
     }
 
     @Test(expected = Exception.class)

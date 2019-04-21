@@ -1,6 +1,5 @@
 package kiryakova.izot.service;
 
-import kiryakova.izot.domain.entities.Order;
 import kiryakova.izot.domain.models.service.CustomerServiceModel;
 import kiryakova.izot.domain.models.service.OrderServiceModel;
 
@@ -19,8 +18,6 @@ public interface OrderService {
     void cancelOrder(String id) throws Exception;
 
     BigDecimal deleteOrderProduct(String id) throws Exception;
-
-    //void setNewTotalPrice(BigDecimal totalPrice, Order order);
 
     OrderServiceModel findUnfinishedOrderByUserName(String username) throws Exception;
 

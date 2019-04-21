@@ -13,7 +13,8 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
     private final AuthorizationInterceptor authorizationInterceptor;
 
     @Autowired
-    public ApplicationWebMvcConfiguration(TitleInterceptor titleInterceptor, AuthorizationInterceptor authorizationInterceptor) {
+    public ApplicationWebMvcConfiguration(TitleInterceptor titleInterceptor,
+                                          AuthorizationInterceptor authorizationInterceptor) {
         this.titleInterceptor = titleInterceptor;
         this.authorizationInterceptor = authorizationInterceptor;
     }

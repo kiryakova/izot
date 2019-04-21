@@ -5,5 +5,6 @@ import kiryakova.izot.domain.models.service.UserServiceModel;
 
 public interface UserValidationService {
     boolean isValid(User user);
+
     boolean isValid(UserServiceModel userServiceModel);
 }

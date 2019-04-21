@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,14 +17,14 @@ public class CategoryAppController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CategoryAppController(CategoryService categoryService, ModelMapper modelMapper) {
+    public CategoryAppController(CategoryService categoryService,
+                                 ModelMapper modelMapper) {
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
     }
 
     @GetMapping("/categories/fetch")
     @PreAuthorize("hasAuthority('USER')")
-    //@ResponseBody
     public List<CategoryViewModel> fetchCategories() {
         return this.categoryService.findAllCategories()
                 .stream()

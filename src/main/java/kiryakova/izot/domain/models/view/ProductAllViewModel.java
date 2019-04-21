@@ -1,7 +1,5 @@
 package kiryakova.izot.domain.models.view;
 
-import kiryakova.izot.domain.entities.Category;
-
 import java.math.BigDecimal;
 
 public class ProductAllViewModel extends BaseViewModel {

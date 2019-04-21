@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 public class OrderValidationServiceImpl implements OrderValidationService {
     @Override
     public boolean isValid(Order order) {
-        return order != null && isUserValid(order.getUser());
+        return order != null
+                && isUserValid(order.getUser());
     }
 
     private boolean isUserValid(User user) {

@@ -19,7 +19,8 @@ public class HomeController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public HomeController(CategoryService categoryService, ModelMapper modelMapper) {
+    public HomeController(CategoryService categoryService,
+                          ModelMapper modelMapper) {
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
     }

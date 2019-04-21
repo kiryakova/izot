@@ -27,7 +27,11 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, UserValidationService userValidation, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserRoleService userRoleService,
+                           UserValidationService userValidation,
+                           ModelMapper modelMapper,
+                           BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.userRoleService = userRoleService;
         this.userValidation = userValidation;
@@ -48,7 +52,8 @@ public class UserServiceImpl implements UserService {
             userServiceModel.setAuthorities(this.userRoleService.findAllRoles());
         } else{
             userServiceModel.setAuthorities(new LinkedHashSet<>());
-            userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("USER"));
+            userServiceModel.getAuthorities()
+                    .add(this.userRoleService.findByAuthority("USER"));
         }
 
         User user = this.modelMapper.map(userServiceModel, User.class);
@@ -57,7 +62,11 @@ public class UserServiceImpl implements UserService {
         try {
             this.userRepository.save(user);
         }catch (Exception ignored){
-            throw new UserRegisterException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_REGISTRATION, userServiceModel.getUsername()));
+            throw new UserRegisterException(
+                    String.format(
+                            ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_REGISTRATION,
+                            userServiceModel.getUsername())
+            );
         }
     }
 
@@ -94,7 +103,10 @@ public class UserServiceImpl implements UserService {
         try {
             this.userRepository.save(user);
         }catch (Exception ignored){
-            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING, userServiceModel.getUsername()));
+            throw new UserEditException(
+                    String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_EDITING,
+                            userServiceModel.getUsername())
+            );
         }
 
         return true;
@@ -120,23 +132,33 @@ public class UserServiceImpl implements UserService {
 
         switch (authority) {
             case "USER":
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("USER"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("USER"));
                 break;
             case "MODERATOR":
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("USER"));
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("MODERATOR"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("USER"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("MODERATOR"));
                 break;
             case "ADMIN":
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("USER"));
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("MODERATOR"));
-                userServiceModel.getAuthorities().add(this.userRoleService.findByAuthority("ADMIN"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("USER"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("MODERATOR"));
+                userServiceModel.getAuthorities()
+                        .add(this.userRoleService.findByAuthority("ADMIN"));
                 break;
         }
 
         try {
             this.userRepository.save(this.modelMapper.map(userServiceModel, User.class));
         }catch (Exception ignored){
-            throw new UserEditException(String.format(ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_SET_AUTHORITY, userServiceModel.getUsername()));
+            throw new UserEditException(
+                    String.format(
+                            ConstantsDefinition.UserConstants.UNSUCCESSFUL_USER_SET_AUTHORITY,
+                            userServiceModel.getUsername())
+            );
         }
     }
 
@@ -178,13 +200,18 @@ public class UserServiceImpl implements UserService {
 
     private void checkIfUserFound(User user) {
         if(!userValidation.isValid(user)) {
-            throw new UsernameNotFoundException(ConstantsDefinition.UserConstants.NO_SUCH_USER);
+            throw new UsernameNotFoundException(ConstantsDefinition
+                    .UserConstants.NO_SUCH_USER);
         }
     }
 
     private void checkIfUserFound(User user, String username) {
         if(!userValidation.isValid(user)) {
-            throw new UsernameNotFoundException(String.format(ConstantsDefinition.UserConstants.NO_USER_WITH_USERNAME, username));
+            throw new UsernameNotFoundException(
+                    String.format(
+                            ConstantsDefinition.UserConstants.NO_USER_WITH_USERNAME,
+                            username)
+            );
         }
     }
 }

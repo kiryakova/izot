@@ -2,16 +2,13 @@ package kiryakova.izot.domain.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name = "producers")
 public class Producer extends BaseEntity {
     private String name;
     private String phone;
-    //private List<Product> productList;
 
     public Producer() {
     }
@@ -34,15 +31,5 @@ public class Producer extends BaseEntity {
         this.phone = phone;
     }
 
-    /*
-    @OneToMany(targetEntity = Product.class, mappedBy = "producer")
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
-    */
 }
 

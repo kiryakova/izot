@@ -1,10 +1,5 @@
 package kiryakova.izot.domain.models.view;
 
-import kiryakova.izot.domain.entities.Order;
-import kiryakova.izot.domain.entities.Product;
-import kiryakova.izot.domain.models.service.OrderServiceModel;
-import kiryakova.izot.domain.models.service.ProductServiceModel;
-
 import java.math.BigDecimal;
 
 public class OrderProductViewModel extends BaseViewModel {

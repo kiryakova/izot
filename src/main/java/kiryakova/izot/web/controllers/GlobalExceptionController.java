@@ -18,12 +18,15 @@ public class GlobalExceptionController extends BaseController {
             throwable = throwable.getCause();
         }
 
-        modelAndView.addObject("message", throwable.getMessage());
-        modelAndView.addObject("reason", throwable.getClass().isAnnotationPresent(ResponseStatus.class)
+        modelAndView.addObject("message",
+                throwable.getMessage());
+        modelAndView.addObject("reason",
+                throwable.getClass().isAnnotationPresent(ResponseStatus.class)
                 ? throwable.getClass().getAnnotation(ResponseStatus.class).reason()
                 : "");
 
-        modelAndView.addObject("status", throwable.getClass().isAnnotationPresent(ResponseStatus.class)
+        modelAndView.addObject("status",
+                throwable.getClass().isAnnotationPresent(ResponseStatus.class)
                 ? throwable.getClass().getAnnotation(ResponseStatus.class).value()
                 : "");
 

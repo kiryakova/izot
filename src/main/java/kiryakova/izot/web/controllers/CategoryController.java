@@ -28,7 +28,9 @@ public class CategoryController extends BaseController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CategoryController(CategoryService categoryService, LogService logService, ModelMapper modelMapper) {
+    public CategoryController(CategoryService categoryService,
+                              LogService logService,
+                              ModelMapper modelMapper) {
         this.categoryService = categoryService;
         this.logService = logService;
         this.modelMapper = modelMapper;
@@ -52,11 +54,16 @@ public class CategoryController extends BaseController {
 
         if(this.categoryService.checkIfCategoryNameAlreadyExists(categoryBindingModel.getName())){
             bindingResult.addError(new FieldError("categoryBindingModel", "name",
-                    String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ALREADY_EXISTS, categoryBindingModel.getName())));
+                    String.format(
+                            ConstantsDefinition.CategoryConstants.CATEGORY_ALREADY_EXISTS,
+                            categoryBindingModel.getName()))
+            );
         }
 
-        if(categoryBindingModel.getImageUrl() == null || categoryBindingModel.getImageUrl().isEmpty()){
-            bindingResult.addError(new FieldError("categoryBindingModel", "imageUrl",
+        if(categoryBindingModel.getImageUrl() == null
+                || categoryBindingModel.getImageUrl().isEmpty()){
+            bindingResult.addError(
+                    new FieldError("categoryBindingModel", "imageUrl",
                     ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
         }
 
@@ -65,11 +72,18 @@ public class CategoryController extends BaseController {
             return this.view("category/add-category", modelAndView);
         }
 
-        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel, CategoryServiceModel.class);
+        CategoryServiceModel categoryServiceModel = this.modelMapper
+                .map(categoryBindingModel, CategoryServiceModel.class);
 
-        this.categoryService.addCategory(categoryServiceModel, categoryBindingModel.getImageUrl());
+        this.categoryService
+                .addCategory(categoryServiceModel, categoryBindingModel.getImageUrl());
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_ADDED_SUCCESSFUL, categoryServiceModel.getName()));
+        this.logService.logAction(principal.getName(),
+                String.format(
+                        ConstantsDefinition.CategoryConstants.CATEGORY_ADDED_SUCCESSFUL,
+                        categoryServiceModel.getName()
+                )
+        );
 
         return this.redirect("/categories/all");
     }
@@ -77,9 +91,11 @@ public class CategoryController extends BaseController {
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Редактиране на категория")
-    public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView editCategory(@PathVariable String id,
+                                     ModelAndView modelAndView) {
         CategoryServiceModel categoryServiceModel = this.categoryService.findCategoryById(id);
-        CategoryBindingModel categoryBindingModel = this.modelMapper.map(categoryServiceModel, CategoryBindingModel.class);
+        CategoryBindingModel categoryBindingModel = this.modelMapper.map(categoryServiceModel,
+                CategoryBindingModel.class);
 
         modelAndView.addObject("category", categoryBindingModel);
         modelAndView.addObject("categoryId", id);
@@ -97,8 +113,10 @@ public class CategoryController extends BaseController {
                                             @ModelAttribute(name = "category") @Valid CategoryBindingModel categoryBindingModel,
                                             BindingResult bindingResult) {
 
-        if(categoryBindingModel.getImageUrl() == null || categoryBindingModel.getImageUrl().isEmpty()){
-            bindingResult.addError(new FieldError("categoryBindingModel", "imageUrl",
+        if(categoryBindingModel.getImageUrl() == null
+                || categoryBindingModel.getImageUrl().isEmpty()){
+            bindingResult.addError(
+                    new FieldError("categoryBindingModel", "imageUrl",
                     ConstantsDefinition.BindingModelConstants.NOT_EMPTY));
         }
 
@@ -110,22 +128,29 @@ public class CategoryController extends BaseController {
             return this.view("category/edit-category", modelAndView);
         }
 
-        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel, CategoryServiceModel.class);
+        CategoryServiceModel categoryServiceModel = this.modelMapper
+                .map(categoryBindingModel, CategoryServiceModel.class);
 
-        this.categoryService.editCategory(id, categoryServiceModel, categoryBindingModel.getImageUrl());
+        this.categoryService
+                .editCategory(id, categoryServiceModel, categoryBindingModel.getImageUrl());
 
-        this.logService.logAction(principal.getName(), String.format(ConstantsDefinition.CategoryConstants.CATEGORY_EDITED_SUCCESSFUL, categoryServiceModel.getName()));
+        this.logService.logAction(principal.getName(),
+                String.format(
+                        ConstantsDefinition.CategoryConstants.CATEGORY_EDITED_SUCCESSFUL,
+                        categoryServiceModel.getName())
+        );
 
         return this.redirect("/categories/all");
-        //return super.redirect("/producers/details/" + id);
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на категория")
-    public ModelAndView deleteCategory(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView deleteCategory(@PathVariable String id,
+                                       ModelAndView modelAndView) {
         modelAndView.addObject("category",
-                this.modelMapper.map(this.categoryService.findCategoryById(id), CategoryViewModel.class)
+                this.modelMapper.map(this.categoryService
+                        .findCategoryById(id), CategoryViewModel.class)
         );
 
         modelAndView.addObject("categoryId", id);
@@ -136,10 +161,12 @@ public class CategoryController extends BaseController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на категория")
-    public ModelAndView deleteCategoryConfirm(Principal principal, @PathVariable String id) {
+    public ModelAndView deleteCategoryConfirm(Principal principal,
+                                              @PathVariable String id) {
         this.categoryService.deleteCategory(id);
 
-        this.logService.logAction(principal.getName(), ConstantsDefinition.CategoryConstants.CATEGORY_DELETED_SUCCESSFUL);
+        this.logService.logAction(principal.getName(),
+                ConstantsDefinition.CategoryConstants.CATEGORY_DELETED_SUCCESSFUL);
 
         return this.redirect("/categories/all");
     }

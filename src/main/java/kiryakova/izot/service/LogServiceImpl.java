@@ -28,7 +28,11 @@ public class LogServiceImpl implements LogService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public LogServiceImpl(LogRepository logRepository, UserService userService, UserValidationService userValidation, JmsTemplate jmsTemplate, ModelMapper modelMapper) {
+    public LogServiceImpl(LogRepository logRepository,
+                          UserService userService,
+                          UserValidationService userValidation,
+                          JmsTemplate jmsTemplate,
+                          ModelMapper modelMapper) {
         this.logRepository = logRepository;
         this.userService = userService;
         this.userValidation = userValidation;
@@ -49,7 +53,8 @@ public class LogServiceImpl implements LogService {
         return this.logRepository.findAllLogsByDateTimeDesc()
                 .stream()
                 .map(log ->{
-                    LogServiceModel logServiceModel = this.modelMapper.map(log, LogServiceModel.class);
+                    LogServiceModel logServiceModel = this.modelMapper
+                            .map(log, LogServiceModel.class);
                     logServiceModel.getUser().setUsername(log.getUser().getUsername());
 
                     return logServiceModel;
@@ -58,13 +63,10 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void logAction(UserServiceModel userServiceModel, String event) {
-        this.jmsTemplate.convertAndSend(String.format("%s;%s;%s", LocalDateTime.now(), userServiceModel.getUsername(), event));
-    }
-
-    @Override
     public void logAction(String username, String event) {
-        this.jmsTemplate.convertAndSend(String.format("%s;%s;%s", LocalDateTime.now(), username, event));
+        this.jmsTemplate.convertAndSend(
+                String.format("%s;%s;%s", LocalDateTime.now(), username, event)
+        );
     }
 
     private Log createLog(String[] eventParams) {
@@ -72,7 +74,8 @@ public class LogServiceImpl implements LogService {
         log.setDateTime(this.formatDate(eventParams[0]));
 
 
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(eventParams[1]);
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(eventParams[1]);
 
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();

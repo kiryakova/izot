@@ -3,20 +3,19 @@ package kiryakova.izot.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
+@RunWith(SpringRunner.class)
 @DataJpaTest
 @ActiveProfiles("test")
 public class MailServiceTests {
-    @MockBean
-    private MailService mailService;
+    @Mock
+    private MailServiceImpl mailService;
 
     @MockBean
     private JavaMailSender javaMailSender;

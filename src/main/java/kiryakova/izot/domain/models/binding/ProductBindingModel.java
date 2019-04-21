@@ -53,7 +53,6 @@ public class ProductBindingModel {
         this.price = price;
     }
 
-    //@NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     public MultipartFile getImageUrl() {
         return imageUrl;
     }
@@ -62,7 +61,6 @@ public class ProductBindingModel {
         this.imageUrl = imageUrl;
     }
 
-    //@NotNull(message = ConstantsDefinition.BindingModelConstants.NOT_NULL)
     public Category getCategory() {
         return category;
     }

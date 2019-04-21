@@ -1,19 +1,21 @@
 package kiryakova.izot.service;
 
+import com.cloudinary.Cloudinary;
 import kiryakova.izot.domain.entities.Category;
 import kiryakova.izot.domain.models.service.CategoryServiceModel;
 import kiryakova.izot.repository.CategoryRepository;
 import kiryakova.izot.validation.CategoryValidationService;
+import kiryakova.izot.validation.CategoryValidationServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,22 +27,28 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class CategoryServiceTests {
     @Autowired
     private CategoryRepository categoryRepository;
     private CategoryService categoryService;
-    private CloudinaryService cloudinaryService;
-    private CategoryValidationService categoryValidationService;
     private ModelMapper modelMapper;
+    @Mock
+    private CloudinaryService cloudinaryService;
+    @Mock
+    private CategoryValidationService categoryValidation;
     private Category category;
     private MultipartFile multipartFile;
+    @Mock
+    private Cloudinary cloudinary;
     List<Category> categories;
 
     @Before
     public void init(){
         this.modelMapper = new ModelMapper();
-        this.categoryService = new CategoryServiceImpl(this.categoryRepository, this.cloudinaryService, this.categoryValidationService, this.modelMapper);
+        this.categoryValidation = new CategoryValidationServiceImpl();
+        this.categoryService = new CategoryServiceImpl(this.categoryRepository, this.cloudinaryService, this.categoryValidation, this.modelMapper);
+        this.cloudinaryService = new CloudinaryServiceImpl(this.cloudinary);
 
         category = new Category();
         category.setName("Category1");
@@ -76,7 +84,7 @@ public class CategoryServiceTests {
         Assert.assertTrue(exists);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void categoryService_addCategory() throws IOException {
 
         CategoryServiceModel toBeSaved = new CategoryServiceModel();
@@ -96,7 +104,7 @@ public class CategoryServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void categoryService_editCategory() throws IOException {
 
         category = this.categoryRepository.save(category);
@@ -119,7 +127,7 @@ public class CategoryServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void categoryService_deleteCategory(){
 
         category = this.categoryRepository.save(category);
@@ -141,7 +149,7 @@ public class CategoryServiceTests {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void categoryService_findByIdCategoryWithValidId() {
 
         category = this.categoryRepository.saveAndFlush(category);

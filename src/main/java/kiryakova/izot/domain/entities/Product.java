@@ -1,9 +1,7 @@
 package kiryakova.izot.domain.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,7 +13,6 @@ public class Product extends BaseEntity {
     private String imageUrl;
     private Category category;
     private Producer producer;
-    //private List<OrderProduct> orderProductList;
 
     public Product() {
     }
@@ -38,9 +35,7 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-    //@Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT '0.01'")
     @Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT '0.00'")
-    //@DecimalMin("0.01")
     public BigDecimal getPrice() {
         return price;
     }
@@ -57,17 +52,6 @@ public class Product extends BaseEntity {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    /*
-        @ManyToOne(targetEntity = Producer.class)
-        @JoinColumn(name = "producer_id", referencedColumnName = "id", nullable = false)
-        public Producer getProducer() {
-            return producer;
-        }
-
-        public void setProducer(Producer producer) {
-            this.producer = producer;
-        }
-    */
 
     @OneToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -88,15 +72,5 @@ public class Product extends BaseEntity {
     public void setProducer(Producer producer) {
         this.producer = producer;
     }
-
-    /*
-    @OneToMany(targetEntity = OrderProduct.class, mappedBy = "product")
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
-    }
-
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
-    }*/
 
 }

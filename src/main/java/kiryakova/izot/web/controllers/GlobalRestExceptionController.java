@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalRestExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Throwable.class})
-    //@ExceptionHandler({TransactionException.class, PersistenceException.class})
-    public @ResponseBody ErrorInfo handleRestSqlException(HttpServletRequest req, Exception e) {
+    public @ResponseBody ErrorInfo handleRestSqlException(HttpServletRequest req,
+                                                          Exception e) {
         return new ErrorInfo(req.getRequestURL().toString(), e);
     }
 }

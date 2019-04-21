@@ -17,26 +17,31 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ActiveProfiles("test")
 public class CustomerServiceTests {
     @Autowired
     private CustomerRepository customerRepository;
+    @Mock
     private OrderRepository orderRepository;
+    @Mock
     private CustomerService customerService;
+    @Mock
     private UserService userService;
-    //private UserRepository userRepository;
+    @Mock
     private OrderService orderService;
+    @Mock
     private UserValidationService userValidation;
+    @Mock
     private CustomerValidationService customerValidation;
+    @Mock
     private ModelMapper modelMapper;
     private Customer customer;
     private User user;
@@ -84,7 +89,6 @@ public class CustomerServiceTests {
     @Test(expected = Exception.class)
     public void customerService_editCustomer() throws Exception {
 
-        //user = userRepository.saveAndFlush(user);
         Order order = new Order();
 
         customer = this.customerRepository.save(customer);

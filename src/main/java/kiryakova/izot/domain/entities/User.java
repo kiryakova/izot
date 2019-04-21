@@ -13,12 +13,6 @@ public class User extends BaseEntity implements UserDetails {
     private String password;
     private String email;
 
-    //private String firstName;
-
-    //private String lastName;
-
-    //private String ucn;
-
     private Set<UserRole> authorities;
 
     private boolean isAccountNonExpired;
@@ -79,7 +73,6 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    //@Column(name = "is_account_non_expired")
     @Transient
     public boolean isAccountNonExpired() {
         return true;

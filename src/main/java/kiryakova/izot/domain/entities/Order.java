@@ -4,9 +4,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -16,7 +14,6 @@ public class Order extends BaseEntity {
     private User user;
     private Customer customer;
     private BigDecimal totalPrice;
-    //private List<OrderProduct> orderProductList;
 
     public Order() {
     }
@@ -69,14 +66,4 @@ public class Order extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
-    /*
-    @OneToMany(fetch=FetchType.EAGER, mappedBy = "order", cascade = CascadeType.REMOVE)
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
-    }
-
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
-    }
-*/
 }

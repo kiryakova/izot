@@ -2,7 +2,6 @@ package kiryakova.izot.service;
 
 import kiryakova.izot.domain.entities.UserRole;
 import kiryakova.izot.domain.models.service.UserRoleServiceModel;
-import kiryakova.izot.domain.models.service.UserServiceModel;
 import kiryakova.izot.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,8 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, ModelMapper modelMapper) {
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository,
+                               ModelMapper modelMapper) {
         this.userRoleRepository = userRoleRepository;
         this.modelMapper = modelMapper;
     }
@@ -44,6 +44,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public UserRoleServiceModel findByAuthority(String authority) {
-        return this.modelMapper.map(this.userRoleRepository.findByAuthority(authority), UserRoleServiceModel.class);
+        return this.modelMapper.map(this.userRoleRepository
+                .findByAuthority(authority), UserRoleServiceModel.class);
     }
 }

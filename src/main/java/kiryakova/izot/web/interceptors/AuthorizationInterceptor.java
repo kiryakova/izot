@@ -23,11 +23,12 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (handler instanceof HandlerMethod) {
-            PreAuthorize methodAnnotation = ((HandlerMethod) handler).getMethodAnnotation(PreAuthorize.class);
+            PreAuthorize methodAnnotation = ((HandlerMethod) handler)
+                    .getMethodAnnotation(PreAuthorize.class);
 
             if(methodAnnotation != null){
                 if(!methodAnnotation.value().equals("isAnonymous()")){
-                    messageWelcome += "Здравейте, ";
+                    messageWelcome += "Здравей, ";
                 }
             }
 

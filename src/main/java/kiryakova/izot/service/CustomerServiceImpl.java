@@ -25,7 +25,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, OrderService orderService, UserService userService, UserValidationService userValidation, CustomerValidationService customerValidation, ModelMapper modelMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               OrderService orderService,
+                               UserService userService,
+                               UserValidationService userValidation,
+                               CustomerValidationService customerValidation,
+                               ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
         this.orderService = orderService;
         this.userService = userService;
@@ -41,7 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalArgumentException();
         }
 
-        Customer customer = this.customerRepository.findCustomerByUserId(userServiceModel.getId()).orElse(null);
+        Customer customer = this.customerRepository
+                .findCustomerByUserId(userServiceModel.getId()).orElse(null);
         CustomerServiceModel customerServiceModel = new CustomerServiceModel();
 
         if(customer != null){
@@ -52,8 +58,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void editCustomer(String username, CustomerServiceModel customerServiceModel, String orderId) {
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+    public void editCustomer(String username,
+                             CustomerServiceModel customerServiceModel,
+                             String orderId) {
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();
         }
@@ -62,12 +71,18 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalArgumentException();
         }
 
-        Customer customer = this.customerRepository.findCustomerByUserId(userServiceModel.getId()).orElse(null);
+        Customer customer = this.customerRepository
+                .findCustomerByUserId(userServiceModel.getId()).orElse(null);
         
-        if ( customer == null || !customer.getFirstName().toLowerCase().equals(customerServiceModel.getFirstName().toLowerCase())
-                || !customer.getLastName().toLowerCase().equals(customerServiceModel.getLastName().toLowerCase())
-                || !customer.getAddress().toLowerCase().equals(customerServiceModel.getAddress().toLowerCase())
-                || !customer.getPhone().toLowerCase().equals(customerServiceModel.getPhone().toLowerCase())) {
+        if ( customer == null
+                || !customer.getFirstName().toLowerCase()
+                .equals(customerServiceModel.getFirstName().toLowerCase())
+                || !customer.getLastName().toLowerCase()
+                .equals(customerServiceModel.getLastName().toLowerCase())
+                || !customer.getAddress().toLowerCase()
+                .equals(customerServiceModel.getAddress().toLowerCase())
+                || !customer.getPhone().toLowerCase()
+                .equals(customerServiceModel.getPhone().toLowerCase())) {
 
             customer = new Customer();
         }
@@ -82,7 +97,11 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customer = this.customerRepository.saveAndFlush(customer);
         }catch (Exception ignored){
-            throw new CustomerNotSavedException(String.format(ConstantsDefinition.CustomerConstants.UNSUCCESSFUL_SAVED_CUSTOMER, customer.getFirstName()));
+            throw new CustomerNotSavedException(
+                    String.format(
+                            ConstantsDefinition.CustomerConstants.UNSUCCESSFUL_SAVED_CUSTOMER,
+                            customer.getFirstName())
+            );
         }
 
         customerServiceModel = this.modelMapper.map(customer, CustomerServiceModel.class);
@@ -92,7 +111,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerServiceModel findCustomerByOrderId(String orderId) {
-        Customer customer = this.customerRepository.findCustomerByOrderId(orderId).orElse(null);
+        Customer customer = this.customerRepository
+                .findCustomerByOrderId(orderId).orElse(null);
         if(customer != null) {
             return this.modelMapper.map(customer, CustomerServiceModel.class);
         }

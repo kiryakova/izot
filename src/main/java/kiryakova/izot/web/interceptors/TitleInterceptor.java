@@ -24,7 +24,8 @@ public class TitleInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (handler instanceof HandlerMethod) {
-            PageTitle methodAnnotation = ((HandlerMethod) handler).getMethodAnnotation(PageTitle.class);
+            PageTitle methodAnnotation = ((HandlerMethod) handler)
+                    .getMethodAnnotation(PageTitle.class);
 
             if (methodAnnotation != null) {
                 title += " - " + methodAnnotation.value();

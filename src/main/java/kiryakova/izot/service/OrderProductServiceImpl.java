@@ -25,7 +25,11 @@ public class OrderProductServiceImpl implements OrderProductService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderProductServiceImpl(OrderProductRepository orderProductRepository, UserService userService, UserValidationService userValidation, OrderProductValidationService orderProductValidation, ModelMapper modelMapper) {
+    public OrderProductServiceImpl(OrderProductRepository orderProductRepository,
+                                   UserService userService,
+                                   UserValidationService userValidation,
+                                   OrderProductValidationService orderProductValidation,
+                                   ModelMapper modelMapper) {
         this.orderProductRepository = orderProductRepository;
         this.userService = userService;
         this.userValidation = userValidation;
@@ -34,7 +38,8 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public OrderProductServiceModel findOrderProductByOrderIdAndProductId(String orderId, String productId) {
+    public OrderProductServiceModel findOrderProductByOrderIdAndProductId(String orderId,
+                                                                          String productId) {
         OrderProduct orderProduct = this.orderProductRepository
                 .findOrderProductByOrderIdAndProductId(orderId, productId).orElse(null);
 
@@ -54,7 +59,8 @@ public class OrderProductServiceImpl implements OrderProductService {
 
     @Override
     public List<OrderProductServiceModel> findOrderProductsByUser(String username) {
-        UserServiceModel userServiceModel = this.userService.findUserByUsername(username);
+        UserServiceModel userServiceModel = this.userService
+                .findUserByUsername(username);
         if(!userValidation.isValid(userServiceModel)) {
             throw new IllegalArgumentException();
         }
@@ -72,13 +78,15 @@ public class OrderProductServiceImpl implements OrderProductService {
         OrderProduct orderProduct = this.orderProductRepository.findById(id).orElse(null);
 
         if(!orderProductValidation.isValid(orderProduct)) {
-            throw new OrderProductNotFoundException(ConstantsDefinition.OrderConstants.NO_SUCH_PRODUCT);
+            throw new OrderProductNotFoundException(ConstantsDefinition
+                    .OrderConstants.NO_SUCH_PRODUCT);
         }
 
         try {
             this.orderProductRepository.deleteOrderProductById(orderProduct.getId());
         } catch (Exception ignored) {
-            throw new OrderProductNotDeletedException(ConstantsDefinition.OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
+            throw new OrderProductNotDeletedException(ConstantsDefinition
+                    .OrderConstants.UNSUCCESSFUL_DELETE_PRODUCT_BY_ORDER);
         }
 
         return orderProduct;

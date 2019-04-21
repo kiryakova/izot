@@ -100,7 +100,7 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public List<ProducerServiceModel> findAllProducers() {
-        return this.producerRepository.findAll()
+        return this.producerRepository.findAllProducers()
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProducerServiceModel.class))
                 .collect(Collectors.toList());

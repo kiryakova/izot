@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductServiceModel> findAllProducts() {
-        return this.productRepository.findAll()
+        return this.productRepository.findAllProducts()
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                 .collect(Collectors.toList());

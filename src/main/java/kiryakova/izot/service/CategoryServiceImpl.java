@@ -109,7 +109,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryServiceModel> findAllCategories() {
-        return this.categoryRepository.findAll()
+        return this.categoryRepository.findAllCategories()
                 .stream()
                 .map(p -> this.modelMapper.map(p, CategoryServiceModel.class))
                 .collect(Collectors.toList());

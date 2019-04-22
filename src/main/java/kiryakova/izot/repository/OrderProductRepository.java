@@ -14,7 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface OrderProductRepository extends JpaRepository<OrderProduct, String> {
-    @Query(value = "SELECT * FROM order_products WHERE order_id = :orderId AND product_id = :productId "
+    @Query(value = "SELECT * FROM order_products " +
+            "WHERE order_id = :orderId AND product_id = :productId "
             , nativeQuery = true)
     Optional<OrderProduct> findOrderProductByOrderIdAndProductId(@Param("orderId") String orderId, @Param("productId") String productId);
 
@@ -29,12 +30,14 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Stri
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE op FROM order_products op WHERE id = :orderProductId "
+    @Query(value = "DELETE op FROM order_products op " +
+            "WHERE id = :orderProductId "
             , nativeQuery = true)
     void deleteOrderProductById(@Param("orderProductId") String id);
 
 
-    @Query(value = "SELECT * FROM order_products WHERE order_id = :orderId "
+    @Query(value = "SELECT * FROM order_products " +
+            "WHERE order_id = :orderId "
             , nativeQuery = true)
     List<OrderProduct> findOrderProductsByOrderId(@Param("orderId") String order_id);
 

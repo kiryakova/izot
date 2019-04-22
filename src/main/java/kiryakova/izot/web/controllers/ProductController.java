@@ -80,7 +80,7 @@ public class ProductController extends BaseController {
         ProductServiceModel productServiceModel = this.modelMapper
                 .map(productBindingModel, ProductServiceModel.class);
 
-        this.productService
+        productServiceModel = this.productService
                 .addProduct(productServiceModel, productBindingModel.getImageUrl());
 
         this.logService.logAction(principal.getName(),
@@ -89,7 +89,7 @@ public class ProductController extends BaseController {
                         productServiceModel.getName())
         );
 
-        return this.redirect("/products/all");
+        return this.redirect("/products/details/" + productServiceModel.getId());
     }
 
     @GetMapping("/edit/{id}")

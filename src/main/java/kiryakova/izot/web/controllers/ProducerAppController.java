@@ -24,7 +24,7 @@ public class ProducerAppController {
     }
 
     @GetMapping("/producers/fetch")
-    @PreAuthorize("hasAuthority('MODERATOR')")
+    @PreAuthorize("isAuthenticated()")
     public List<ProducerViewModel> fetchProducers() {
         return this.producerService.findAllProducers()
                 .stream()

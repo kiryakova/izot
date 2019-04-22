@@ -2,10 +2,10 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-izot rounded">
             <th:block sec:authorize="isAnonymous()">
-                <a class="navbar-brand nav-link-white" th:href="@{/}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н.Загора</span></a>
+                <a class="navbar-brand nav-link-white" th:href="@{/}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н&#46;Загора</span></a>
             </th:block>
             <th:block sec:authorize="hasAnyAuthority('ROOT_ADMIN', 'ADMIN', 'MODERATOR', 'USER')">
-                <a class="navbar-brand nav-link-white" th:href="@{/home}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н.Загора</span></a>
+                <a class="navbar-brand nav-link-white" th:href="@{/home}"><img class="bg-img" th:src="@{/img/izot.jpg}" /><span id="logo">Н&#46;Загора</span></a>
             </th:block>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,7 @@
                         <a class="nav-link" th:href="@{/}">Начало</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/users/login}"><i class="fas fa-sign-in-alt"></i> Вход</a>
+                        <a class="nav-link" th:href="@{/users/login}"><i class="fas fa-sign-in-alt"></i>&#32;Вход</a>
                     </li>
                     </th:block>
 
@@ -40,13 +40,13 @@
                                     Модериране
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="moderatorDropdown">
-                                    <a class="dropdown-item" th:href="@{/producers/add}">Добави Производител</a>
-                                    <a class="dropdown-item" th:href="@{/categories/add}">Добави Категория</a>
-                                    <a class="dropdown-item" th:href="@{/products/add}">Добави Продукт</a>
+                                    <a class="dropdown-item" th:href="@{/producers/add}">Добави&#32;Производител</a>
+                                    <a class="dropdown-item" th:href="@{/categories/add}">Добави&#32;Категория</a>
+                                    <a class="dropdown-item" th:href="@{/products/add}">Добави&#32;Продукт</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" th:href="@{/producers/all}">Всички Производители</a>
-                                    <a class="dropdown-item" th:href="@{/categories/all}">Всички Категории</a>
-                                    <a class="dropdown-item" th:href="@{/products/all}">Всички Продукти</a>
+                                    <a class="dropdown-item" th:href="@{/producers/all}">Всички&#32;Производители</a>
+                                    <a class="dropdown-item" th:href="@{/categories/all}">Всички&#32;Категории</a>
+                                    <a class="dropdown-item" th:href="@{/products/all}">Всички&#32;Продукти</a>
                                 </div>
                             </div>
                         </li>
@@ -59,9 +59,9 @@
                                     Администриране
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                    <a class="dropdown-item" th:href="@{/orders/all/}">Всички Поръчки</a>
-                                    <a class="dropdown-item" th:href="@{/users/all/}">Всички Потребители</a>
-                                    <a class="dropdown-item" th:href="@{/users/logs/}">Логове</a>
+                                    <a class="dropdown-item" th:href="@{/orders/all/}">Всички&#32;Поръчки</a>
+                                    <a class="dropdown-item" th:href="@{/users/all/}">Всички&#32;Потребители</a>
+                                    <a class="dropdown-item" th:href="@{/logs/}">Логове</a>
                                 </div>
                             </div>
                         </li>
@@ -79,10 +79,10 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownProfile">
-                                    <a class="dropdown-item" th:href="@{/orders/my}">Моите Поръчки</a>
+                                    <a class="dropdown-item" th:href="@{/orders/my}">Моите&#32;Поръчки</a>
                                     <a class="dropdown-item" th:href="@{/users/profile}">Профил</a>
                                     <form th:action="@{/logout}" th:method="POST">
-                                        <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Изход</button>
+                                        <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>&#32;Изход</button>
                                     </form>
                                 </div>
                             </div>

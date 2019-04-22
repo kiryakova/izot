@@ -30,13 +30,15 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE o FROM orders o LEFT JOIN order_products op ON (op.order_id = o.id) WHERE o.id = :orderId "
+    @Query(value = "DELETE o FROM orders o LEFT JOIN order_products op " +
+            "ON (op.order_id = o.id) WHERE o.id = :orderId AND o.is_finished = 0 "
             , nativeQuery = true)
     void cancelOrderById(@Param("orderId") String orderId);
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE o FROM orders o LEFT JOIN order_products op ON (op.order_id = o.id) WHERE o.is_finished = 0 "
+    @Query(value = "DELETE o FROM orders o LEFT JOIN order_products op " +
+            "ON (op.order_id = o.id) WHERE o.is_finished = 0 "
             , nativeQuery = true)
     void deleteAllUnfinishedOrders();
 }

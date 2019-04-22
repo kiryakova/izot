@@ -27,22 +27,7 @@ textarea {
     width: 35px;
     height: 30px;
     border-radius: 5px 0px 10px 0px;
-    /*border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 0px;*/
-    /*background: url(../img/izot.jpg);*/
 }
-
-/*.logo {
-    align-items: center;
-    color: black;
-    display: flex;
-    flex-grow: 2;
-    margin: auto;
-    text-decoration: none;
-    word-spacing: 20px;
-}*/
 
 #logo{
     padding-left: 10px;
@@ -61,4 +46,8 @@ img.img-thumbnail {
     padding: 5px;
     max-width: 40px;
     max-height: 40px;
+}
+
+.text-wrap{
+    overflow-wrap:break-word;
 }

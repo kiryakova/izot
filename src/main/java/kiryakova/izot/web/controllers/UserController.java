@@ -249,18 +249,4 @@ public class UserController extends BaseController {
         return this.redirect("/users/all");
     }
 
-    @GetMapping("/logs")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView logs(ModelAndView modelAndView) {
-
-        List<LogViewModel> logs = this.logService.findAllLogsByDateTimeDesc()
-                .stream()
-                .map(l -> this.modelMapper.map(l, LogViewModel.class))
-                .collect(Collectors.toList());
-
-        modelAndView.addObject("logs", logs);
-
-        return this.view("logs", modelAndView);
-
-    }
 }

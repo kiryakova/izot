@@ -16,11 +16,12 @@
                 <th class="col-md-1 text-center text-izot-bold">#</th>
                 <th class="col-md-2 text-center text-izot-bold">Дата</th>
                 <th class="col-md-2 text-center text-izot-bold">Име</th>
-                <th class="col-md-2 text-center text-izot-bold">E-mail</th>
+                <th class="col-md-2 text-center text-izot-bold">E&#45;mail</th>
                 <th class="col-md-5 text-center text-izot-bold">Събитие</th>
             </tr>
             </thead>
             <tbody>
+
             <th:block th:each="log, iter : ${logs}" th:object="${log}">
                 <tr class="row mx-auto">
                     <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
@@ -30,6 +31,7 @@
                     <td class="col-md-5 text-center text-izot" th:text="*{event}"></td>
                 </tr>
             </th:block>
+
             </tbody>
         </table>
         <hr style="height: 2px" class="bg-izot w-75">

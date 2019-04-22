@@ -1,34 +1,38 @@
 <th:block th:fragment="product-details-form">
 
         <div class="row">
-            <div class="col col-md-12">
+            <div class="col col-md-12 text-izot">
                 <h1 th:text="'Име: ' + ${product.name}"></h1>
             </div>
         </div>
-        <hr style="height: 2px" class="bg-izot w-25" />
+        <hr style="height: 2px" class="bg-izot w-50" />
         <div class="text-center">
             <img th:src="${product.imageUrl}" class="img-responsive" alt="Product">
         </div>
         <div class="row">
-            <div class="col col-md-12 mt-5">
+            <div class="col col-md-12 mt-5 text-izot">
                 <h4 th:text="'Категория: ' + ${product.category.name}"></h4>
             </div>
         </div>
         <div class="row">
-            <div class="col col-md-12">
+            <div class="col col-md-12 text-izot">
                 <h4 th:text="'Производител: ' + ${product.producer.name}"></h4>
             </div>
         </div>
         <div class="row">
-            <div class="col col-md-12">
-                <h4 th:text="'Описание: ' + ${product.description}"></h4>
+            <div class="col col-md-3">
+            </div>
+            <div class="col col-md-6 flex-wrap mt-3 text-izot text-wrap">
+                <p class="text-wrap" th:text="'Описание: ' + ${product.description}"></p>
+            </div>
+            <div class="col col-md-3">
             </div>
         </div>
         <div class="row">
-            <div class="col col-md-12">
+            <div class="col col-md-12 mt-3 text-izot-bold">
                 <h4 th:text="'Цена: ' + ${product.price}"></h4>
             </div>
         </div>
-        <hr style="height: 2px" class="bg-izot w-25" />
+        <hr style="height: 2px" class="bg-izot w-50" />
 
 </th:block>

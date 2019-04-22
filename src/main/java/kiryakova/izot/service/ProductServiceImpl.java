@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(ProductServiceModel productServiceModel,
+    public ProductServiceModel addProduct(ProductServiceModel productServiceModel,
                            MultipartFile imageUrl) {
         if(!productValidation.isValid(productServiceModel)){
             throw new IllegalArgumentException();
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         this.setImageUrl(product, imageUrl);
 
         try {
-            this.productRepository.save(product);
+            product = this.productRepository.saveAndFlush(product);
         } catch (Exception ignored){
             throw new ProductNotSavedException(
                     String.format(
@@ -61,6 +61,8 @@ public class ProductServiceImpl implements ProductService {
                             product.getName())
             );
         }
+
+        return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     @Override

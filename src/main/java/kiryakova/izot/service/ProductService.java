@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    void addProduct(ProductServiceModel productServiceModel,
+    ProductServiceModel addProduct(ProductServiceModel productServiceModel,
                     MultipartFile imageUrl);
 
     void editProduct(String id,

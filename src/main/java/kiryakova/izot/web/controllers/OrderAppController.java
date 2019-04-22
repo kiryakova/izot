@@ -25,6 +25,7 @@ public class OrderAppController {
     @PreAuthorize("isAuthenticated()")
     public boolean addOrder(@RequestParam("id") String id,
                             @RequestParam("quantity") int quantity, Principal principal) {
+
         String name = principal.getName();
 
         return this.orderService.addOrder(id, name, quantity);
@@ -34,6 +35,7 @@ public class OrderAppController {
     @PreAuthorize("isAuthenticated()")
     public BigDecimal deleteProductFromOrder(Principal principal,
                                              @PathVariable(name="id") String id) throws Exception {
+
         return this.orderService.deleteOrderProduct(id);
     }
 }

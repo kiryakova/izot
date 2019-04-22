@@ -97,6 +97,7 @@ public class ProductController extends BaseController {
     @PageTitle("Редактиране на продукт")
     public ModelAndView editProduct(@PathVariable String id,
                                     ModelAndView modelAndView)  {
+
         ProductServiceModel productServiceModel = this.productService
                 .findProductById(id);
         ProductBindingModel productBindingModel = this.modelMapper
@@ -153,6 +154,7 @@ public class ProductController extends BaseController {
     @PageTitle("Детайли на продукта")
     public ModelAndView detailsProduct(@PathVariable String id,
                                        ModelAndView modelAndView) {
+
         modelAndView.addObject("product",
                 this.modelMapper.map(this.productService.findProductById(id), ProductDetailsViewModel.class));
 
@@ -168,6 +170,7 @@ public class ProductController extends BaseController {
                                             @PathVariable(name="categoryId", required=false) String categoryId,
                                             @PathVariable(name="producerId", required=false) String producerId,
                                             ModelAndView modelAndView) {
+
         modelAndView.addObject("product", this.modelMapper
                 .map(this.productService
                         .findProductById(id), ProductDetailsViewModel.class));
@@ -183,6 +186,7 @@ public class ProductController extends BaseController {
     @PageTitle("Изтриване на продукт")
     public ModelAndView deleteProduct(@PathVariable String id,
                                       ModelAndView modelAndView) {
+
         modelAndView.addObject("product",
                 this.modelMapper.map(this.productService.findProductById(id),
                         ProductDetailsViewModel.class)
@@ -198,6 +202,7 @@ public class ProductController extends BaseController {
     @PageTitle("Изтриване на продукт")
     public ModelAndView deleteProductConfirm(Principal principal,
                                              @PathVariable String id) {
+
         this.productService.deleteProduct(id);
 
         this.logService.logAction(principal.getName(),
@@ -210,6 +215,7 @@ public class ProductController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Всички продукти")
     public ModelAndView allProductsUpFromModerator(ModelAndView modelAndView) {
+
         modelAndView.addObject("products",
                 this.productService.findAllProducts()
                 .stream()

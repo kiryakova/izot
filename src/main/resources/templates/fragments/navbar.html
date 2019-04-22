@@ -79,8 +79,8 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownProfile">
+                                    <a class="dropdown-item" th:href="@{/orders/my}">Моите Поръчки</a>
                                     <a class="dropdown-item" th:href="@{/users/profile}">Профил</a>
-                                    <a class="dropdown-item" th:href="@{/orders/my}">Поръчки</a>
                                     <form th:action="@{/logout}" th:method="POST">
                                         <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Изход</button>
                                     </form>

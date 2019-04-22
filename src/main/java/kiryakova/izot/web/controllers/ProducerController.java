@@ -84,6 +84,7 @@ public class ProducerController extends BaseController {
     @PageTitle("Редактиране на производител")
     public ModelAndView editCategory(@PathVariable String id,
                                      ModelAndView modelAndView) {
+
         modelAndView.addObject("producer",
                 this.modelMapper.map(this.producerService.findProducerById(id),
                         ProducerBindingModel.class)
@@ -101,6 +102,7 @@ public class ProducerController extends BaseController {
                                      @PathVariable String id,
                                      @ModelAttribute(name = "producer") @Valid ProducerBindingModel producerBindingModel,
                                      BindingResult bindingResult) {
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("producer", producerBindingModel);
             modelAndView.addObject("producerId", id);
@@ -118,6 +120,7 @@ public class ProducerController extends BaseController {
     @PageTitle("Изтриване на производител")
     public ModelAndView deleteCategory(@PathVariable String id,
                                        ModelAndView modelAndView) {
+
         modelAndView.addObject("producer",
                 this.modelMapper.map(this.producerService.findProducerById(id),
                         ProducerViewModel.class)
@@ -132,6 +135,7 @@ public class ProducerController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Изтриване на производител")
     public ModelAndView deleteProducer(@PathVariable String id) {
+
         this.producerService.deleteProducer(id);
 
         return this.redirect("/producers/all");
@@ -141,6 +145,7 @@ public class ProducerController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Всички производители")
     public ModelAndView allProducer(ModelAndView modelAndView) {
+
         modelAndView.addObject("producers",
                 this.producerService.findAllProducers()
                 .stream()

@@ -131,6 +131,7 @@ public class UserController extends BaseController {
     @PageTitle("Потребителски профил")
     public ModelAndView profile(Principal principal,
                                 ModelAndView modelAndView){
+
         modelAndView.addObject("user",
                 this.modelMapper
                         .map(this.userService
@@ -145,6 +146,7 @@ public class UserController extends BaseController {
     @PageTitle("Редакция на потребителския профил")
     public ModelAndView editProfile(Principal principal,
                                     ModelAndView modelAndView){
+
         modelAndView.addObject("user",
                 this.modelMapper
                         .map(this.userService
@@ -218,6 +220,7 @@ public class UserController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("Всички потребители")
     public ModelAndView allUsers(ModelAndView modelAndView) {
+
         List<UserViewModel> users = this.userService.findAllUsers()
                 .stream()
                 .map(u -> {
@@ -240,6 +243,7 @@ public class UserController extends BaseController {
     @PageTitle("Всички потребители")
     public ModelAndView setAuthority(@PathVariable("id") String id,
                                      @PathVariable("authority") String authority) {
+
         this.userService.setUserAuthority(id, authority);
 
         return this.redirect("/users/all");

@@ -1,0 +1,32 @@
+<th:block th:fragment="orders-form">
+
+    <hr style="height: 2px" class="bg-izot w-40" />
+    <table class="table table-hover w-40 mx-auto">
+        <thead>
+        <tr class="row mx-auto">
+            <th class="col-md-1 text-center text-izot-bold">#</th>
+            <th class="col-md-4 text-center text-izot-bold">Дата на поръчката</th>
+            <th class="col-md-3 text-center text-izot-bold">Обща стойност</th>
+            <th class="col-md-4 text-center text-izot-bold"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="order, iter : ${orders}" th:object="${order}">
+            <tr class="row mx-auto">
+                <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
+                <td class="col-md-4 text-center text-izot" th:text="*{#temporals.format(orderDateTime, 'dd/MM/yyyy HH:mm')}"></td>
+                <td class="col-md-3 text-center text-izot" th:text="|*{totalPrice} лв&#46;|"></td>
+                <td class="col-md-4 text-center text-izot">
+                    <form id="all-orders-form" th:action="@{/orders/details/{id}(id=${order.id})}" method="GET">
+                        <div class="button-holder d-flex justify-content-center">
+                            <button type="submit" class="btn btn-danger font-weight-bold text-white">Детайли</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <hr style="height: 2px" class="bg-izot w-40" />
+
+</th:block>

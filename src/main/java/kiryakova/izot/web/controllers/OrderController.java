@@ -42,11 +42,82 @@ public class OrderController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/cancel/order/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Отказ поръчка")
+    public ModelAndView cancelOrder(Principal principal,
+                                    @PathVariable(name="id") String id,
+                                    ModelAndView modelAndView) throws Exception {
+
+        this.orderService.cancelOrder(id);
+
+        this.logService.logAction(principal.getName(),
+                ConstantsDefinition.OrderConstants.ORDER_CANCELED_SUCCESSFUL);
+
+        return this.redirect("/orders/products/my");
+
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
+    @PageTitle("Всички поръчки")
+    public ModelAndView allOrders(ModelAndView modelAndView) {
+
+        modelAndView.addObject("orders",
+                this.orderService.findAllOrders()
+                        .stream()
+                        .map(o -> this.modelMapper.map(o, OrderViewModel.class))
+                        .collect(Collectors.toList()));
+
+        return this.view("order/all-orders", modelAndView);
+    }
+
+    @GetMapping("/details/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Поръчка")
+    public ModelAndView orderDetails(@PathVariable(name="id") String id,
+                                     ModelAndView modelAndView) {
+
+        modelAndView.addObject("order",
+                this.modelMapper.map(this.orderService
+                        .findOrderById(id), OrderViewModel.class));
+
+        modelAndView.addObject("orderedProducts",
+                this.orderProductService.findOrderProductsByOrderId(id)
+                        .stream()
+                        .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
+                        .collect(Collectors.toList()));
+
+        modelAndView.addObject("customer",
+                this.modelMapper.map(this.customerService
+                        .findCustomerByOrderId(id), CustomerViewModel.class));
+
+        return this.view("order/details-order", modelAndView);
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Моите поръчки")
+    public ModelAndView myOrders(Principal principal,
+                                 ModelAndView modelAndView) throws Exception {
+
+        String name = principal.getName();
+
+        modelAndView.addObject("orders",
+                this.orderService.findAllOrdersByUsername(name)
+                        .stream()
+                        .map(o -> this.modelMapper.map(o, OrderViewModel.class))
+                        .collect(Collectors.toList()));
+
+        return this.view("order/my-orders", modelAndView);
+    }
+
     @GetMapping("/products/my")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Заявени продукти")
     public ModelAndView productsByOrder(Principal principal,
                                         ModelAndView modelAndView) throws Exception {
+
         String name = principal.getName();
 
         OrderServiceModel orderServiceModel = this.orderService
@@ -66,7 +137,7 @@ public class OrderController extends BaseController {
                 .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
                 .collect(Collectors.toList()));
 
-        return this.view("order/my-products", modelAndView);
+        return this.view("order/my-ordered-products", modelAndView);
     }
 
     @GetMapping("/confirm/{id}")
@@ -76,50 +147,10 @@ public class OrderController extends BaseController {
                                      @PathVariable(name="id") String id,
                                      ModelAndView modelAndView) throws Exception {
 
-        orderService.confirmOrder(id);
+        this.orderService.confirmOrder(id);
 
         this.logService.logAction(principal.getName(),
                 ConstantsDefinition.OrderConstants.ORDER_CONFIRMED_SUCCESSFUL);
-
-        return this.orderDetails(id, modelAndView);
-
-    }
-
-    @GetMapping("/cancel/order/{id}")
-    @PreAuthorize("isAuthenticated()")
-    @PageTitle("Отказ поръчка")
-    public ModelAndView cancelOrder(Principal principal,
-                                     @PathVariable(name="id") String id,
-                                     ModelAndView modelAndView) throws Exception {
-
-        orderService.cancelOrder(id);
-
-        this.logService.logAction(principal.getName(),
-                ConstantsDefinition.OrderConstants.ORDER_CANCELED_SUCCESSFUL);
-
-        return this.redirect("/orders/products/my");
-
-    }
-
-    @GetMapping("/all")
-    @PreAuthorize(value = "hasAuthority('ADMIN')")
-    @PageTitle("Всички поръчки")
-    public ModelAndView allOrders(ModelAndView modelAndView) {
-
-        modelAndView.addObject("orders",
-                this.orderService.findAllOrders()
-                .stream()
-                .map(o -> this.modelMapper.map(o, OrderViewModel.class))
-                .collect(Collectors.toList()));
-
-        return this.view("order/all-orders", modelAndView);
-    }
-
-    @GetMapping("/details/{id}")
-    @PreAuthorize("isAuthenticated()")
-    @PageTitle("Потвърдена поръчка")
-    public ModelAndView orderDetails(@PathVariable(name="id") String id,
-                                     ModelAndView modelAndView) {
 
         modelAndView.addObject("order",
                 this.modelMapper.map(this.orderService
@@ -127,30 +158,16 @@ public class OrderController extends BaseController {
 
         modelAndView.addObject("orderedProducts",
                 this.orderProductService.findOrderProductsByOrderId(id)
-                .stream()
-                .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
-                .collect(Collectors.toList()));
+                        .stream()
+                        .map(p -> this.modelMapper.map(p, OrderProductViewModel.class))
+                        .collect(Collectors.toList()));
 
         modelAndView.addObject("customer",
                 this.modelMapper.map(this.customerService
-                .findCustomerByOrderId(id), CustomerViewModel.class));
+                        .findCustomerByOrderId(id), CustomerViewModel.class));
 
         return this.view("order/confirmed-order", modelAndView);
+
     }
 
-    @GetMapping("/my")
-    @PreAuthorize("isAuthenticated()")
-    @PageTitle("Моите поръчки")
-    public ModelAndView myOrders(Principal principal,
-                                 ModelAndView modelAndView) throws Exception {
-        String name = principal.getName();
-
-        modelAndView.addObject("orders",
-                this.orderService.findAllOrdersByUsername(name)
-                .stream()
-                .map(o -> this.modelMapper.map(o, OrderViewModel.class))
-                .collect(Collectors.toList()));
-
-        return this.view("order/all-orders", modelAndView);
-    }
 }

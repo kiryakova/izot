@@ -1,0 +1,45 @@
+<th:block th:fragment="order-details-form">
+
+    <h5 class="text-center text-izot" th:text="|*{#temporals.format(order.orderDateTime, 'dd/MM/yyyy HH:mm')} - ${#strings.substring(order.id, 0, 8)}|"></h5>
+
+    <h5 class="text-center text-izot" th:text="|клиент: ${customer.firstName} ${customer.lastName}|"></h5>
+    <h5 class="text-center text-izot" th:text="|адрес: ${customer.address}|"></h5>
+    <h5 class="text-center text-izot" th:text="|телефон: ${customer.phone}|"></h5>
+
+    <hr style="height: 2px" class="bg-izot w-75" />
+
+    <table class="table table-hover w-75 mx-auto">
+        <thead>
+        <tr class="row mx-auto">
+            <th class="col-md-1 text-center text-izot-bold">#</th>
+            <th class="col-md-3 text-center text-izot-bold">Изображение</th>
+            <th class="col-md-3 text-center text-izot-bold">Име</th>
+            <th class="col-md-3 text-center text-izot-bold">Количество</th>
+            <th class="col-md-2 text-center text-izot-bold">Ед.Цена</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="orderedProduct, iter : ${orderedProducts}" th:object="${orderedProduct}">
+            <tr class="row mx-auto" th:id="${orderedProduct.id}">
+                <td class="col-md-1 text-center text-izot" th:text="${iter.index + 1}"></td>
+                <td class="col-md-3 text-center text-izot">
+                    <div class="text-center">
+                        <img th:src="${orderedProduct.product.imageUrl}" width="40" height="40" alt="Product" />
+                    </div>
+                </td>
+                <td class="col-md-3 text-center text-izot" th:text="${orderedProduct.product.name}"></td>
+                <td class="col-md-3 text-center text-izot" th:text="${orderedProduct.quantity}"></td>
+                <td class="col-md-2 text-center text-izot" th:text="|${orderedProduct.price} лв&#46;|"></td>
+            </tr>
+
+        </th:block>
+        <tr class="row mx-auto">
+            <td colspan="3" class="col-md-7"></td>
+            <td colspan="1" class="col-md-3 align-content-end">Обща стойност на поръчката:</td>
+            <td class="col-md-2 text-center text-izot" th:id="totalPrice" th:text="|${order.totalPrice} лв&#46;|"></td>
+        </tr>
+        </tbody>
+    </table>
+    <hr style="height: 2px" class="bg-izot w-75">
+
+</th:block>

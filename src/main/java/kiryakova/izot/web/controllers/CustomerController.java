@@ -39,6 +39,7 @@ public class CustomerController extends BaseController {
     public ModelAndView editCustomer(Principal principal,
                                      @PathVariable String id,
                                      ModelAndView modelAndView) throws Exception {
+
         String name = principal.getName();
 
         CustomerServiceModel customerServiceModel = this.customerService
@@ -61,6 +62,7 @@ public class CustomerController extends BaseController {
                                             @PathVariable(name="id") String id,
                                             @ModelAttribute(name = "customer") @Valid CustomerBindingModel customerBindingModel,
                                             BindingResult bindingResult) throws Exception {
+
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("customer", customerBindingModel);
             modelAndView.addObject("orderId", id);

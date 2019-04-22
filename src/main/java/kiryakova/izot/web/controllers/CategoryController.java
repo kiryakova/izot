@@ -93,6 +93,7 @@ public class CategoryController extends BaseController {
     @PageTitle("Редактиране на категория")
     public ModelAndView editCategory(@PathVariable String id,
                                      ModelAndView modelAndView) {
+
         CategoryServiceModel categoryServiceModel = this.categoryService.findCategoryById(id);
         CategoryBindingModel categoryBindingModel = this.modelMapper.map(categoryServiceModel,
                 CategoryBindingModel.class);
@@ -148,6 +149,7 @@ public class CategoryController extends BaseController {
     @PageTitle("Изтриване на категория")
     public ModelAndView deleteCategory(@PathVariable String id,
                                        ModelAndView modelAndView) {
+
         modelAndView.addObject("category",
                 this.modelMapper.map(this.categoryService
                         .findCategoryById(id), CategoryViewModel.class)
@@ -163,6 +165,7 @@ public class CategoryController extends BaseController {
     @PageTitle("Изтриване на категория")
     public ModelAndView deleteCategoryConfirm(Principal principal,
                                               @PathVariable String id) {
+
         this.categoryService.deleteCategory(id);
 
         this.logService.logAction(principal.getName(),
@@ -175,6 +178,7 @@ public class CategoryController extends BaseController {
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PageTitle("Всички категории")
     public ModelAndView allCategories(ModelAndView modelAndView) {
+
         modelAndView.addObject("categories", this.categoryService.findAllCategories()
                 .stream()
                 .map(c -> this.modelMapper.map(c, CategoryViewModel.class))

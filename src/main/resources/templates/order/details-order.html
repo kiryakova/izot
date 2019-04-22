@@ -7,9 +7,13 @@
     <main class="mt-3">
         <th:block th:if="${order} != null">
 
-            <h1 class="text-center text-izot">Потвърдена поръчка</h1>
+
+            <h1 class="text-center text-izot">Поръчка</h1>
             <th:block th:include="~{fragments/order-details-form}"></th:block>
 
+            <div class="button-holder row d-flex justify-content-md-around">
+                <div><button onclick="window.history.back()" class="btn bg-izot font-weight-bold text-white">Обратно</button></div>
+            </div>
         </th:block>
     </main>
     <th:block th:include="~{fragments/footer}"></th:block>
